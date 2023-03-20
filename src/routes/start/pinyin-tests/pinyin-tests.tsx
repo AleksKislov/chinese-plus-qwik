@@ -1,5 +1,5 @@
-// import { playAudio } from "./play-audio";
-import { component$, useClientEffect$, $, useStore } from "@builder.io/qwik";
+import { component$, useVisibleTask$, $, useStore } from "@builder.io/qwik";
+import { playSvg, rewindSvg } from "~/components/common/media/svg";
 import { allPinyinSounds } from "~/misc/consts/pinyin";
 import CONST_URLS from "~/misc/consts/urls";
 import { getRandElem } from "~/misc/helpers/tools";
@@ -62,7 +62,7 @@ export function setEmptyAnswers(answers: string[]): AnswersObj {
 export default component$(() => {
   const store = useStore<StoreAns>({ sounds: [""], inputs: {} });
 
-  useClientEffect$(() => {
+  useVisibleTask$(() => {
     init(store);
   });
 
@@ -102,22 +102,7 @@ export default component$(() => {
     },
     {
       func: $(() => init(store)),
-      txt: (
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke-width='1.5'
-          stroke='currentColor'
-          class='w-6 h-6'
-        >
-          <path
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            d='M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3'
-          />
-        </svg>
-      ),
+      txt: rewindSvg,
     },
   ];
 
@@ -135,20 +120,7 @@ export default component$(() => {
                     type='button'
                     onClick$={() => playAudio(store.sounds[i + answers.length * k])}
                   >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke-width='1.5'
-                      stroke='currentColor'
-                      class='w-6 h-6'
-                    >
-                      <path
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        d='M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z'
-                      />
-                    </svg>
+                    {playSvg}
                   </button>
                   <input
                     type='text'

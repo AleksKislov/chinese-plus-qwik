@@ -1,8 +1,11 @@
 import { component$ } from "@builder.io/qwik";
+import { useNavigate } from "@builder.io/qwik-city";
 
 export const CardInfo = component$(
   ({ isOldHsk, isForTests }: { isForTests: boolean; isOldHsk: boolean }) => {
     let text, title;
+
+    const refresh = useNavigate();
 
     const isNewHskTable = !isOldHsk && !isForTests;
     const isOldHskTable = isOldHsk && !isForTests;
@@ -29,6 +32,11 @@ export const CardInfo = component$(
       <>
         <p class='card-title'>{title}</p>
         <p>{text}</p>
+        {isForTests && (
+          <button class='btn my-2' onClick$={() => refresh()}>
+            Обновить тесты
+          </button>
+        )}
       </>
     );
   }
