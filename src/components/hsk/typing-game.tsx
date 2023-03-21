@@ -1,215 +1,214 @@
-import Image from "next/image";
-import { useState, useEffect, KeyboardEvent } from "react";
-import { shuffleArr } from "../../helpers/tools/shuffle-arr";
-import { parseRussian } from "../../helpers/translation";
-import { useInterval } from "../../helpers/ui";
 import badImg from "../../../public/img/typing-game/001bad.png";
 import okImg from "../../../public/img/typing-game/003ok.png";
 import goodImg from "../../../public/img/typing-game/002positive.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faLevelDownAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+// import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
+import { parseRussian } from "~/misc/helpers/translation";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCheckCircle, faLevelDownAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { arrorUturnDown } from "../common/media/svg";
+import { type TestWord } from "~/routes/hsk/2/tests";
+import { $, component$, useSignal } from "@builder.io/qwik";
 
 type TypingGameProps = {
   words: TestWord[] | null;
-  testStarted: Function;
   level: string;
 };
 
-const QUEST_NUM = 10;
+export const QUEST_NUM = 10;
 
-export default function TypingGame({ words, testStarted, level }: TypingGameProps) {
-  const [shuffledWords, setShuffledWords] = useState<TestWord[] | null>(null);
-  const [questionNum, setQuestionNum] = useState<number>(1);
-  const [start, setStart] = useState<boolean>(false);
+export const TypingGame = component$(({ words, level }: TypingGameProps) => {
+  const questionNum = 1;
+  const start = useSignal(false);
+  const shuffledWords: TestWord[] = [];
+  const progress = useSignal(0);
+  const corrects = useSignal(0);
+  const wrongs = useSignal(0);
+  const resultWords = "";
+  const wrongAnswers: string[] = [];
+  const question: TestWord | null = null;
+  const answer = "";
 
-  useEffect(() => {
-    if (!words) return;
-    testStarted(false);
-    shuffleArr(words);
-    const newArr = words.slice(0, QUEST_NUM);
-    setShuffledWords(newArr);
-    setQuestion(newArr[0]);
-  }, [words]);
+  // useEffect(() => {
+  //   if (!words) return;
+  //   testStarted(false);
+  //   shuffleArr(words);
+  //   const newArr = words.slice(0, QUEST_NUM);
+  //   setShuffledWords(newArr);
+  //   setQuestion(newArr[0]);
+  // }, [words]);
 
-  const [resultWords, setResultWords] = useState("");
-  const [progress, setProgress] = useState(0);
-  const [question, setQuestion] = useState<TestWord | null>(null);
-  const [answer, setAnswer] = useState("");
-  const [wrong, setWrong] = useState(0);
-  const [correct, setCorrect] = useState(0);
+  // useInterval(() => {
+  //   if (!start) return;
+  //   setProgress(progress + 0.5);
+  //   if (progress >= 100) {
+  //     skipQuestion();
+  //   }
+  // }, 100);
 
-  const [wrongAnswers, setWrongAnswers] = useState<string[]>([]);
+  // const setNewQuestion = () => {
+  //   setProgress(0);
+  //   setQuestion(shuffledWords![questionNum]);
+  //   setQuestionNum(questionNum + 1);
+  // };
 
-  useInterval(() => {
-    if (!start) return;
-    setProgress(progress + 0.5);
-    if (progress >= 100) {
-      skipQuestion();
-    }
-  }, 100);
+  const skipQuestion = $(() => {
+    // setWrongAnswers([...wrongAnswers, question!.chinese]);
+    // setNewQuestion();
+    // setWrong(wrong + 1);
+  });
 
-  const setNewQuestion = () => {
-    setProgress(0);
-    setQuestion(shuffledWords![questionNum]);
-    setQuestionNum(questionNum + 1);
-  };
+  // useEffect(() => {
+  //   if (questionNum > QUEST_NUM) {
+  //     setResultWords(correct > 8 ? "Отличный результат!" : correct > 5 ? "Неплохо!" : "Н-да уж...");
+  //     testStarted(false);
+  //     setStart(false);
+  //   }
+  // }, [questionNum]);
 
-  const skipQuestion = () => {
-    setWrongAnswers([...wrongAnswers, question!.chinese]);
-    setNewQuestion();
-    setWrong(wrong + 1);
-  };
-
-  useEffect(() => {
-    if (questionNum > QUEST_NUM) {
-      setResultWords(correct > 8 ? "Отличный результат!" : correct > 5 ? "Неплохо!" : "Н-да уж...");
-      testStarted(false);
-      setStart(false);
-    }
-  }, [questionNum]);
-
-  const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleEnter = (e) => {
     if (e.key === "Enter") checkIt();
   };
 
-  const checkIt = () => {
-    if (answer === question!.chinese) {
-      setWrongAnswers([...wrongAnswers, ""]);
-      setCorrect(correct + 1);
-      setNewQuestion();
-    }
-    setAnswer("");
-  };
+  const checkIt = $(() => {
+    // if (answer === question!.chinese) {
+    //   setWrongAnswers([...wrongAnswers, ""]);
+    //   setCorrect(correct + 1);
+    //   setNewQuestion();
+    // }
+    // setAnswer("");
+  });
 
-  const setNewGame = () => {
-    setWrongAnswers([]);
-    setResultWords("");
-    testStarted(true);
-    setStart(true);
-    setQuestion(null);
-    setQuestionNum(1);
-    setAnswer("");
-    setCorrect(0);
-    setWrong(0);
-    setProgress(0);
-    if (words) {
-      shuffleArr(words);
-      const newArr = words.slice(0, QUEST_NUM);
-      setShuffledWords(newArr);
-      setQuestion(newArr[0]);
-    }
-  };
+  const setNewGame = $(() => {
+    start.value = true;
+    //   setWrongAnswers([]);
+    //   setResultWords("");
+    //   testStarted(true);
+    //   setQuestion(null);
+    //   setQuestionNum(1);
+    //   setAnswer("");
+    //   setCorrect(0);
+    //   setWrong(0);
+    //   setProgress(0);
+    //   if (words) {
+    //     shuffleArr(words);
+    //     const newArr = words.slice(0, QUEST_NUM);
+    //     setShuffledWords(newArr);
+    //     setQuestion(newArr[0]);
+    //   }
+  });
 
   const gameDiv = (
     <div>
-      <div className='float-end'>
-        <button className='btn btn-danger btn-sm' onClick={skipQuestion}>
+      <div class='float-right'>
+        <button class='btn btn-error btn-sm' onClick$={skipQuestion}>
           Пропустить
         </button>
       </div>
-      <h5 className='card-subtitle mb-2'>
-        Вопрос {questionNum}/{QUEST_NUM}
-      </h5>
+      <div class='prose mb-3'>
+        <h4 class='card-title'>
+          Вопрос {questionNum}/{QUEST_NUM}
+        </h4>
+      </div>
       <p
-        className='card-text text-sm'
-        dangerouslySetInnerHTML={{
-          __html: question ? parseRussian(question.translation, false) : "",
-        }}
+        class=' text-sm'
+        dangerouslySetInnerHTML={question ? parseRussian(question.translation, false) : ""}
       ></p>
-      <div className='row'>
-        <div className='col-12'>
-          <div className='input-group'>
-            <input
-              type='text'
-              className='form-control'
-              placeholder='Ответ на кит. языке'
-              onChange={(e) => setAnswer(e.target.value)}
-              value={answer}
-              onKeyDown={handleEnter}
-              autoComplete='off'
-            />
-            <button className='btn btn-success' type='button' onClick={checkIt}>
-              <FontAwesomeIcon icon={faLevelDownAlt} />
-            </button>
-          </div>
+
+      <div class='form-control'>
+        <div class='input-group w-full '>
+          <input
+            type='text'
+            class='input input-bordered w-full'
+            placeholder='汉字'
+            // onChange$={(e) => setAnswer(e.target.value)}
+            value={answer}
+            // onKeyDown$={handleEnter}
+            autoComplete='off'
+          />
+          <button class='btn btn-success' type='button' onClick$={checkIt}>
+            {arrorUturnDown}
+          </button>
         </div>
       </div>
-      <label className='ms-1 mt-1'>
-        <FontAwesomeIcon icon={faCheckCircle} className='text-success' /> {correct}{" "}
-        <FontAwesomeIcon icon={faTimesCircle} className='text-danger ms-2' /> {wrong}
-      </label>
+
+      {/* <label class='ms-1 mt-1'>
+        <FontAwesomeIcon icon={faCheckCircle} class='text-success' /> {corrects}{" "}
+        <FontAwesomeIcon icon={faTimesCircle} class='text-danger ms-2' /> {wrongs}
+      </label> */}
     </div>
   );
 
   return (
     shuffledWords && (
-      <div className='card border-primary mb-3'>
-        <div className='progress mx-1' style={{ height: "3px" }}>
+      <div class='card bg-neutral w-full mb-3'>
+        <div class='progress mx-1' style={{ height: "3px" }}>
           <div
-            className='progress-bar bg-success'
+            class='progress-bar bg-success'
             role='progressbar'
-            style={{ width: `${100 - progress}%` }}
+            style={{ width: `${100 - progress.value}%` }}
           ></div>
           <div
-            className='progress-bar bg-danger'
+            class='progress-bar bg-danger'
             role='progressbar'
-            style={{ width: `${progress}%` }}
+            style={{ width: `${progress.value}%` }}
           ></div>
         </div>
 
-        <div className='card-body'>
-          {start ? (
+        <div class='card-body'>
+          {start.value ? (
             gameDiv
           ) : (
             <div>
-              <h4 className='card-title'>
-                {questionNum > QUEST_NUM ? (
-                  "Результат"
-                ) : level ? (
-                  <>
-                    Успей напечатать <small className='text-muted'>[ур. {level}]</small>
-                  </>
-                ) : (
-                  "Успей напечатать"
-                )}
-              </h4>
+              <div class='prose mb-2'>
+                <h3 class='card-title'>
+                  {questionNum > QUEST_NUM ? (
+                    "Результат"
+                  ) : level ? (
+                    <>
+                      Успей напечатать <small>[ур. {level}]</small>
+                    </>
+                  ) : (
+                    "Успей напечатать"
+                  )}
+                </h3>
+              </div>
               {questionNum > QUEST_NUM && (
-                <div className='row mb-3 text-center'>
-                  <div className='col-sm-4'>
-                    <div className='mt-2'>
-                      <Image
+                <div class='row mb-3 text-center'>
+                  <div class='col-sm-4'>
+                    <div class='mt-2'>
+                      <img
                         width={64}
                         height={64}
-                        src={correct > 8 ? goodImg : correct < 6 ? badImg : okImg}
+                        src={corrects.value > 8 ? goodImg : corrects.value < 6 ? badImg : okImg}
                         alt='your result'
                       />
                     </div>
                   </div>
-                  <div className='col-sm-4'>
-                    <p className='card-text h5'>Верно</p>
-                    <p className='card-text h2 text-success'>
-                      <strong>{correct}</strong>
+                  <div class='col-sm-4'>
+                    <p class=' h5'>Верно</p>
+                    <p class=' h2 text-success'>
+                      <strong>{corrects.value}</strong>
                     </p>
                   </div>
-                  <div className='col-sm-4'>
-                    <p className='card-text h5'>Ошибки</p>
-                    <p className='card-text h2 text-danger'>
-                      <strong>{wrong}</strong>
+                  <div class='col-sm-4'>
+                    <p class=' h5'>Ошибки</p>
+                    <p class=' h2 text-danger'>
+                      <strong>{wrongs.value}</strong>
                     </p>
                   </div>
                 </div>
               )}
               {words && words.length < QUEST_NUM ? (
-                <p className='card-text'>
+                <p>
                   Наберите хотя бы 10 слов в список ниже, чтобы активировать тест и проверить свои
                   знания
                 </p>
               ) : (
                 <div>
-                  <button className='btn btn-sm btn-info me-2' onClick={setNewGame}>
+                  <button class='btn btn-sm btn-info mr-2' onClick$={setNewGame}>
                     {questionNum > QUEST_NUM ? "Еще раз" : "Старт"}
                   </button>
-                  <span className='card-text'>
+                  <span>
                     {questionNum > QUEST_NUM
                       ? `${resultWords} ${
                           wrongAnswers.filter((x) => Boolean(x)).length > 0
@@ -224,14 +223,14 @@ export default function TypingGame({ words, testStarted, level }: TypingGameProp
           )}
         </div>
 
-        <div className='row d-flex justify-content-center'>
+        <div class='flex justify-center'>
           {[...new Array(QUEST_NUM)].map((x, ind) => (
             <div
               key={ind}
-              className={`col-1 badge rounded-pill ${
+              class={`badge mx-2 mb-2 ${
                 wrongAnswers.length > ind
                   ? wrongAnswers[ind]
-                    ? "bg-danger"
+                    ? "bg-error"
                     : "bg-success"
                   : "bg-secondary"
               }`}
@@ -243,4 +242,4 @@ export default function TypingGame({ words, testStarted, level }: TypingGameProp
       </div>
     )
   );
-}
+});

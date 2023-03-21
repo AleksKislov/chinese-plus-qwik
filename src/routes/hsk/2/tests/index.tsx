@@ -11,6 +11,7 @@ import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
 import { getRandElem } from "~/misc/helpers/tools";
 import { playSvg } from "~/components/common/media/svg";
 import CONST_URLS from "~/misc/consts/urls";
+import { TypingGame } from "~/components/hsk/typing-game";
 
 export type TestWord = {
   chinese: string;
@@ -105,7 +106,7 @@ export default component$(() => {
 
   const getQuestionBtn = (word: TestWord, type: QuestionType) => {
     if (type === QuestKinds.audio) return playSvg;
-    if (type === QuestKinds.pinyin) return word.pinyin;
+    if (type === QuestKinds.pinyin) return <div class={"lowercase"}>{word.pinyin}</div>;
     return word.chinese;
   };
 
@@ -122,7 +123,7 @@ export default component$(() => {
         </Sidebar>
 
         <MainContent>
-          {/* <TypingGame words={hskWords} testStarted={() => {}} level={level} /> */}
+          <TypingGame words={testWords.value} level={loc.url.searchParams.get("lvl") || "1"} />
 
           {questions.map(({ type, title }) => (
             <>
