@@ -11,7 +11,7 @@ export default component$(() => {
             <Slot />
           </div>
         </section>
-        <footer class='footer footer-center p-10 text-base-content rounded bg-neutral mt-auto'>
+        <footer class='footer footer-center p-10 text-base-content rounded bg-neutral mt-4'>
           <div class='grid grid-flow-col gap-4'>
             <a class='link link-hover'>About us</a>
             <a class='link link-hover'>Contact</a>

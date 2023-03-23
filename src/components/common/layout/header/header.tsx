@@ -17,7 +17,7 @@ export default component$(() => {
   const userState = useContext(userContext);
 
   return (
-    <header class='bg-neutral mb-3'>
+    <header class='bg-neutral mb-4'>
       <div class='md:container md:mx-auto'>
         <div class='navbar h-12'>
           <div class='flex-1'>
