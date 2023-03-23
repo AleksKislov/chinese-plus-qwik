@@ -1,167 +1,146 @@
-import badImg from "../../../public/img/typing-game/001bad.png";
-import okImg from "../../../public/img/typing-game/003ok.png";
-import goodImg from "../../../public/img/typing-game/002positive.png";
-// import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
-import { parseRussian } from "~/misc/helpers/translation";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCheckCircle, faLevelDownAlt, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
 import { arrorUturnDown } from "../common/media/svg";
 import { type TestWord } from "~/routes/hsk/2/tests";
-import { $, component$, useSignal } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useSignal,
+  useStore,
+  useTask$,
+  type QwikKeyboardEvent,
+} from "@builder.io/qwik";
 
 type TypingGameProps = {
-  words: TestWord[] | null;
+  words: TestWord[];
   level: string;
+};
+
+type WrongStore = {
+  answers: string[];
+  num: number;
 };
 
 export const QUEST_NUM = 10;
 
 export const TypingGame = component$(({ words, level }: TypingGameProps) => {
-  const questionNum = 1;
   const start = useSignal(false);
-  const shuffledWords: TestWord[] = [];
   const progress = useSignal(0);
+  const questionNum = useSignal(1);
+  const shuffled = useStore({ words });
   const corrects = useSignal(0);
-  const wrongs = useSignal(0);
-  const resultWords = "";
-  const wrongAnswers: string[] = [];
-  const question: TestWord | null = null;
-  const answer = "";
+  const resultWords = useSignal("");
+  const wrongStore = useStore<WrongStore>({ answers: [], num: 0 });
+  const question = useSignal(words[0]);
+  const answer = useSignal("");
 
-  // useEffect(() => {
-  //   if (!words) return;
-  //   testStarted(false);
-  //   shuffleArr(words);
-  //   const newArr = words.slice(0, QUEST_NUM);
-  //   setShuffledWords(newArr);
-  //   setQuestion(newArr[0]);
-  // }, [words]);
-
-  // useInterval(() => {
-  //   if (!start) return;
-  //   setProgress(progress + 0.5);
-  //   if (progress >= 100) {
-  //     skipQuestion();
-  //   }
-  // }, 100);
-
-  // const setNewQuestion = () => {
-  //   setProgress(0);
-  //   setQuestion(shuffledWords![questionNum]);
-  //   setQuestionNum(questionNum + 1);
-  // };
-
-  const skipQuestion = $(() => {
-    // setWrongAnswers([...wrongAnswers, question!.chinese]);
-    // setNewQuestion();
-    // setWrong(wrong + 1);
+  const setNewQuestion = $(() => {
+    progress.value = 0;
+    question.value = shuffled.words[questionNum.value];
+    questionNum.value++;
   });
 
-  // useEffect(() => {
-  //   if (questionNum > QUEST_NUM) {
-  //     setResultWords(correct > 8 ? "Отличный результат!" : correct > 5 ? "Неплохо!" : "Н-да уж...");
-  //     testStarted(false);
-  //     setStart(false);
-  //   }
-  // }, [questionNum]);
+  const skipQuestion = $(() => {
+    wrongStore.answers.push(question.value.chinese);
+    wrongStore.num++;
+    setNewQuestion();
+  });
 
-  const handleEnter = (e) => {
-    if (e.key === "Enter") checkIt();
-  };
+  useTask$(({ track }) => {
+    track(() => question.value);
+
+    if (questionNum.value > QUEST_NUM) {
+      resultWords.value =
+        corrects.value > 8 ? "Отличный результат!" : corrects.value > 5 ? "Неплохо!" : "Н-да уж...";
+      // testStarted(false);
+      start.value = false;
+    }
+
+    const id = setInterval(() => {
+      if (!start.value || questionNum.value > QUEST_NUM) return;
+      progress.value += 0.5;
+      if (progress.value >= 100) skipQuestion();
+    }, 100);
+    return () => {
+      progress.value = 0;
+      clearInterval(id);
+    };
+  });
 
   const checkIt = $(() => {
-    // if (answer === question!.chinese) {
-    //   setWrongAnswers([...wrongAnswers, ""]);
-    //   setCorrect(correct + 1);
-    //   setNewQuestion();
-    // }
-    // setAnswer("");
+    if (answer.value === question.value.chinese) {
+      corrects.value++;
+      wrongStore.answers.push("");
+      setNewQuestion();
+    }
+    answer.value = "";
   });
 
   const setNewGame = $(() => {
     start.value = true;
-    //   setWrongAnswers([]);
-    //   setResultWords("");
-    //   testStarted(true);
-    //   setQuestion(null);
-    //   setQuestionNum(1);
-    //   setAnswer("");
-    //   setCorrect(0);
-    //   setWrong(0);
-    //   setProgress(0);
-    //   if (words) {
-    //     shuffleArr(words);
-    //     const newArr = words.slice(0, QUEST_NUM);
-    //     setShuffledWords(newArr);
-    //     setQuestion(newArr[0]);
-    //   }
+    wrongStore.answers = [];
+    wrongStore.num = 0;
+    resultWords.value = "";
+    questionNum.value = 1;
+    answer.value = "";
+    corrects.value = 0;
+    progress.value = 0;
+    shuffleArr(words);
+    const newArr = words.slice(0, QUEST_NUM);
+    shuffled.words = newArr;
+    question.value = newArr[0];
   });
 
-  const gameDiv = (
-    <div>
-      <div class='float-right'>
-        <button class='btn btn-error btn-sm' onClick$={skipQuestion}>
-          Пропустить
-        </button>
-      </div>
-      <div class='prose mb-3'>
-        <h4 class='card-title'>
-          Вопрос {questionNum}/{QUEST_NUM}
-        </h4>
-      </div>
-      <p
-        class=' text-sm'
-        dangerouslySetInnerHTML={question ? parseRussian(question.translation, false) : ""}
-      ></p>
-
-      <div class='form-control'>
-        <div class='input-group w-full '>
-          <input
-            type='text'
-            class='input input-bordered w-full'
-            placeholder='汉字'
-            // onChange$={(e) => setAnswer(e.target.value)}
-            value={answer}
-            // onKeyDown$={handleEnter}
-            autoComplete='off'
-          />
-          <button class='btn btn-success' type='button' onClick$={checkIt}>
-            {arrorUturnDown}
-          </button>
-        </div>
-      </div>
-
-      {/* <label class='ms-1 mt-1'>
-        <FontAwesomeIcon icon={faCheckCircle} class='text-success' /> {corrects}{" "}
-        <FontAwesomeIcon icon={faTimesCircle} class='text-danger ms-2' /> {wrongs}
-      </label> */}
-    </div>
-  );
-
   return (
-    shuffledWords && (
+    shuffled.words && (
       <div class='card bg-neutral w-full mb-3'>
-        <div class='progress mx-1' style={{ height: "3px" }}>
-          <div
-            class='progress-bar bg-success'
-            role='progressbar'
-            style={{ width: `${100 - progress.value}%` }}
-          ></div>
-          <div
-            class='progress-bar bg-danger'
-            role='progressbar'
-            style={{ width: `${progress.value}%` }}
-          ></div>
-        </div>
-
         <div class='card-body'>
           {start.value ? (
-            gameDiv
+            <div>
+              <div class='float-right'>
+                <div
+                  class='radial-progress text-error mr-3'
+                  style={`--value:${progress.value}; --size:3rem;`}
+                >
+                  {Math.ceil(progress.value)}
+                </div>
+
+                <button class='btn btn-error btn-sm' onClick$={skipQuestion}>
+                  Пропустить
+                </button>
+              </div>
+              <div class='prose mb-3'>
+                <h4 class='card-title'>
+                  Вопрос {questionNum}/{QUEST_NUM}
+                </h4>
+              </div>
+              <p class='text-sm mb-3' dangerouslySetInnerHTML={question.value?.translation}></p>
+
+              <div class='form-control'>
+                <div class='input-group w-full '>
+                  <input
+                    type='text'
+                    class='input input-bordered w-full'
+                    placeholder='汉字'
+                    value={answer.value}
+                    onChange$={(e) => {
+                      answer.value = e.target.value;
+                    }}
+                    onKeyDown$={(e: QwikKeyboardEvent<HTMLInputElement>) => {
+                      if (e.key === "Enter") return checkIt();
+                    }}
+                    autoComplete='off'
+                  />
+                  <button class='btn btn-success' type='button' onClick$={checkIt}>
+                    {arrorUturnDown}
+                  </button>
+                </div>
+              </div>
+            </div>
           ) : (
             <div>
               <div class='prose mb-2'>
                 <h3 class='card-title'>
-                  {questionNum > QUEST_NUM ? (
+                  {questionNum.value > QUEST_NUM ? (
                     "Результат"
                   ) : level ? (
                     <>
@@ -172,28 +151,36 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
                   )}
                 </h3>
               </div>
-              {questionNum > QUEST_NUM && (
-                <div class='row mb-3 text-center'>
-                  <div class='col-sm-4'>
-                    <div class='mt-2'>
-                      <img
-                        width={64}
-                        height={64}
-                        src={corrects.value > 8 ? goodImg : corrects.value < 6 ? badImg : okImg}
-                        alt='your result'
-                      />
-                    </div>
+              {questionNum.value > QUEST_NUM && (
+                <div class='flex justify-center mb-3'>
+                  <div class=''>
+                    <img
+                      width={64}
+                      height={64}
+                      src={
+                        corrects.value > 8
+                          ? "/img/typing-game/002positive.png"
+                          : corrects.value < 6
+                          ? "/img/typing-game/001bad.png"
+                          : "/img/typing-game/003ok.png"
+                      }
+                      alt='your result'
+                    />
                   </div>
-                  <div class='col-sm-4'>
-                    <p class=' h5'>Верно</p>
-                    <p class=' h2 text-success'>
+                  <div class='mx-4 mt-2 text-center'>
+                    <div class='prose'>
+                      <h4>Верно</h4>
+                    </div>
+                    <p class='text-success'>
                       <strong>{corrects.value}</strong>
                     </p>
                   </div>
-                  <div class='col-sm-4'>
-                    <p class=' h5'>Ошибки</p>
-                    <p class=' h2 text-danger'>
-                      <strong>{wrongs.value}</strong>
+                  <div class='mt-2 text-center'>
+                    <div class='prose'>
+                      <h4>Ошибки</h4>
+                    </div>
+                    <p class='h2 text-error'>
+                      <strong>{wrongStore.num}</strong>
                     </p>
                   </div>
                 </div>
@@ -206,16 +193,16 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
               ) : (
                 <div>
                   <button class='btn btn-sm btn-info mr-2' onClick$={setNewGame}>
-                    {questionNum > QUEST_NUM ? "Еще раз" : "Старт"}
+                    {questionNum.value > QUEST_NUM ? "Еще раз" : "Старт"}
                   </button>
                   <span>
-                    {questionNum > QUEST_NUM
-                      ? `${resultWords} ${
-                          wrongAnswers.filter((x) => Boolean(x)).length > 0
+                    {questionNum.value > QUEST_NUM
+                      ? `${resultWords.value} ${
+                          wrongStore.answers.filter((x) => Boolean(x)).length > 0
                             ? "Нужно повторить "
                             : ""
-                        } ${wrongAnswers.filter((x) => Boolean(x)).join(", ")}`
-                      : "Проверьте насколько хорошо вы знаете эти слова. Впишите нужное китайское слово за 10 сек."}
+                        } ${wrongStore.answers.filter((x) => Boolean(x)).join(", ")}`
+                      : "Проверьте насколько хорошо вы знаете эти слова. Впишите нужные слова на время!"}
                   </span>
                 </div>
               )}
@@ -228,11 +215,11 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
             <div
               key={ind}
               class={`badge mx-2 mb-2 ${
-                wrongAnswers.length > ind
-                  ? wrongAnswers[ind]
+                wrongStore.answers.length > ind
+                  ? wrongStore.answers[ind]
                     ? "bg-error"
                     : "bg-success"
-                  : "bg-secondary"
+                  : "bg-neutral-content"
               }`}
             >
               {" "}

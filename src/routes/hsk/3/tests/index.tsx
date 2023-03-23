@@ -5,56 +5,36 @@ import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
 import { TableCard } from "~/components/hsk/table-card";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
-import { type OldHskWordType } from "../table";
+import { type NewHskWordType } from "../table";
 import { apiGetReq } from "~/misc/actions/request";
-import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
-import { getRandElem } from "~/misc/helpers/tools";
 import { playSvg } from "~/components/common/media/svg";
 import CONST_URLS from "~/misc/consts/urls";
 import { TypingGame } from "~/components/hsk/typing-game";
 
-export type TestWord = {
-  chinese: string;
-  level: string;
-  id: number;
-  pinyin: string;
-  translation: string;
-};
+import {
+  type TestWord,
+  type QuestionType,
+  type QuestionStore,
+  type AnswerStore,
+  collectOptions,
+  checkAnswers,
+  QuestKinds,
+} from "../../2/tests";
 
-export const QuestKinds = {
-  chars: "chars",
-  pinyin: "pinyin",
-  audio: "audio",
-};
-
-export type QuestionType = "chars" | "pinyin" | "audio";
+import { parseRussian } from "~/misc/helpers/translation";
 
 // get 150 words
 export const getTestWords = routeLoader$(async (ev): Promise<TestWord[]> => {
   const lvl = ev.query.get("lvl") || "1";
-  const res = await apiGetReq(`/api/lexicon/all?hsk_level=${lvl}`, undefined, []);
-  return res.map(({ chinese, level, word_id: id, pinyin, translation }: OldHskWordType) => ({
-    chinese,
-    level,
+  const res = await apiGetReq(`/api/newhskwords/all?hsk_level=${lvl}`, undefined, []);
+  return res.map(({ cn: chinese, lvl: level, py: pinyin, id, ru }: NewHskWordType) => ({
     id,
+    level,
+    chinese,
     pinyin,
-    translation,
+    translation: parseRussian(ru, false),
   }));
 });
-
-export type QuestionStore = {
-  chars: null | TestWord[];
-  pinyin: null | TestWord[];
-  audio: null | TestWord[];
-};
-
-export type AnswersObj = { [x: number]: boolean };
-
-export type AnswerStore = {
-  chars: AnswersObj;
-  pinyin: AnswersObj;
-  audio: AnswersObj;
-};
 
 export default component$(() => {
   const QUEST_NUM = 5;
@@ -117,7 +97,7 @@ export default component$(() => {
         <Sidebar>
           <TableCard
             level={loc.url.searchParams.get("lvl") || "1"}
-            isOldHsk={true}
+            isOldHsk={false}
             isForTests={true}
           />
         </Sidebar>
@@ -183,46 +163,6 @@ export default component$(() => {
   );
 });
 
-export function collectOptions(
-  words: TestWord[],
-  answer: TestWord,
-  OPTIONS_NUM: number
-): TestWord[] {
-  const arr: TestWord[] = [];
-  arr[0] = answer;
-  while (arr.length < OPTIONS_NUM) {
-    const randOpt = getRandElem(words)!;
-    if (!arr.some((x) => x.id === randOpt.id)) {
-      arr.push(randOpt);
-    }
-  }
-  shuffleArr(arr);
-  return arr;
-}
-
-export const checkAnswers = (answers: AnswersObj, q: QuestionType) => {
-  const successClasses = ["bg-success", "text-success-content"];
-  const errClasses = ["bg-error", "text-error-content"];
-  for (const wordId in answers) {
-    if (!Object.prototype.hasOwnProperty.call(answers, wordId)) continue;
-
-    const questNode = document.getElementById(`${q}_${wordId}`);
-    questNode?.classList.remove(...successClasses, ...errClasses);
-
-    answers[wordId]
-      ? questNode?.classList.add(...successClasses)
-      : questNode?.classList.add(...errClasses);
-  }
-};
-
 export const playAudio = (id: number, lvl: string) => {
-  const firstIdPerLvl: { [key: string]: number } = {
-    1: 0,
-    2: 150,
-    3: 300,
-    4: 600,
-    5: 1200,
-    6: 2500,
-  };
-  new Audio(`${CONST_URLS.myAudioURL}hsk${lvl}/${id - 1 - firstIdPerLvl[lvl]}.mp3`).play();
+  new Audio(`${CONST_URLS.myAudioURL}newhsk/band${lvl}/${id}.mp3`).play();
 };
