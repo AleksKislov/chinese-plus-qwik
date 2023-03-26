@@ -3,7 +3,7 @@ import CONST_URLS from "~/misc/consts/urls";
 import CONSTANTS from "~/misc/consts/consts";
 import type { OldHskWordType } from "~/routes/hsk/2/table";
 import Cookies from "js-cookie";
-import { apiPostReq, apiDeleteReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 import { alertsContext } from "~/root";
 import { minusSvg, plusSvg, playSvg } from "../common/media/svg";
 
@@ -30,11 +30,11 @@ export const pronounce = (id: number, lvl: number) => {
 };
 
 export const addUserHskWord = async (word: OldHskWordType, token: string) => {
-  await apiPostReq("/api/words/", word, token);
+  await ApiService.post("/api/words/", word, token);
 };
 
 export const removeUserHskWord = async (wordId: number, token: string) => {
-  await apiDeleteReq("/api/words/" + wordId, token);
+  await ApiService.delete("/api/words/" + wordId, token);
 };
 
 export const OldHskTableRow = component$(

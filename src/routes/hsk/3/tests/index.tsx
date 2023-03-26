@@ -6,7 +6,7 @@ import { PageTitle } from "~/components/common/layout/title";
 import { TableCard } from "~/components/hsk/table-card";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { type NewHskWordType } from "../table";
-import { apiGetReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 import { playSvg } from "~/components/common/media/svg";
 import CONST_URLS from "~/misc/consts/urls";
 import { TypingGame } from "~/components/hsk/typing-game";
@@ -26,7 +26,7 @@ import { parseRussian } from "~/misc/helpers/translation";
 // get 150 words
 export const getTestWords = routeLoader$(async (ev): Promise<TestWord[]> => {
   const lvl = ev.query.get("lvl") || "1";
-  const res = await apiGetReq(`/api/newhskwords/all?hsk_level=${lvl}`, undefined, []);
+  const res = await ApiService.get(`/api/newhskwords/all?hsk_level=${lvl}`, undefined, []);
   return res.map(({ cn: chinese, lvl: level, py: pinyin, id, ru }: NewHskWordType) => ({
     id,
     level,

@@ -3,7 +3,7 @@ import { useLocation } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { TableCard } from "~/components/hsk/table-card";
 import { Pagination } from "~/components/hsk/pagination";
-import { apiGetReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 import { NewHskTable } from "~/components/hsk/new-hsk-table";
 import { PageTitle } from "~/components/common/layout/title";
 import { FlexRow } from "~/components/common/layout/flex-row";
@@ -22,7 +22,7 @@ export type NewHskWordType = {
 export const getHskWords = routeLoader$(async (ev): Promise<NewHskWordType[]> => {
   const lvl = ev.query.get("lvl") || "1";
   const lmt = ev.query.get("pg") || "0";
-  return await apiGetReq(`/api/newhskwords?hsk_level=${lvl}&limit=${lmt}`, undefined, []);
+  return await ApiService.get(`/api/newhskwords?hsk_level=${lvl}&limit=${lmt}`, undefined, []);
 });
 
 export default component$(() => {

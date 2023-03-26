@@ -1,4 +1,4 @@
-import { component$, useClientEffect$, useStyles$ } from "@builder.io/qwik";
+import { component$, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { tableMap, pinyinMap } from "~/misc/consts/pinyin";
 import styles from "./table.css?inline";
@@ -44,7 +44,7 @@ export default component$(() => {
 
   const consonansts = Object.keys(tableMap);
 
-  useClientEffect$(() => {
+  useVisibleTask$(() => {
     initHiglights();
   });
 

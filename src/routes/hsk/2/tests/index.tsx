@@ -6,7 +6,7 @@ import { PageTitle } from "~/components/common/layout/title";
 import { TableCard } from "~/components/hsk/table-card";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { type OldHskWordType } from "../table";
-import { apiGetReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
 import { getRandElem } from "~/misc/helpers/tools";
 import { playSvg } from "~/components/common/media/svg";
@@ -32,7 +32,7 @@ export type QuestionType = "chars" | "pinyin" | "audio";
 // get 150 words
 export const getTestWords = routeLoader$(async (ev): Promise<TestWord[]> => {
   const lvl = ev.query.get("lvl") || "1";
-  const res = await apiGetReq(`/api/lexicon/all?hsk_level=${lvl}`, undefined, []);
+  const res = await ApiService.get(`/api/lexicon/all?hsk_level=${lvl}`, undefined, []);
   return res.map(({ chinese, level, word_id: id, pinyin, translation }: OldHskWordType) => ({
     chinese,
     level,

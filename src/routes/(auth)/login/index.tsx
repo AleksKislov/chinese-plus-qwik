@@ -2,17 +2,10 @@ import { component$, useStore, $, useOnDocument, useContext } from "@builder.io/
 import { useNavigate } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
 import { userContext } from "~/root";
-import { apiPostReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 
-export const login = async (
-  email: string,
-  password: string
-): Promise<{ token: string } | undefined> => {
-  try {
-    return await apiPostReq("/api/auth", { email, password });
-  } catch (err) {
-    console.log(err);
-  }
+export const login = (email: string, password: string): Promise<{ token: string } | null> => {
+  return ApiService.post("/api/auth", { email, password }, "", null);
 };
 
 export default component$(() => {

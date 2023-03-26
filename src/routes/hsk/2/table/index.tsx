@@ -5,7 +5,7 @@ import { Alerts } from "~/components/common/alerts/alerts";
 import { TableCard } from "~/components/hsk/table-card";
 import { Pagination } from "~/components/hsk/pagination";
 import { OldHskTable } from "~/components/hsk/hsk-table";
-import { apiGetReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 import { PageTitle } from "~/components/common/layout/title";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
@@ -33,13 +33,13 @@ export type UserOldHskWordType = {
 export const getUserHsk2Words = routeLoader$(async ({ cookie }): Promise<UserOldHskWordType[]> => {
   const token = cookie.get("token")?.value || "";
   if (!token) return [];
-  return await apiGetReq("/api/words", token, []);
+  return await ApiService.get("/api/words", token, []);
 });
 
 export const getHskWords = routeLoader$(async (ev): Promise<OldHskWordType[]> => {
   const lvl = ev.query.get("lvl") || "1";
   const lmt = ev.query.get("pg") || "0";
-  return await apiGetReq(`/api/lexicon?hsk_level=${lvl}&limit=${lmt}`, undefined, []);
+  return await ApiService.get(`/api/lexicon?hsk_level=${lvl}&limit=${lmt}`, undefined, []);
 });
 
 export default component$(() => {

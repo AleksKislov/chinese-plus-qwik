@@ -60,17 +60,17 @@ export default component$(() => {
                 <MenuItem name={watch.name} links={watch.links} />
                 <MenuItem name={start.name} links={start.links} />
 
-                <li tabIndex={0} class='dropdown dropdown-hover w-52'>
+                <li tabIndex={0} class='dropdown dropdown-hover'>
                   <label>
                     HSK
                     {dropdownArrowBottom}
                   </label>
-
-                  <ul class='dropdown-content menu p-2 shadow bg-neutral rounded-box w-52'>
+                  {/* dropdown-content menu shadow bg-neutral rounded-box p-2 */}
+                  <ul class='dropdown-content menu shadow bg-neutral rounded-box w-52 p-2'>
                     <li class='menu-title'>
                       <small>HSK 2.0</small>
                     </li>
-                    <li class={"w-82"}>
+                    <li>
                       <Link href='/hsk/2/table'>Таблица</Link>
                     </li>
                     <li>
@@ -93,6 +93,10 @@ export default component$(() => {
                       <Link href='/hsk/3/search'>Поиск</Link>
                     </li>
                   </ul>
+                </li>
+
+                <li tabIndex={0}>
+                  <Link href='/feedback'>Фидбэк</Link>
                 </li>
               </ul>
             </div>

@@ -1,5 +1,5 @@
 import { $, component$, useOnDocument, useSignal, type Signal } from "@builder.io/qwik";
-import { apiPostReq } from "~/misc/actions/request";
+import { ApiService } from "~/misc/actions/request";
 import { type OldHskWordType } from "~/routes/hsk/2/table";
 import { type NewHskWordType } from "~/routes/hsk/3/table";
 import { searchSvg } from "../common/media/svg";
@@ -22,7 +22,7 @@ export const HskSearchForm = component$(({ hskWords, isOldHsk }: HskSearchFormPr
   const getHskWords = $(async () => {
     const chinese = chineseWord.value;
     if (!chinese) return (hskWords.value = []);
-    hskWords.value = await apiPostReq(path, { chinese }, undefined, []);
+    hskWords.value = await ApiService.post(path, { chinese }, undefined, []);
   });
 
   useOnDocument(
