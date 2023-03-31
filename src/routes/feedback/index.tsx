@@ -1,11 +1,22 @@
 import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { telegramSvg, vkSvg, youtubeSvg } from "~/components/common/media/svg";
 import { ApiService } from "~/misc/actions/request";
 import { PostForm } from "~/components/feedback/post-form";
 import { PostCard } from "~/components/feedback/post-card";
+
+export type newPostData = {
+  title: string;
+  text: string;
+  tag: MsgType;
+};
+
+export const useAddPost = routeAction$((post, ev) => {
+  const token = ev.cookie.get("token")?.value;
+  return ApiService.post("/api/posts", post, token);
+});
 
 export type MsgType = "wish" | "bug" | "news";
 type MsgsType = "all" | "wish" | "bug" | "news";
@@ -50,6 +61,12 @@ export default component$(() => {
 
   const DisplayBtns: MsgsType[] = ["all", "wish", "bug", "news"];
 
+  const socMedia = [
+    { href: "https://www.youtube.com/c/Buyilehuorg", svg: youtubeSvg },
+    { href: "https://t.me/chineseplusnew", svg: telegramSvg },
+    { href: "https://vk.com/buyilehu", svg: vkSvg },
+  ];
+
   return (
     <>
       <PageTitle txt={"Гостевая и Новости Проекта"} />
@@ -58,9 +75,12 @@ export default component$(() => {
           <div class='card w-full bg-neutral h-full'>
             <div class='card-body'>
               <div class={"flex"}>
-                За проектом можно следить и в соцсетях: <span class={"pl-2"}>{youtubeSvg}</span>
-                <span class={"pl-2"}>{telegramSvg}</span>
-                <span class={"pl-2"}>{vkSvg}</span>
+                За проектом можно следить и в соцсетях:{" "}
+                {socMedia.map(({ href, svg }, ind) => (
+                  <a href={href} target={"_blank"} class={"pl-2 hover:text-info"} key={ind}>
+                    {svg}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -72,6 +92,7 @@ export default component$(() => {
               <div class='btn-group'>
                 {DisplayBtns?.map((btnType, ind) => (
                   <button
+                    key={btnType}
                     class={`btn btn-sm btn-info lowercase ${
                       chosenMsgsType.value === btnType ? "" : "btn-outline"
                     }`}

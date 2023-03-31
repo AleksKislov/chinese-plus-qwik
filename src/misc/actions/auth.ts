@@ -15,6 +15,8 @@ export interface UserFromDB {
     _id: string;
     name: string;
     avatar: string;
+    role: string | null;
+    email: string;
   };
 }
 

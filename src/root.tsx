@@ -18,6 +18,9 @@ export interface User {
   name: string;
   avatar: string;
   loggedIn: boolean;
+  isAdmin: boolean;
+  isModerator: boolean;
+  email: string;
 }
 
 export interface Alert {
@@ -30,7 +33,15 @@ export const alertsContext = createContextId<Alert[]>("alerts-context");
 
 export default component$(() => {
   useStyles$(globalStyles);
-  const userState = useStore<User>({ name: "", avatar: "", loggedIn: false, _id: "" });
+  const userState = useStore<User>({
+    name: "",
+    avatar: "",
+    loggedIn: false,
+    _id: "",
+    isAdmin: false,
+    isModerator: false,
+    email: "",
+  });
   const alertsState = useStore<Alert[]>([]);
 
   useVisibleTask$(async () => {
@@ -46,7 +57,10 @@ export default component$(() => {
       userState._id = resp.user._id;
       userState.avatar = resp.user.avatar;
       userState.name = resp.user.name;
+      userState.email = resp.user.email;
       userState.loggedIn = true;
+      userState.isAdmin = resp.user.role === "admin";
+      userState.isModerator = resp.user.role === "moderator";
     }
     return cntrlr.abort;
   });

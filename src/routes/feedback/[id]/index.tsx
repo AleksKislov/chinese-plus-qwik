@@ -1,29 +1,20 @@
 import { component$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { Link, routeLoader$ } from "@builder.io/qwik-city";
+import { CommentCard } from "~/components/common/comments/comment-card";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PostCard } from "~/components/feedback/post-card";
 import { ApiService } from "~/misc/actions/request";
 import { type Post } from "..";
-
-type Comment = {
-  addressees: string[];
-  _id: string;
-  text: string;
-  name: string;
-  avatar: string;
-  user: string;
-  post_id: string;
-  destination: string;
-  date: string;
-};
+import { type Comment } from "~/components/common/comments/comment-card";
+import { infoAlertSvg } from "~/components/common/media/svg";
+import { CommentForm, WHERE } from "~/components/common/comments/comment-form";
 
 export const getPost = routeLoader$(({ params }): Promise<Post> => {
   return ApiService.get(`/api/posts/${params.id}`, undefined, {});
 });
 
 export const getComments = routeLoader$(({ params }): Promise<Comment[]> => {
-  const where = "post";
-  return ApiService.get(`/api/comments?where=${where}&id=${params.id}`, undefined, []);
+  return ApiService.get(`/api/comments?where=${WHERE.post}&id=${params.id}`, undefined, []);
 });
 
 export default component$(() => {
@@ -32,11 +23,34 @@ export default component$(() => {
   return (
     <>
       <FlexRow>
-        <div class='w-full md:w-1/2 mb-3 mr-4 h-24'>
+        <div class='w-full md:w-1/2 mr-4 mb-3'>
+          <div class='mb-3'>
+            <Link href={`/feedback`}>
+              <button class={`btn btn-sm btn-info btn-outline`} type='button'>
+                назад
+              </button>
+            </Link>
+          </div>
           <PostCard post={post.value} isPostPage={true} />
+          <CommentForm contentId={post.value._id} where={WHERE.post} path={undefined} />
         </div>
 
-        <div class='w-full md:w-1/2'></div>
+        <div class='w-full md:w-1/2'>
+          <div class={"prose mb-3"}>
+            <h3>Комментарии</h3>
+          </div>
+
+          {comments.value.length ? (
+            comments.value.map((msg, ind) => <CommentCard comment={msg} key={ind} />)
+          ) : (
+            <div class='alert alert-info shadow-lg'>
+              <div>
+                {infoAlertSvg}
+                <span>Еще никто не комментировал</span>
+              </div>
+            </div>
+          )}
+        </div>
       </FlexRow>
     </>
   );
