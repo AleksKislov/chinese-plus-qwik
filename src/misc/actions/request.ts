@@ -42,17 +42,22 @@ async function myFetch(path: string, opts: ReqOptions, defaultVal?: any): Promis
 
 export class ApiService {
   static get(path: string, token?: string, defaultVal?: any): Promise<any> {
-    const opts = getReqOptions("GET", null, token);
-    return myFetch(path, opts, defaultVal);
+    return myFetch(path, getReqOptions("GET", null, token), defaultVal);
   }
 
   static post(path: string, body: Object, token?: string, defaultVal?: any): Promise<any> {
-    const opts = getReqOptions("POST", JSON.stringify(body), token);
-    return myFetch(path, opts, defaultVal);
+    return myFetch(path, getReqOptions("POST", JSON.stringify(body), token), defaultVal);
+  }
+
+  static put(path: string, body: Object | null, token?: string, defaultVal?: any): Promise<any> {
+    return myFetch(
+      path,
+      getReqOptions("PUT", body ? JSON.stringify(body) : null, token),
+      defaultVal
+    );
   }
 
   static delete(path: string, token?: string, defaultVal?: any): Promise<any> {
-    const opts = getReqOptions("DELETE", null, token);
-    return myFetch(path, opts, defaultVal);
+    return myFetch(path, getReqOptions("DELETE", null, token), defaultVal);
   }
 }

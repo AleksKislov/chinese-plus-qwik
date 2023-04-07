@@ -1,15 +1,18 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, type Signal, useContext } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
+import { userContext } from "~/root";
 import { msgTypes, type Post } from "~/routes/feedback";
+import { type Addressee } from "../common/comments/comment-form";
 import { UserDateDiv } from "../common/comments/user-with-date";
 import { commentSvg } from "../common/media/svg";
 
-type PostCardType = {
+type PostCardProps = {
   post: Post;
   isPostPage: boolean;
+  addressees: Signal<Addressee[]>;
 };
 
-export const PostCard = component$(({ post, isPostPage }: PostCardType) => {
+export const PostCard = component$(({ post, isPostPage, addressees }: PostCardProps) => {
   const {
     _id,
     avatar,
@@ -21,14 +24,33 @@ export const PostCard = component$(({ post, isPostPage }: PostCardType) => {
     comments_id: commentIds,
     text,
   } = post;
+  const userState = useContext(userContext);
+  const ownsPost = userState._id === userId;
 
   return (
     <div class='card w-full bg-neutral mb-3'>
       <div class='card-body'>
         <div class='flex'>
-          <div class='avatar mr-4'>
-            <div class='w-12 mask mask-squircle'>
-              <img src={`https:${avatar}`} />
+          <div
+            class='tooltip tooltip-info'
+            data-tip={ownsPost ? "Это вы" : "Обратиться к пользователю"}
+          >
+            <div class='avatar mr-4'>
+              <div
+                class='w-12 mask mask-squircle'
+                onClick$={() => {
+                  if (ownsPost || addressees.value.some((x) => x.id === userId)) return;
+                  addressees.value = [
+                    ...addressees.value,
+                    {
+                      id: userId,
+                      name: userName,
+                    },
+                  ];
+                }}
+              >
+                <img src={`https:${avatar}`} />
+              </div>
             </div>
           </div>
           <div>

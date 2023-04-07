@@ -17,7 +17,7 @@ export const Tooltip = component$(() => {
         <Slot name='one' />
       </div>
       <span
-        class={`absolute top-6 transition-all rounded bg-base-300 p-2 text-primary group-hover:scale-100 ${
+        class={`absolute top-6 right-0 transition-all rounded bg-base-300 p-2 text-primary group-hover:scale-100 ${
           state.value ? "scale-100" : "scale-0"
         }`}
       >

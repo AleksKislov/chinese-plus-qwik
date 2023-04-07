@@ -16,5 +16,3 @@ export const EmojiSelect = component$(({ emoji }: { emoji: Signal<string> }) => 
     </Tooltip>
   );
 });
-
-export default EmojiSelect;

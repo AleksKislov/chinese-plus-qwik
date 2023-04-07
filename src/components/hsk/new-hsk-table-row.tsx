@@ -68,7 +68,7 @@ export const MoreInfoModal = component$(
     return (
       <>
         <input type='checkbox' id={modalId} class='modal-toggle' />
-        <label for={modalId} class='modal cursor-pointer'>
+        <div class='modal'>
           <div class='modal-box relative'>
             <label for={modalId} class='btn btn-sm btn-circle absolute right-2 top-2'>
               ✕
@@ -93,7 +93,7 @@ export const MoreInfoModal = component$(
             </div>
             <RuTranslation ru={ru} showExamples={showExamples.value} />
           </div>
-        </label>
+        </div>
       </>
     );
   }

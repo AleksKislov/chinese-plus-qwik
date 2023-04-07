@@ -5,7 +5,7 @@ export const playSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -22,7 +22,7 @@ export const minusSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path stroke-linecap='round' stroke-linejoin='round' d='M18 12H6' />
   </svg>
@@ -35,7 +35,7 @@ export const plusSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6' />
   </svg>
@@ -48,7 +48,7 @@ export const moreInfoSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -65,7 +65,7 @@ export const exitSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -88,7 +88,7 @@ export const collapsedMenuSvg = (
 );
 
 export const earthPicSvg = (
-  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='w-6 h-6'>
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='w-4 h-4'>
     <path d='M15.75 8.25a.75.75 0 01.75.75c0 1.12-.492 2.126-1.27 2.812a.75.75 0 11-.992-1.124A2.243 2.243 0 0015 9a.75.75 0 01.75-.75z' />
     <path
       fill-rule='evenodd'
@@ -105,7 +105,7 @@ export const enterSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -146,7 +146,7 @@ export const searchSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -163,7 +163,7 @@ export const rewindSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -180,7 +180,7 @@ export const arrorUturnDown = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -197,7 +197,7 @@ export const commentSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -250,7 +250,7 @@ export const thumbUpSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -267,7 +267,7 @@ export const editSvg = (
     viewBox='0 0 24 24'
     stroke-width='1.5'
     stroke='currentColor'
-    class='w-6 h-6'
+    class='w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -282,7 +282,7 @@ export const infoAlertSvg = (
     xmlns='http://www.w3.org/2000/svg'
     fill='none'
     viewBox='0 0 24 24'
-    class='stroke-current flex-shrink-0 w-6 h-6'
+    class='stroke-current flex-shrink-0 w-4 h-4'
   >
     <path
       stroke-linecap='round'
@@ -290,5 +290,18 @@ export const infoAlertSvg = (
       stroke-width='2'
       d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
     ></path>
+  </svg>
+);
+
+export const xMarkSvg = (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    stroke-width='1.5'
+    stroke='currentColor'
+    class='w-4 h-4'
+  >
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12' />
   </svg>
 );
