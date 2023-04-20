@@ -2,14 +2,14 @@ import { component$, type Signal, useContext } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { userContext } from "~/root";
 import { msgTypes, type Post } from "~/routes/feedback";
-import { type Addressee } from "../common/comments/comment-form";
+import { WHERE, type Addressee } from "../common/comments/comment-form";
 import { UserDateDiv } from "../common/comments/user-with-date";
-import { commentSvg } from "../common/media/svg";
+import { CommentsBtn } from "../common/content-cards/comments-btn";
 
 type PostCardProps = {
   post: Post;
   isPostPage: boolean;
-  addressees: Signal<Addressee[]>;
+  addressees: Signal<Addressee[]> | null;
 };
 
 export const PostCard = component$(({ post, isPostPage, addressees }: PostCardProps) => {
@@ -39,14 +39,10 @@ export const PostCard = component$(({ post, isPostPage, addressees }: PostCardPr
               <div
                 class='w-12 mask mask-squircle'
                 onClick$={() => {
-                  if (ownsPost || addressees.value.some((x) => x.id === userId)) return;
-                  addressees.value = [
-                    ...addressees.value,
-                    {
-                      id: userId,
-                      name: userName,
-                    },
-                  ];
+                  if (!addressees || ownsPost || addressees.value.some((x) => x.id === userId)) {
+                    return;
+                  }
+                  addressees.value = [...addressees.value, { id: userId, name: userName }];
                 }}
               >
                 <img src={`https:${avatar}`} />
@@ -63,17 +59,14 @@ export const PostCard = component$(({ post, isPostPage, addressees }: PostCardPr
         <p class={"mt-2"} dangerouslySetInnerHTML={text}></p>
 
         <div class={"flex justify-between"}>
-          <UserDateDiv userId={userId} userName={userName} date={date} />
+          <UserDateDiv userId={userId} userName={userName} date={date} ptNum={2} />
 
           {!isPostPage && (
-            <div class={""}>
-              <Link href={`/feedback/${post._id}`}>
-                <button class='btn btn-info btn-sm btn-outline float-right'>
-                  {commentSvg}{" "}
-                  {commentIds.length > 0 && <span class={"ml-1"}>{commentIds.length}</span>}
-                </button>
-              </Link>
-            </div>
+            <CommentsBtn
+              contentId={post._id}
+              contentType={WHERE.post}
+              commentIdsLen={commentIds.length}
+            />
           )}
         </div>
       </div>

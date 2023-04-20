@@ -1,20 +1,19 @@
 import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
-import { dateToStr } from "~/misc/helpers/tools";
+import { SmallDate } from "../ui/small-date";
+import { UserLink } from "../content-cards/user-link";
 
-type UserDateDivProps = { userId: string; userName: string; date: string };
+type UserDateDivProps = { userId: string; userName: string; date: string; ptNum: number };
 
-export const UserDateDiv = component$(({ userId, userName, date }: UserDateDivProps) => {
+export const UserDateDiv = component$(({ userId, userName, date, ptNum }: UserDateDivProps) => {
+  const pt = "pt-" + ptNum;
   return (
     <>
-      <div class={"flex pt-2"}>
+      <div class={"flex " + pt}>
         <div>
-          <Link href={`/users/${userId}`}>
-            <small class={"text-accent"}>{userName}</small>
-          </Link>
+          <UserLink userId={userId} userName={userName} />
         </div>
         <div>
-          <small class={"text-neutral-500 ml-1"}>{dateToStr(date, false)}</small>
+          <SmallDate onlyDate={false} date={date} />
         </div>
       </div>
     </>

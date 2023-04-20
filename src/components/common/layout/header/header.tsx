@@ -197,7 +197,7 @@ export const watch: MenuItemProps = {
       text: "Видео",
     },
     {
-      href: "/watch/unapproved-vides",
+      href: "/watch/unapproved-videos",
       text: "На проверке",
     },
   ],

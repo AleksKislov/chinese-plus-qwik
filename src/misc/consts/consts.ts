@@ -106,6 +106,7 @@ const CONSTANTS = {
   CONTENT: {
     video: "video",
     text: "text",
+    post: "post",
   },
 };
 

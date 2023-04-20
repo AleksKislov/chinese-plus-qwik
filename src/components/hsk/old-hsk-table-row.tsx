@@ -57,7 +57,7 @@ export const OldHskTableRow = component$(
     const addOrRemoveHskWord = $(async () => {
       const token = Cookies.get("token");
 
-      console.log(userWordsLenSignal.value);
+      // console.log(userWordsLenSignal.value);
       if (!token) {
         return alertsState.push({ bg: "alert-error", text: "Нужно войти" });
       }

@@ -6,6 +6,7 @@ import { type Addressee, type CommentIdToReply } from "./comment-form";
 import { ApiService } from "~/misc/actions/request";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { EditCommentModal } from "./edit-comment-modal";
+import { getLikeBtnTooltipTxt } from "../content-cards/like-btn";
 
 export type Comment = {
   addressees: string[];
@@ -32,16 +33,14 @@ type CommentCardProps = {
   addressees: Signal<Addressee[]>;
 };
 
-export const useAddLike = globalAction$((params, ev) => {
+export const useCommentLike = globalAction$((params, ev) => {
   const token = ev.cookie.get("token")?.value;
-  // console.log(token, params);
-
   return ApiService.put(`/api/comments/like/${params._id}`, null, token, {});
 }, zod$({ _id: z.string() }));
 
 export const CommentCard = component$(
   ({ comment, commentIdToReply, addressees }: CommentCardProps) => {
-    const addDelLike = useAddLike();
+    const addDelLike = useCommentLike();
     const userState = useContext(userContext);
     const { loggedIn, isAdmin } = userState;
     const { _id, date, text, name: userName, user: userId, likes } = comment;
@@ -49,7 +48,6 @@ export const CommentCard = component$(
     const canEdit = ownsComment || isAdmin;
     const isLiked = loggedIn && likes.some((like) => like.user === userState._id);
 
-    // console.log(comment);
     const modalId = `edit-modal-${_id}`;
     return (
       <>
@@ -87,7 +85,7 @@ export const CommentCard = component$(
             </div>
 
             <div class={"mt-2 flex justify-between"}>
-              <UserDateDiv userId={userId} userName={userName} date={date} />
+              <UserDateDiv userId={userId} userName={userName} date={date} ptNum={2} />
 
               <div>
                 {canEdit && (
@@ -99,17 +97,15 @@ export const CommentCard = component$(
                 )}
                 <div
                   class='tooltip tooltip-info'
-                  data-tip={
-                    likes.length > 0
-                      ? likes.reduce((acc, x) => (acc += `${x.name}, `), "").slice(0, -2)
-                      : "Никто не лайкал"
-                  }
+                  data-tip={getLikeBtnTooltipTxt(likes, "Никто не лайкал")}
                 >
                   <button
                     class={`btn btn-sm lowercase btn-info ${isLiked ? "" : "btn-outline"} mx-1`}
                     type='button'
-                    disabled={!loggedIn || ownsComment}
-                    onClick$={() => addDelLike.submit({ _id })}
+                    onClick$={() => {
+                      if (!loggedIn || ownsComment) return;
+                      addDelLike.submit({ _id });
+                    }}
                   >
                     {thumbUpSvg} {likes.length > 0 && <span>{likes.length}</span>}
                   </button>

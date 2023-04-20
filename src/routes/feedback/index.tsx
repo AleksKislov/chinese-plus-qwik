@@ -1,4 +1,4 @@
-import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { $, component$, useSignal } from "@builder.io/qwik";
 import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
@@ -46,13 +46,8 @@ export const getInitPosts = routeLoader$((): Promise<Post[]> => {
 export default component$(() => {
   const chosenMsgsType = useSignal<MsgsType>("all");
   const skip = useSignal(0);
-  const posts = useSignal<Post[]>([]);
   const initialPosts = getInitPosts();
-
-  useTask$(({ track }) => {
-    track(() => initialPosts);
-    posts.value = initialPosts.value;
-  });
+  const posts = useSignal<Post[]>(initialPosts.value);
 
   const getPosts = $((): Promise<Post[]> => {
     const t = chosenMsgsType.value === "all" ? "" : chosenMsgsType.value;
@@ -119,7 +114,7 @@ export default component$(() => {
 
         <div class='w-full md:w-1/2'>
           {posts.value?.map((post, ind) => (
-            <PostCard post={post} isPostPage={false} key={ind} />
+            <PostCard post={post} isPostPage={false} key={ind} addressees={null} />
           ))}
 
           <div class={"flex flex-col items-center"}>

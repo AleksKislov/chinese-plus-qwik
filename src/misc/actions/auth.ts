@@ -1,3 +1,4 @@
+// import { globalAction$ } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
 import { BASE_URL } from "./request";
 
@@ -10,13 +11,15 @@ export enum StatusCodes {
 }
 
 export interface UserFromDB {
-  err?: StatusCodes.Unauthorized | StatusCodes.NotFound;
+  err?: number;
   user?: {
     _id: string;
     name: string;
     avatar: string;
     role: string | null;
     email: string;
+    finished_texts: string[] | null;
+    seenVideos: string[] | null;
   };
 }
 
@@ -24,10 +27,7 @@ export function logout() {
   Cookies.remove("token");
 }
 
-export async function getUser(
-  token: string,
-  controller?: AbortController
-): Promise<UserFromDB | null> {
+export async function getUser(token: string, controller?: AbortController): Promise<UserFromDB> {
   try {
     const resp = await fetch(BASE_URL + "/api/auth", {
       signal: controller?.signal,
@@ -46,3 +46,24 @@ export async function getUser(
     return { err: StatusCodes.NotFound };
   }
 }
+
+// export const useGetUser = globalAction$(async (_prm, ev): Promise<UserFromDB> => {
+//   const token = ev.cookie.get("token")?.value;
+
+//   try {
+//     const resp = await fetch(BASE_URL + "/api/auth", {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "x-auth-token": token || "",
+//       },
+//     });
+//     if (resp.status === StatusCodes.Unauthorized) {
+//       return { err: StatusCodes.Unauthorized };
+//     }
+//     return { user: await resp.json() };
+//   } catch (e) {
+//     console.warn((e as Error).message);
+//     return { err: StatusCodes.NotFound };
+//   }
+// });
