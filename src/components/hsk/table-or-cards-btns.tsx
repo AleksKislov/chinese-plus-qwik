@@ -9,10 +9,10 @@ export const TableOrCardsBtns = component$(
 
     return (
       <div class={"sm:float-right float-left mb-2"}>
-        <div>Отображать</div>
+        <span class={"mr-1 font-bold"}>Отображать: </span>
         <div class='btn-group'>
           <button
-            class={`btn btn-sm btn-info ${displayCards.bool ? "btn-outline" : ""}`}
+            class={`btn btn-sm btn-info lowercase ${displayCards.bool ? "btn-outline" : ""}`}
             type='button'
             onClick$={() => {
               localStorage.setItem("displayCards", "0");
@@ -24,7 +24,7 @@ export const TableOrCardsBtns = component$(
 
           <button
             type='button'
-            class={`btn btn-sm btn-info ${displayCards.bool ? "" : "btn-outline"}`}
+            class={`btn btn-sm btn-info lowercase ${displayCards.bool ? "" : "btn-outline"}`}
             onClick$={() => {
               localStorage.setItem("displayCards", "1");
               displayCards.bool = true;

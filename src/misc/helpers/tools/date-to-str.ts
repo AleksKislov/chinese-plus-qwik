@@ -1,4 +1,4 @@
-export const dateToStr = (date: string, onlyDate: boolean): string => {
+export const dateToStr = (date: ISODate, onlyDate: boolean): string => {
   const str = new Date(date);
   const rusDate = str.toLocaleDateString("ru-RU", {
     year: "numeric",

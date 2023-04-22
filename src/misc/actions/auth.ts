@@ -13,7 +13,7 @@ export enum StatusCodes {
 export interface UserFromDB {
   err?: number;
   user?: {
-    _id: string;
+    _id: ObjectId;
     name: string;
     avatar: string;
     role: string | null;

@@ -4,8 +4,11 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui")],
-
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("daisyui"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
   daisyui: {
     styled: true,
     themes: true,

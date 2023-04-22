@@ -33,7 +33,7 @@ export default component$(() => {
 
   return (
     <>
-      <PageTitle txt={"Тексы на проверке"} />
+      <PageTitle txt={"Тексты на проверке"} />
       <FlexRow>
         <Sidebar>
           <div class='card bg-primary text-primary-content'>

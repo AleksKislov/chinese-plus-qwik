@@ -2,7 +2,6 @@ import { component$, type Signal, useContext } from "@builder.io/qwik";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 import { userContext } from "~/root";
-import { type ContentLike } from "../comments/comment-card";
 import { type WhereType } from "../comments/comment-form";
 import { heartSvg } from "../media/svg";
 

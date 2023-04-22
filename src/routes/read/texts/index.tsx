@@ -1,7 +1,6 @@
 import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
-import { type ContentLike } from "~/components/common/comments/comment-card";
 
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
@@ -15,7 +14,7 @@ import { TextCard } from "~/components/read/text-card";
 import { type LevelUnion } from "~/routes/watch/videos";
 
 export type TextCardInfo = {
-  _id: string;
+  _id: ObjectId;
   categoryInd: number;
   tags: string[];
   hits: number;
@@ -28,10 +27,10 @@ export type TextCardInfo = {
   pic_url: string;
   isApproved: 1 | 0 | undefined;
   source: string;
-  comments_id: { _id: string }[];
+  comments_id: CommentId[];
   audioSrc: 1 | 0 | undefined;
   likes: ContentLike[];
-  date: string;
+  date: ISODate;
 };
 
 export const getInitTexts = routeLoader$((): Promise<TextCardInfo[]> => {

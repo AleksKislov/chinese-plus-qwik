@@ -15,7 +15,7 @@ import { logout, StatusCodes, getUser } from "./misc/actions/auth";
 import globalStyles from "./global.css?inline";
 
 export interface User {
-  _id: string;
+  _id: ObjectId;
   name: string;
   avatar: string;
   loggedIn: boolean;

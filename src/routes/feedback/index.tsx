@@ -22,15 +22,15 @@ export type MsgType = "wish" | "bug" | "news";
 type MsgsType = "all" | "wish" | "bug" | "news";
 
 export type Post = {
-  _id: string;
+  _id: ObjectId;
   text: string;
   title: string;
   tag: MsgType;
   name: string; // user name
   avatar: string;
   user: string;
-  comments_id: { _id: string }[];
-  date: string;
+  comments_id: CommentId[];
+  date: ISODate;
 };
 
 export const msgTypes = {

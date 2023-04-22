@@ -2,7 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { SmallDate } from "../ui/small-date";
 import { UserLink } from "../content-cards/user-link";
 
-type UserDateDivProps = { userId: string; userName: string; date: string; ptNum: number };
+type UserDateDivProps = { userId: string; userName: string; date: ISODate; ptNum: number };
 
 export const UserDateDiv = component$(({ userId, userName, date, ptNum }: UserDateDivProps) => {
   const pt = "pt-" + ptNum;

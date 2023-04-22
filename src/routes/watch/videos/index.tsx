@@ -1,7 +1,6 @@
 import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
-import { type ContentLike } from "~/components/common/comments/comment-card";
 
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
@@ -33,7 +32,7 @@ export type VideoCategory =
 // }
 
 export type VideoCardInfo = {
-  _id: string;
+  _id: ObjectId;
   category: VideoCategory;
   tags: string[];
   hits: number;
@@ -45,9 +44,9 @@ export type VideoCardInfo = {
   source: string;
   isApproved: 1 | 0 | undefined;
   user: string;
-  comments_id: { _id: string }[];
+  comments_id: CommentId[];
   likes: ContentLike[];
-  date: string;
+  date: ISODate;
 };
 
 export const getInitVideos = routeLoader$((): Promise<VideoCardInfo[]> => {

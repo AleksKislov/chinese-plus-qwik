@@ -11,7 +11,7 @@ import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
 
 export type NewHskWordType = {
-  _id: string;
+  _id: ObjectId;
   id: number;
   cn: string;
   py: string;

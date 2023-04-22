@@ -1,41 +1,33 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, type Signal } from "@builder.io/qwik";
 
-type HideBtnStore = {
-  hide: {
-    chinese: boolean;
-    russian: boolean;
-    pinyin: boolean;
-  };
+type HideBtnsProps = {
+  hideBtnsSig: Signal<string[]>;
 };
 
-export const HideButtons = component$(({ hide }: HideBtnStore) => {
-  const btns = [
-    {
-      txt: "Иероглифы",
-      flag: hide.chinese,
-    },
-    {
-      txt: "Пиньинь",
-      flag: hide.pinyin,
-    },
-    {
-      txt: "Перевод",
-      flag: hide.russian,
-    },
-  ];
+export enum HideBtnsEnum {
+  cn = "Иероглифы",
+  ru = "Перевод",
+  py = "Пиньинь",
+}
+
+export const HideButtons = component$(({ hideBtnsSig }: HideBtnsProps) => {
+  const btns = [HideBtnsEnum.cn, HideBtnsEnum.py, HideBtnsEnum.ru];
 
   return (
     <div class={"float-left mb-2"}>
-      <div>Скрыть</div>
+      <span class={"font-bold mr-1"}>Скрыть: </span>
+
       <div class='btn-group'>
-        {btns.map(({ txt, flag }, ind) => (
+        {btns.map((txt: string, ind: number) => (
           <button
-            key={txt}
-            class={`btn btn-sm btn-outline btn-info ${flag ? "btn-active" : ""}`}
+            key={ind}
+            class={`btn btn-sm btn-outline btn-info lowercase ${
+              hideBtnsSig.value.includes(txt) ? "btn-active" : ""
+            }`}
             onClick$={() => {
-              if (ind === 0) hide.chinese = !flag;
-              if (ind === 1) hide.pinyin = !flag;
-              if (ind === 2) hide.russian = !flag;
+              hideBtnsSig.value = hideBtnsSig.value.includes(txt)
+                ? hideBtnsSig.value.filter((x) => x !== txt)
+                : [...hideBtnsSig.value, txt];
             }}
           >
             {txt}

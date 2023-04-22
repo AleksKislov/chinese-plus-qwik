@@ -12,7 +12,7 @@ import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
 
 export type OldHskWordType = {
-  _id: string;
+  _id: ObjectId;
   word_id: number;
   chinese: string;
   pinyin: string;
@@ -21,7 +21,7 @@ export type OldHskWordType = {
 };
 
 export type UserOldHskWordType = {
-  _id: string;
+  _id: ObjectId;
   user: string;
   word_id: number;
   chinese: string;

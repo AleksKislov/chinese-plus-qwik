@@ -1,5 +1,4 @@
 import { component$, type Signal } from "@builder.io/qwik";
-import { type ContentLike } from "../comments/comment-card";
 import { WHERE, type WhereType } from "../comments/comment-form";
 import { audioSvg } from "../media/svg";
 import { BookmarkBtn } from "./bookmark-btn";

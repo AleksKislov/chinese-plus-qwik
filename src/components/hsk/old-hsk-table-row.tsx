@@ -1,4 +1,4 @@
-import { component$, $, useSignal, useContext } from "@builder.io/qwik";
+import { component$, $, useSignal, useContext, type Signal } from "@builder.io/qwik";
 import CONST_URLS from "~/misc/consts/urls";
 import CONSTANTS from "~/misc/consts/consts";
 import type { OldHskWordType } from "~/routes/hsk/2/table";
@@ -6,12 +6,11 @@ import Cookies from "js-cookie";
 import { ApiService } from "~/misc/actions/request";
 import { alertsContext } from "~/root";
 import { minusSvg, plusSvg, playSvg } from "../common/media/svg";
+import { HideBtnsEnum } from "./hide-buttons";
 
 type TableRowType = {
   word: OldHskWordType;
-  hideChinese: boolean;
-  hidePinyin: boolean;
-  hideRussian: boolean;
+  hideBtnsSig: Signal<string[]>;
   userSelected: boolean;
   userWordsLen: number;
 };
@@ -38,14 +37,7 @@ export const removeUserHskWord = async (wordId: number, token: string) => {
 };
 
 export const OldHskTableRow = component$(
-  ({
-    word,
-    hideChinese,
-    hidePinyin,
-    hideRussian,
-    userSelected: clickedByUser,
-    userWordsLen,
-  }: TableRowType) => {
+  ({ word, hideBtnsSig, userSelected: clickedByUser, userWordsLen }: TableRowType) => {
     const userSelectedSignal = useSignal(clickedByUser);
     const userSelected = userSelectedSignal.value;
     const userWordsLenSignal = useSignal(userWordsLen);
@@ -86,13 +78,15 @@ export const OldHskTableRow = component$(
       <>
         <tr class={"hover"}>
           <td class={userSelected ? "bg-secondary" : ""}>{id}</td>
-          {!hideChinese && (
+          {!hideBtnsSig.value.includes(HideBtnsEnum.cn) && (
             <td class={`prose ${userSelected ? "bg-secondary" : ""}`}>
               <h2>{cn}</h2>
             </td>
           )}
-          {!hidePinyin && <td class={userSelected ? "bg-secondary" : ""}>{py}</td>}
-          {!hideRussian && (
+          {!hideBtnsSig.value.includes(HideBtnsEnum.py) && (
+            <td class={userSelected ? "bg-secondary" : ""}>{py}</td>
+          )}
+          {!hideBtnsSig.value.includes(HideBtnsEnum.ru) && (
             <td class={userSelected ? "bg-secondary" : ""} style={{ maxWidth: "50%" }}>
               <div style={{ wordWrap: "break-word", whiteSpace: "normal" }}>{ru}</div>
             </td>

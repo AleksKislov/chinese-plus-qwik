@@ -18,7 +18,7 @@ export const CardImg = component$(({ contentId, contentType, picUrl }: CardImgPr
   return (
     <figure class={`lg:w-1/3 max-h-full ${contentType === WHERE.text ? "max-h-52" : ""}`}>
       <Link href={getUrlToContent(contentType, contentId)}>
-        <img src={picUrl} alt='Text pic' class='w-full h-full lg:object-cover' />
+        <img src={picUrl} alt='Content pic' class='w-full h-full lg:object-cover' />
       </Link>
     </figure>
   );

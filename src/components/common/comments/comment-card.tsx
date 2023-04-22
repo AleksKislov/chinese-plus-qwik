@@ -10,21 +10,15 @@ import { getLikeBtnTooltipTxt } from "../content-cards/like-btn";
 
 export type Comment = {
   addressees: string[];
-  _id: string;
+  _id: ObjectId;
   text: string;
   name: string; // userName
   avatar: string; // userAvatar
   user: string; // userId
-  post_id: string;
+  post_id: ObjectId;
   likes: ContentLike[];
   destination: string;
-  date: string;
-};
-
-export type ContentLike = {
-  _id: string;
-  user: string; // user id
-  name: string; // user name
+  date: ISODate;
 };
 
 type CommentCardProps = {

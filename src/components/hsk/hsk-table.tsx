@@ -1,4 +1,4 @@
-import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, useStore, useVisibleTask$ } from "@builder.io/qwik";
 
 import { HideButtons } from "./hide-buttons";
 import { OldHskTableRow } from "./old-hsk-table-row";
@@ -16,11 +16,7 @@ type OldHskTableType = {
 };
 
 export const OldHskTable = component$(({ hskWords, userHskWords }: OldHskTableType) => {
-  const hideStore = useStore({
-    chinese: false,
-    pinyin: false,
-    russian: false,
-  });
+  const hideBtnsSig = useSignal<string[]>([]);
   const pinyinAbove = useStore<PinyinAboveStore>({ bool: false });
   const displayCardsStore = useStore<DisplayCardsStore>({ bool: false });
 
@@ -34,7 +30,7 @@ export const OldHskTable = component$(({ hskWords, userHskWords }: OldHskTableTy
         {displayCardsStore.bool ? (
           <FlipCardsButtons pinyinAbove={pinyinAbove} />
         ) : (
-          <HideButtons hide={hideStore} />
+          <HideButtons hideBtnsSig={hideBtnsSig} />
         )}
         <TableOrCardsBtns displayCards={displayCardsStore} />
       </div>
@@ -48,9 +44,7 @@ export const OldHskTable = component$(({ hskWords, userHskWords }: OldHskTableTy
                 <OldHskTableRow
                   key={word._id}
                   word={word as OldHskWordType}
-                  hideChinese={hideStore.chinese}
-                  hideRussian={hideStore.russian}
-                  hidePinyin={hideStore.pinyin}
+                  hideBtnsSig={hideBtnsSig}
                   userSelected={
                     Array.isArray(userHskWords) &&
                     userHskWords.some((x) => x.word_id === (word as OldHskWordType).word_id)
