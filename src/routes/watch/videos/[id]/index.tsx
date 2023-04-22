@@ -1,4 +1,11 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  noSerialize,
+  useSignal,
+  useStore,
+  useTask$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 
@@ -13,7 +20,7 @@ import { YoutubeService } from "~/misc/actions/youtube-service";
 import CONSTANTS from "~/misc/consts/consts";
 import { ContentPageCard, FontSizeBtns } from "~/components/common/content-cards/content-page-card";
 import { WHERE } from "~/components/common/comments/comment-form";
-import { HideButtons } from "~/components/hsk/hide-buttons";
+import { Subs } from "~/components/watch/subs";
 
 type VideoFromDB = {
   _id: ObjectId;
@@ -48,11 +55,21 @@ export const useGetVideo = routeLoader$(({ params }): Promise<VideoFromDB> => {
   return ApiService.get(`/api/videos/${params.id}`, undefined, null);
 });
 
+type YTPlayer = {
+  player: {
+    playerInfo: {
+      currentTime: number;
+    };
+  } | null;
+};
+
 export default component$(() => {
   const video = useGetVideo();
-  const YtPlayer = "ytPlayer";
+  const YtPlayerId = "ytPlayerId";
   const fontSizeSig = useSignal(FontSizeBtns.md);
   const hideBtnsSig = useSignal<string[]>([]);
+  const ytSig = useStore<YTPlayer>({ player: null });
+  // const isPlaying = useSignal(false)
 
   const {
     _id: videoId,
@@ -71,7 +88,16 @@ export default component$(() => {
   } = video.value;
 
   useVisibleTask$(() => {
-    YTframeLoader.load((YT) => new YT.Player(YtPlayer, { videoId: source }));
+    if (!ytSig.player) {
+      YTframeLoader.load((YT) => {
+        const ytPlayer = new YT.Player(YtPlayerId, { videoId: source });
+        ytSig.player = noSerialize(ytPlayer);
+      });
+    }
+
+    setInterval(() => {
+      const curTime = ytSig.player?.playerInfo?.currentTime || 0;
+    }, 100);
   });
 
   return (
@@ -98,14 +124,10 @@ export default component$(() => {
 
         <MainContent>
           <div class='aspect-w-16 aspect-h-9 mb-3'>
-            <div id={YtPlayer}></div>
+            <div id={YtPlayerId}></div>
           </div>
 
-          <div class='card w-full bg-neutral mb-3'>
-            <div class='card-body'>сабы</div>
-          </div>
-
-          <HideButtons hideBtnsSig={hideBtnsSig} />
+          <Subs hideBtnsSig={hideBtnsSig} />
         </MainContent>
       </FlexRow>
     </>
