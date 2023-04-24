@@ -1,11 +1,4 @@
-import {
-  component$,
-  noSerialize,
-  useSignal,
-  useStore,
-  useTask$,
-  useVisibleTask$,
-} from "@builder.io/qwik";
+import { component$, noSerialize, useSignal, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 
@@ -21,6 +14,7 @@ import CONSTANTS from "~/misc/consts/consts";
 import { ContentPageCard, FontSizeBtns } from "~/components/common/content-cards/content-page-card";
 import { WHERE } from "~/components/common/comments/comment-form";
 import { Subs } from "~/components/watch/subs";
+import { parseVideoWords } from "~/misc/helpers/content";
 
 type VideoFromDB = {
   _id: ObjectId;
@@ -51,16 +45,30 @@ type ChineseSub = {
   text: string;
 };
 
-export const useGetVideo = routeLoader$(({ params }): Promise<VideoFromDB> => {
-  return ApiService.get(`/api/videos/${params.id}`, undefined, null);
+type TooltipSubs = {
+  tooltipSubs: DictWord[][];
+};
+
+export const getVideoFromDB = (id: string): Promise<VideoFromDB> => {
+  return ApiService.get(`/api/videos/${id}`, undefined, null);
+};
+
+export const getCnSub = (wordsArr: string[][]) => {
+  return ApiService.post("/api/dictionary/allWordsForVideo", wordsArr, undefined, []);
+};
+
+export const useGetVideo = routeLoader$(async ({ params }): Promise<VideoFromDB & TooltipSubs> => {
+  const videoFromDb = await getVideoFromDB(params.id);
+  const tooltipSubs = await getCnSub(videoFromDb.chineseArr);
+  return { ...videoFromDb, tooltipSubs };
 });
 
 type YTPlayer = {
   player: {
-    playerInfo: {
+    playerInfo?: {
       currentTime: number;
     };
-  } | null;
+  };
 };
 
 export default component$(() => {
@@ -68,7 +76,8 @@ export default component$(() => {
   const YtPlayerId = "ytPlayerId";
   const fontSizeSig = useSignal(FontSizeBtns.md);
   const hideBtnsSig = useSignal<string[]>([]);
-  const ytSig = useStore<YTPlayer>({ player: null });
+  const ytSig = useStore<YTPlayer>({ player: {} });
+  const subCurrentInd = useSignal(0);
   // const isPlaying = useSignal(false)
 
   const {
@@ -85,10 +94,19 @@ export default component$(() => {
     length,
     desc,
     likes,
+    cnSubs,
+    ruSubs,
+    pySubs,
+    chineseArr,
+    tooltipSubs,
   } = video.value;
 
+  const mainSub = useSignal(parseVideoWords(chineseArr, tooltipSubs));
+
+  // setFullChineseSubs(await parseWordsForVideo(video.chineseArr));
+
   useVisibleTask$(() => {
-    if (!ytSig.player) {
+    if (!ytSig.player.playerInfo) {
       YTframeLoader.load((YT) => {
         const ytPlayer = new YT.Player(YtPlayerId, { videoId: source });
         ytSig.player = noSerialize(ytPlayer);
@@ -96,7 +114,12 @@ export default component$(() => {
     }
 
     setInterval(() => {
-      const curTime = ytSig.player?.playerInfo?.currentTime || 0;
+      const curTime = ytSig.player.playerInfo?.currentTime || 0;
+      const ind = cnSubs.findIndex(({ start, dur }) => {
+        return +start < curTime && +start + +dur > curTime;
+      });
+      if (ind < 0) return;
+      subCurrentInd.value = ind;
     }, 100);
   });
 
@@ -127,7 +150,12 @@ export default component$(() => {
             <div id={YtPlayerId}></div>
           </div>
 
-          <Subs hideBtnsSig={hideBtnsSig} />
+          <Subs
+            hideBtnsSig={hideBtnsSig}
+            main={mainSub.value[subCurrentInd.value]}
+            ru={ruSubs[subCurrentInd.value]}
+            py={pySubs[subCurrentInd.value]}
+          />
         </MainContent>
       </FlexRow>
     </>
