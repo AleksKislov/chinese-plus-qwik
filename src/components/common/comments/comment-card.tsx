@@ -8,7 +8,7 @@ import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { EditCommentModal } from "./edit-comment-modal";
 import { getLikeBtnTooltipTxt } from "../content-cards/like-btn";
 
-export type Comment = {
+export type CommentType = {
   addressees: string[];
   _id: ObjectId;
   text: string;
@@ -22,7 +22,7 @@ export type Comment = {
 };
 
 type CommentCardProps = {
-  comment: Comment;
+  comment: CommentType;
   commentIdToReply: CommentIdToReply;
   addressees: Signal<Addressee[]>;
 };

@@ -46,24 +46,3 @@ export async function getUser(token: string, controller?: AbortController): Prom
     return { err: StatusCodes.NotFound };
   }
 }
-
-// export const useGetUser = globalAction$(async (_prm, ev): Promise<UserFromDB> => {
-//   const token = ev.cookie.get("token")?.value;
-
-//   try {
-//     const resp = await fetch(BASE_URL + "/api/auth", {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//         "x-auth-token": token || "",
-//       },
-//     });
-//     if (resp.status === StatusCodes.Unauthorized) {
-//       return { err: StatusCodes.Unauthorized };
-//     }
-//     return { user: await resp.json() };
-//   } catch (e) {
-//     console.warn((e as Error).message);
-//     return { err: StatusCodes.NotFound };
-//   }
-// });

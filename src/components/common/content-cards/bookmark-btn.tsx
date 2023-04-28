@@ -6,7 +6,7 @@ import { WHERE, type WhereType } from "../comments/comment-form";
 import { bookMarkSvg } from "../media/svg";
 
 export const useMarkContent = globalAction$(
-  async (params, ev) => {
+  (params, ev) => {
     const token = ev.cookie.get("token")?.value;
     const { contentId, contentType, bookMarked } = params;
     const method = contentType === WHERE.text ? "mark_finished_texts" : "mark_as_seen";

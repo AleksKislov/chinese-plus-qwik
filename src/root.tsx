@@ -5,7 +5,6 @@ import {
   createContextId,
   useContextProvider,
   useStore,
-  // useTask$,
 } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
@@ -13,6 +12,7 @@ import Cookies from "js-cookie";
 import { logout, StatusCodes, getUser } from "./misc/actions/auth";
 
 import globalStyles from "./global.css?inline";
+import { getUserWords, type UserWord } from "./misc/actions/get-user-words";
 
 export interface User {
   _id: ObjectId;
@@ -24,12 +24,15 @@ export interface User {
   email: string;
   finishedTexts: string[];
   seenVideos: string[];
+  words: UserWord[];
 }
 
 export interface Alert {
-  bg: string;
+  bg: AlertBgUnion;
   text: string;
 }
+
+type AlertBgUnion = "alert-info" | "alert-success" | "alert-warning" | "alert-error";
 
 export const userContext = createContextId<User>("user-context");
 export const alertsContext = createContextId<Alert[]>("alerts-context");
@@ -37,15 +40,16 @@ export const alertsContext = createContextId<Alert[]>("alerts-context");
 export default component$(() => {
   useStyles$(globalStyles);
   const userState = useStore<User>({
+    _id: "",
     name: "",
     avatar: "",
     loggedIn: false,
-    _id: "",
     isAdmin: false,
     isModerator: false,
     email: "",
     finishedTexts: [],
     seenVideos: [],
+    words: [],
   });
   const alertsState = useStore<Alert[]>([]);
 
@@ -53,9 +57,14 @@ export default component$(() => {
     const cntrlr = new AbortController();
     const token = Cookies.get("token");
     if (!token) return;
-    const resp = await getUser(token, cntrlr);
-    // console.log(resp?.user);
+    const [userResp, userWords] = await Promise.allSettled([
+      getUser(token, cntrlr),
+      getUserWords(token),
+    ]);
+    // console.log(userWords);
 
+    if (userResp.status === "rejected") return cntrlr.abort;
+    const resp = userResp.value;
     if (resp.err === StatusCodes.Unauthorized) {
       logout();
     }
@@ -69,28 +78,10 @@ export default component$(() => {
       userState.isModerator = resp.user.role === "moderator";
       userState.finishedTexts = resp.user.finished_texts ? resp.user.finished_texts : [];
       userState.seenVideos = resp.user.seenVideos ? resp.user.seenVideos : [];
+      userState.words = userWords.status === "fulfilled" ? userWords.value : [];
     }
     return cntrlr.abort;
   });
-
-  // const getUser = useGetUser();
-  // useTask$(async () => {
-  //   const userReq = await getUser.submit();
-  //   const resp = userReq.value;
-  //   if (resp.err === StatusCodes.Unauthorized) {
-  //     logout();
-  //   }
-  //   if (resp.user) {
-  //     userState._id = resp.user._id;
-  //     userState.avatar = resp.user.avatar;
-  //     userState.name = resp.user.name;
-  //     userState.email = resp.user.email;
-  //     userState.loggedIn = true;
-  //     userState.isAdmin = resp.user.role === "admin";
-  //     userState.isModerator = resp.user.role === "moderator";
-  //     userState.finishedTexts = resp.user.finished_texts ? resp.user.finished_texts : [];
-  //   }
-  // });
 
   useContextProvider(userContext, userState);
   useContextProvider(alertsContext, alertsState);

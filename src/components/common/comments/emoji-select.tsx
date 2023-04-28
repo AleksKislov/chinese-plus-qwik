@@ -1,10 +1,10 @@
 import { component$, type Signal } from "@builder.io/qwik";
 import CONSTANTS from "~/misc/consts/consts";
-import { Tooltip } from "../tooltips/tooltip";
+import { EmojiTooltipShell } from "../tooltips/emoji-tooltip-shell";
 
 export const EmojiSelect = component$(({ emoji }: { emoji: Signal<string> }) => {
   return (
-    <Tooltip>
+    <EmojiTooltipShell>
       <div q:slot='one'>😀</div>
       <div q:slot='two' class={"w-36 text-center"}>
         {CONSTANTS.commentEmojis.map((emo, ind) => (
@@ -13,6 +13,6 @@ export const EmojiSelect = component$(({ emoji }: { emoji: Signal<string> }) => 
           </span>
         ))}
       </div>
-    </Tooltip>
+    </EmojiTooltipShell>
   );
 });

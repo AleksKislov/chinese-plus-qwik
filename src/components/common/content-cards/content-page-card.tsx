@@ -21,7 +21,7 @@ type ContentPageCardProps = {
   length: number;
   desc: string;
   likes: ContentLike[];
-  fontSizeSig: Signal<string>;
+  fontSizeSig: Signal<FontSizeBtnsUnion>;
 };
 
 export enum FontSizeBtns {
@@ -29,6 +29,14 @@ export enum FontSizeBtns {
   md = "中",
   lg = "大",
 }
+
+export type FontSizeBtnsUnion = "小" | "中" | "大";
+
+export const FontSizeMap: { [key: string]: string } = {
+  小: "text-base",
+  中: "text-lg",
+  大: "text-2xl",
+};
 
 export const ContentPageCard = component$(
   ({
@@ -48,7 +56,7 @@ export const ContentPageCard = component$(
   }: ContentPageCardProps) => {
     const likesSignal = useSignal(likes);
 
-    const fontSizeBtns = [FontSizeBtns.sm, FontSizeBtns.md, FontSizeBtns.lg];
+    const fontSizeBtns: FontSizeBtnsUnion[] = [FontSizeBtns.sm, FontSizeBtns.md, FontSizeBtns.lg];
     return (
       <div class='card w-full bg-neutral mb-3'>
         <figure>
@@ -70,7 +78,7 @@ export const ContentPageCard = component$(
           <div>
             <span class={"font-bold"}>Шрифт: </span>
             <div class='btn-group ml-1'>
-              {fontSizeBtns.map((txt: string, ind: number) => (
+              {fontSizeBtns.map((txt, ind) => (
                 <button
                   key={ind}
                   class={`btn btn-sm btn-outline btn-info ${

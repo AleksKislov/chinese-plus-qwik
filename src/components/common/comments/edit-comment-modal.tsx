@@ -1,7 +1,7 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
-import { type Comment } from "./comment-card";
+import { type CommentType } from "./comment-card";
 import {
   type Addressee,
   CommentTextArea,
@@ -13,7 +13,7 @@ import {
 
 type EditCommentProps = {
   modalId: string;
-  comment: Comment;
+  comment: CommentType;
 };
 
 // @todo

@@ -1,25 +1,26 @@
 import { component$, useSignal, useStore } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
-import { CommentCard } from "~/components/common/comments/comment-card";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PostCard } from "~/components/feedback/post-card";
 import { ApiService } from "~/misc/actions/request";
 import { type Post } from "..";
-import { type Comment } from "~/components/common/comments/comment-card";
-import { infoAlertSvg } from "~/components/common/media/svg";
+import { type CommentType } from "~/components/common/comments/comment-card";
 import {
   CommentForm,
   WHERE,
   type CommentIdToReply,
   type Addressee,
 } from "~/components/common/comments/comment-form";
+import { getContentComments } from "~/misc/actions/get-content-comments";
+import { CommentsBlock } from "~/components/common/comments/comments-block";
+import { CommentsBlockTitle } from "~/components/common/comments/comments-block-title";
 
 export const getPost = routeLoader$(({ params }): Promise<Post> => {
   return ApiService.get(`/api/posts/${params.id}`, undefined, {});
 });
 
-export const getComments = routeLoader$(({ params }): Promise<Comment[]> => {
-  return ApiService.get(`/api/comments?where=${WHERE.post}&id=${params.id}`, undefined, []);
+export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => {
+  return getContentComments(WHERE.post, params.id);
 });
 
 export default component$(() => {
@@ -56,27 +57,13 @@ export default component$(() => {
         </div>
 
         <div class='w-full md:w-1/2'>
-          <div class={"prose mb-3"}>
-            <h3>Комментарии</h3>
-          </div>
+          <CommentsBlockTitle />
 
-          {comments.value.length ? (
-            comments.value.map((msg, ind) => (
-              <CommentCard
-                comment={msg}
-                key={ind}
-                commentIdToReply={commentIdToReplyStore}
-                addressees={addressees}
-              />
-            ))
-          ) : (
-            <div class='alert alert-info shadow-lg'>
-              <div>
-                {infoAlertSvg}
-                <span>Еще никто не комментировал</span>
-              </div>
-            </div>
-          )}
+          <CommentsBlock
+            comments={comments.value}
+            commentIdToReply={commentIdToReplyStore}
+            addressees={addressees}
+          />
         </div>
       </FlexRow>
     </>

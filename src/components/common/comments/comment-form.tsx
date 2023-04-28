@@ -120,7 +120,7 @@ export const CommentForm = component$(
 
     return (
       <>
-        <div class='card w-full bg-neutral'>
+        <div class='card w-full bg-neutral mb-3'>
           <div class='card-body'>
             <div class={"flex justify-between mb-2"}>
               <h2 class='card-title pt-1'>Ваш комментарий</h2>
