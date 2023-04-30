@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore } from "@builder.io/qwik";
-import { Link, routeLoader$ } from "@builder.io/qwik-city";
+import { routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PostCard } from "~/components/feedback/post-card";
 import { ApiService } from "~/misc/actions/request";
@@ -14,6 +14,7 @@ import {
 import { getContentComments } from "~/misc/actions/get-content-comments";
 import { CommentsBlock } from "~/components/common/comments/comments-block";
 import { CommentsBlockTitle } from "~/components/common/comments/comments-block-title";
+import { BackBtn } from "~/components/common/ui/back-btn";
 
 export const getPost = routeLoader$(({ params }): Promise<Post> => {
   return ApiService.get(`/api/posts/${params.id}`, undefined, {});
@@ -39,13 +40,7 @@ export default component$(() => {
     <>
       <FlexRow>
         <div class='w-full md:w-1/2 mr-4 mb-3'>
-          <div class='mb-3'>
-            <Link href={`/feedback`}>
-              <button class={`btn btn-sm btn-info btn-outline`} type='button'>
-                назад
-              </button>
-            </Link>
-          </div>
+          <BackBtn path={"/feedback"} />
           <PostCard post={post.value} isPostPage={true} addressees={addressees} />
           <CommentForm
             contentId={post.value._id}

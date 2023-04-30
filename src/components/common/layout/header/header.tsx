@@ -144,10 +144,10 @@ export const authMenu = (
       <Link href='/me'>Мой кабинет</Link>
     </li>
     <li>
-      <Link href='/me/hsk-words'>Мой HSK</Link>
+      <Link href='/me/hsk-words'>Мой словарик HSK</Link>
     </li>
     <li>
-      <Link href='/me/words'>Мои слова</Link>
+      <Link href='/me/words'>Мой словарик</Link>
     </li>
     <li>
       <Link href='/me/texts'>Мои тексты</Link>
@@ -158,6 +158,8 @@ export const authMenu = (
     <li>
       <Link href='/create-content'>Поделиться контентом</Link>
     </li>
+    <hr class='h-px my-1 bg-primary border-0' />
+
     <li>
       <a
         onClick$={() => {

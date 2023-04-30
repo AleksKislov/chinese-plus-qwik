@@ -10,6 +10,7 @@ import { WordTooltipShell } from "./word-tooltip-shell";
 
 type WordTooltipProps = {
   word: string | DictWord;
+  hasReddened?: boolean; // only for video subs
 };
 
 export const useAddUserWord = globalAction$(
@@ -29,7 +30,7 @@ export const useDelUserWord = globalAction$((w, ev) => {
   return ApiService.delete("/api/userwords/" + w.chinese, token);
 }, zod$({ chinese: z.string() }));
 
-export const WordTooltip = component$(({ word }: WordTooltipProps) => {
+export const WordTooltip = component$(({ word, hasReddened }: WordTooltipProps) => {
   const addUserWord = useAddUserWord();
   const delUserWord = useDelUserWord();
   const userState = useContext(userContext);
@@ -46,16 +47,18 @@ export const WordTooltip = component$(({ word }: WordTooltipProps) => {
   return (
     <>
       {typeof word === "string" ? (
-        <span>{word}</span>
+        <span class={hasReddened ? "text-error" : ""}>{word}</span>
       ) : (
-        <div onMouseLeave$={() => (state.value = false)}>
+        <div class={""} onMouseLeave$={() => (state.value = false)}>
           <WordTooltipShell isShown={state.value}>
             <div
               onClick$={() => (state.value = true)}
               q:slot='one'
               class={`rounded cursor-pointer hover:bg-info hover:text-info-content hover:px-1 ${
                 isUserWord ? "bg-accent text-accent-content" : ""
-              } ${state.value ? "bg-info text-info-content px-1" : ""}`}
+              } ${state.value ? "bg-info text-info-content px-1" : ""} ${
+                hasReddened ? "text-error" : ""
+              }`}
             >
               {word.chinese}
             </div>

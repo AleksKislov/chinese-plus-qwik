@@ -5,8 +5,7 @@ import { ApiService } from "~/misc/actions/request";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
-import { PageTitle } from "~/components/common/layout/title";
-import { type VideoCategory } from "..";
+import { type VideoCardInfo } from "..";
 
 import YTframeLoader from "youtube-iframe";
 import { YoutubeService } from "~/misc/actions/youtube-service";
@@ -25,27 +24,13 @@ import { type CommentType } from "~/components/common/comments/comment-card";
 import { getContentComments } from "~/misc/actions/get-content-comments";
 import { CommentsBlock } from "~/components/common/comments/comments-block";
 import { CommentsBlockTitle } from "~/components/common/comments/comments-block-title";
+import { ContentPageHead } from "~/components/common/ui/content-page-head";
 
-type VideoFromDB = {
-  _id: ObjectId;
-  category: VideoCategory;
+type VideoFromDB = VideoCardInfo & {
   pySubs: string[];
   ruSubs: string[];
   chineseArr: string[][];
-  tags: string[];
-  hits: number;
-  title: string;
-  desc: string;
-  lvl: 1 | 2 | 3;
   cnSubs: ChineseSub[];
-  length: number;
-  userName: string;
-  source: string;
-  isApproved: 1 | 0 | undefined;
-  user: string;
-  comments_id: CommentId[];
-  likes: ContentLike[];
-  date: ISODate;
 };
 
 type ChineseSub = {
@@ -56,14 +41,14 @@ type ChineseSub = {
 };
 
 type TooltipSubs = {
-  tooltipSubs: DictWord[][];
+  tooltipSubs: (DictWord | string)[][];
 };
 
-export const getVideoFromDB = (id: string): Promise<VideoFromDB> => {
+export const getVideoFromDB = (id: ObjectId): Promise<VideoFromDB> => {
   return ApiService.get(`/api/videos/${id}`, undefined, null);
 };
 
-export const getCnSub = (wordsArr: string[][]) => {
+export const getWordsForTooltips = (wordsArr: string[][]) => {
   return ApiService.post("/api/dictionary/allWordsForVideo", wordsArr, undefined, []);
 };
 
@@ -73,7 +58,7 @@ export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => 
 
 export const useGetVideo = routeLoader$(async ({ params }): Promise<VideoFromDB & TooltipSubs> => {
   const videoFromDb = await getVideoFromDB(params.id);
-  const tooltipSubs = await getCnSub(videoFromDb.chineseArr);
+  const tooltipSubs = await getWordsForTooltips(videoFromDb.chineseArr);
   return { ...videoFromDb, tooltipSubs };
 });
 
@@ -93,7 +78,7 @@ export default component$(() => {
   const hideBtnsSig = useSignal<string[]>([]);
   const ytSig = useStore<YTPlayer>({ player: {} });
   const subCurrentInd = useSignal(0);
-  // const isPlaying = useSignal(false)
+  const curWordInd = useSignal(-1);
 
   const commentIdToReplyStore = useStore<CommentIdToReply>({
     commentId: "",
@@ -108,7 +93,7 @@ export default component$(() => {
     title,
     source,
     date,
-    // hits,
+    hits,
     tags,
     user: userId,
     userName,
@@ -141,12 +126,18 @@ export default component$(() => {
       });
       if (ind < 0) return;
       subCurrentInd.value = ind;
+
+      const lineLen = mainSub.value[ind].length;
+      const secStep = +cnSubs[ind].dur / lineLen;
+      const curInnerTime = curTime - +cnSubs[ind].start;
+      curWordInd.value = curInnerTime / secStep;
     }, 100);
   });
 
   return (
     <>
-      <PageTitle txt={title} />
+      <ContentPageHead title={title} hits={hits} path='/watch/videos' />
+
       <FlexRow>
         <Sidebar>
           <ContentPageCard
@@ -168,8 +159,9 @@ export default component$(() => {
 
         <MainContent>
           <Alerts />
+
           <div class='aspect-w-16 aspect-h-9 mb-3'>
-            <div id={YtPlayerId}></div>
+            <div class={"rounded-lg"} id={YtPlayerId}></div>
           </div>
 
           <Subs
@@ -178,6 +170,7 @@ export default component$(() => {
             main={mainSub.value[subCurrentInd.value]}
             ru={ruSubs[subCurrentInd.value]}
             py={pySubs[subCurrentInd.value]}
+            curWordInd={curWordInd.value}
           />
 
           <div class={"mt-2"}>

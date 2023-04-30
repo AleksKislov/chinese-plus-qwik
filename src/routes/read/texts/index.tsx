@@ -71,10 +71,8 @@ export default component$(() => {
         <Sidebar>
           <div class='card bg-primary text-primary-content'>
             <div class='card-body'>
-              <h2 class='card-title'>Смотри и учись</h2>
-              <p>
-                Умные тройные субтитры (оригинал, пиньинь и перевод) для видео на китайском языке.
-              </p>
+              <h2 class='card-title'>Читай и учись</h2>
+              <p>Чтение китайских текстов с умным переводом.</p>
             </div>
           </div>
         </Sidebar>

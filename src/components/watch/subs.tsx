@@ -9,9 +9,9 @@ type SubsProps = {
   ru: string;
   py: string;
   main: (string | DictWord)[];
+  curWordInd: number;
 };
-export const Subs = component$(({ hideBtnsSig, ru, py, main, fontSize }: SubsProps) => {
-  // const mouseIn = useSignal(0);
+export const Subs = component$(({ hideBtnsSig, ru, py, main, fontSize, curWordInd }: SubsProps) => {
   return (
     <div>
       <div class='card card-compact w-full bg-neutral mb-3'>
@@ -19,7 +19,7 @@ export const Subs = component$(({ hideBtnsSig, ru, py, main, fontSize }: SubsPro
           {!hideBtnsSig.value.includes(HideBtnsEnum.cn) && (
             <div class={`flex ${FontSizeMap[fontSize]}`}>
               {main.map((word, ind) => (
-                <WordTooltip key={ind} word={word} />
+                <WordTooltip key={ind} word={word} hasReddened={ind <= curWordInd} />
               ))}
             </div>
           )}
