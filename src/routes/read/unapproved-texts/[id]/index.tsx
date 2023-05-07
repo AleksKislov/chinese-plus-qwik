@@ -19,7 +19,6 @@ import { type CommentType } from "~/components/common/comments/comment-card";
 import { getContentComments } from "~/misc/actions/get-content-comments";
 import { CommentsBlock } from "~/components/common/comments/comments-block";
 import { CommentsBlockTitle } from "~/components/common/comments/comments-block-title";
-import { type TextCardInfo } from "..";
 import { parseTextWords, countZnChars } from "~/misc/helpers/content";
 import { Paragraph } from "~/components/read/paragraph";
 import { ContentPageHead } from "~/components/common/ui/content-page-head";
@@ -27,64 +26,24 @@ import { MoreInfoModal } from "~/components/common/modals/more-info-modal";
 import { EditWordModal } from "~/components/common/modals/edit-word-modal";
 import { editWordModalId, moreInfoModalId } from "~/components/common/tooltips/word-tooltip";
 import { FontSizeBtnGroup } from "~/components/common/content-cards/font-size-btns";
-import { LongTxtPagination } from "~/components/read/long-txt-pagination";
-import { AudioPlayer } from "~/components/read/audio-player";
-
-export type TextContent = {
-  origintext: string[];
-  translation: string[];
-  chinese_arr: string[];
-};
-
-export type TextFromDB = TextCardInfo &
-  TextContent & {
-    pages: (TextContent & { _id: ObjectId })[];
-  };
-
-export type TooltipText = {
-  tooltipTxt: (string | DictWord)[][];
-};
+import { getWordsForTooltips, type TextFromDB, type TooltipText } from "../../texts/[id]";
 
 export const getTextFromDB = (id: ObjectId): Promise<TextFromDB> => {
   return ApiService.get(`/api/texts/${id}`, undefined, null);
-};
-
-export const getWordsForTooltips = (wordsArr: string[]): Promise<(string | DictWord)[]> => {
-  return ApiService.post("/api/dictionary/allWords", wordsArr, undefined, []);
 };
 
 export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => {
   return getContentComments(WHERE.text, params.id);
 });
 
-export const useGetText = routeLoader$(
-  async ({ params, query }): Promise<TextFromDB & TooltipText & { curPage: number }> => {
-    let curPage = 0;
-    const pg = query.get("pg") || "1";
-    if (+pg && +pg > 0) curPage = +pg - 1;
-
-    const textFromDb = await getTextFromDB(params.id);
-    let chineseArr = textFromDb.chinese_arr;
-    if (textFromDb.pages && textFromDb.pages.length) {
-      chineseArr = textFromDb.pages[curPage].chinese_arr;
-    }
-    const dbWords = await getWordsForTooltips(chineseArr);
-    const tooltipTxt = parseTextWords(chineseArr, dbWords);
-    return { ...textFromDb, tooltipTxt, curPage };
-  }
-);
-
-// export const useGetPageWords = routeAction$(
-//   async (params, ev): Promise<TooltipText> => {
-//     console.log("routeAction", ev.query.get("pg"));
-//     const { chineseArr } = params;
-//     const tooltipTxt = parseTextWords(chineseArr, await getWordsForTooltips(chineseArr));
-//     return { tooltipTxt };
-//   },
-//   zod$({
-//     chineseArr: z.array(z.string()),
-//   })
-// );
+export const useGetText = routeLoader$(async ({ params }): Promise<TextFromDB & TooltipText> => {
+  const textFromDb = await getTextFromDB(params.id);
+  // todo: chinese_arr for long texts is [],
+  // if (text.pages && text.pages.length) {
+  const dbWords = await getWordsForTooltips(textFromDb.chinese_arr);
+  const tooltipTxt = parseTextWords(textFromDb.chinese_arr, dbWords);
+  return { ...textFromDb, tooltipTxt };
+});
 
 export default component$(() => {
   const text = useGetText();
@@ -114,17 +73,14 @@ export default component$(() => {
     translation,
     tooltipTxt,
     origintext,
-    pages,
-    curPage,
   } = text.value;
 
-  const isLongTxt = pages && pages.length;
   const currentWord = useSignal<DictWord | undefined>(undefined);
   const showTranslation = useSignal(true);
 
   return (
     <>
-      <ContentPageHead title={title} hits={hits} path='/read/texts' />
+      <ContentPageHead title={title} hits={hits} path='/read/unapproved-texts' />
 
       <FlexRow>
         <Sidebar>
@@ -167,16 +123,13 @@ export default component$(() => {
             </div>
           </div>
 
-          {isLongTxt ? <LongTxtPagination numOfPages={pages.length} curPage={curPage} /> : null}
-
-          <AudioPlayer title={title} textId={textId} />
           {tooltipTxt.map((parag, i) => (
             <Paragraph
               key={i}
               fontSize={fontSizeSig.value}
               tooltipedParag={parag}
-              translation={isLongTxt ? pages[curPage].translation[i] : translation[i]}
-              strLen={countZnChars(isLongTxt ? pages[curPage].origintext[i] : origintext[i])}
+              translation={translation[i]}
+              strLen={countZnChars(origintext[i])}
               ind={i}
               currentWord={currentWord}
               showTranslation={showTranslation.value}

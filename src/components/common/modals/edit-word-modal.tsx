@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal } from "@builder.io/qwik";
+import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 import { alertsContext } from "~/root";
@@ -16,6 +16,11 @@ export const EditWordModal = component$(
     const newPinyin = useSignal(pinyin || "");
     const alertsState = useContext(alertsContext);
 
+    useTask$(({ track }) => {
+      track(() => pinyin);
+      newPinyin.value = pinyin || "";
+    });
+
     const submitEdition = $(async () => {
       const newPy = newPinyin.value.trim();
 
@@ -29,8 +34,8 @@ export const EditWordModal = component$(
     return (
       <>
         <input type='checkbox' id={modalId} class='modal-toggle' />
-        <div class='modal text-left'>
-          <div class='modal-box relative'>
+        <label class='modal text-left' for={modalId}>
+          <label class='modal-box relative' for=''>
             <label for={modalId} class='btn btn-sm btn-circle absolute right-2 top-2'>
               ✕
             </label>
@@ -60,8 +65,8 @@ export const EditWordModal = component$(
                 Отредактировать
               </label>
             </div>
-          </div>
-        </div>
+          </label>
+        </label>
       </>
     );
   }

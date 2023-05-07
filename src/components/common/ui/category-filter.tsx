@@ -19,7 +19,7 @@ export const CategoryFilter = component$(({ categorySignal, contentType }: Categ
         }}
       >
         <option selected value={""}>
-          Все Категории
+          {categorySignal.value === "" ? "Все Категории" : "Все Категории"}
         </option>
         {contentType === WHERE.video
           ? (Object.keys(CONSTANTS.videoCategories) as VideoCategory[]).map((x, ind) => (

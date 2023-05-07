@@ -1,4 +1,4 @@
-import { component$, type Signal, useSignal } from "@builder.io/qwik";
+import { component$, useSignal } from "@builder.io/qwik";
 import { UserDateDiv } from "../comments/user-with-date";
 import { ContentCat } from "./content-cat";
 import { ContentLen } from "./content-len";
@@ -21,7 +21,7 @@ type ContentPageCardProps = {
   length: number;
   desc: string;
   likes: ContentLike[];
-  fontSizeSig: Signal<FontSizeBtnsUnion>;
+  // fontSizeSig: Signal<FontSizeBtnsUnion>;
 };
 
 export enum FontSizeBtns {
@@ -52,11 +52,9 @@ export const ContentPageCard = component$(
     likes,
     contentType,
     contentId,
-    fontSizeSig,
   }: ContentPageCardProps) => {
     const likesSignal = useSignal(likes);
 
-    const fontSizeBtns: FontSizeBtnsUnion[] = [FontSizeBtns.sm, FontSizeBtns.md, FontSizeBtns.lg];
     return (
       <div class='card w-full bg-neutral mb-3'>
         <figure>
@@ -74,24 +72,6 @@ export const ContentPageCard = component$(
               contentId={contentId}
               creatorId={userId}
             />
-          </div>
-          <div>
-            <span class={"font-bold"}>Шрифт: </span>
-            <div class='btn-group ml-1'>
-              {fontSizeBtns.map((txt, ind) => (
-                <button
-                  key={ind}
-                  class={`btn btn-sm btn-outline btn-info ${
-                    txt === fontSizeSig.value ? "btn-active" : ""
-                  }`}
-                  onClick$={() => {
-                    fontSizeSig.value = txt;
-                  }}
-                >
-                  {txt}
-                </button>
-              ))}
-            </div>
           </div>
           <ContentLvl lvl={lvl} />
           <ContentCat txt={category} />

@@ -1,7 +1,7 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import { YoutubeService } from "~/misc/actions/youtube-service";
 import CONSTANTS from "~/misc/consts/consts";
-import { type LevelUnion, type VideoCardInfo } from "~/routes/watch/videos";
+import { type VideoCardInfo } from "~/routes/watch/videos";
 import { WHERE } from "../common/comments/comment-form";
 import { UserDateDiv } from "../common/comments/user-with-date";
 import { TagsLine } from "../common/content-cards/tags-line";
@@ -16,10 +16,11 @@ import { CardBtns } from "../common/content-cards/card-btns";
 
 type VideoCardProps = {
   video: VideoCardInfo;
-  showLevel: LevelUnion;
+  // showLevel: LevelUnion;
+  isUnapproved?: boolean;
 };
 
-export const VideoCard = component$(({ video, showLevel }: VideoCardProps) => {
+export const VideoCard = component$(({ video, isUnapproved }: VideoCardProps) => {
   const {
     _id: videoId,
     title,
@@ -38,17 +39,23 @@ export const VideoCard = component$(({ video, showLevel }: VideoCardProps) => {
   } = video;
 
   const likesSignal = useSignal(likes);
-  const isDisplayed = showLevel === "0" || showLevel === lvl + "";
-  return !isDisplayed ? null : (
+  return (
     <div class='card lg:card-side w-full bg-neutral mb-3'>
       <CardImg
         contentId={videoId}
         contentType={WHERE.video}
         picUrl={YoutubeService.getVideoPicUrl(source)}
+        isUnapproved={isUnapproved}
       />
 
       <div class='card-body lg:w-2/3'>
-        <CardTitle contentId={videoId} contentType={WHERE.video} hits={hits} title={title} />
+        <CardTitle
+          contentId={videoId}
+          contentType={WHERE.video}
+          hits={hits}
+          title={title}
+          isUnapproved={isUnapproved}
+        />
         <TagsLine tags={tags} />
         <UserDateDiv userId={userId} userName={userName} date={date} ptNum={0} />
 
@@ -68,6 +75,7 @@ export const VideoCard = component$(({ video, showLevel }: VideoCardProps) => {
           likes={likesSignal}
           commentIdsLen={commentIds.length}
           withAudio={false}
+          isUnapproved={isUnapproved}
         />
       </div>
     </div>

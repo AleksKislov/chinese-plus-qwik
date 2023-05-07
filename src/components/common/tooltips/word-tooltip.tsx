@@ -1,16 +1,17 @@
-import { component$, useContext, useSignal } from "@builder.io/qwik";
+import { component$, type Signal, useContext, useSignal } from "@builder.io/qwik";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 import { parseRussian } from "~/misc/helpers/translation";
 import { alertsContext, userContext } from "~/root";
 import { editSvg, minusSvg, moreInfoSvg, plusSvg } from "../media/svg";
-import { EditWordModal } from "../modals/edit-word-modal";
-import { MoreInfoModal } from "../modals/more-info-modal";
-import { WordTooltipShell } from "./word-tooltip-shell";
+
+export const editWordModalId = "editWordModalId";
+export const moreInfoModalId = "moreInfoModalId";
 
 type WordTooltipProps = {
   word: string | DictWord;
   hasReddened?: boolean; // only for video subs
+  currentWord: Signal<DictWord | undefined>;
 };
 
 export const useAddUserWord = globalAction$(
@@ -30,161 +31,152 @@ export const useDelUserWord = globalAction$((w, ev) => {
   return ApiService.delete("/api/userwords/" + w.chinese, token);
 }, zod$({ chinese: z.string() }));
 
-export const WordTooltip = component$(({ word, hasReddened }: WordTooltipProps) => {
+export const WordTooltip = component$(({ word, hasReddened, currentWord }: WordTooltipProps) => {
   const addUserWord = useAddUserWord();
   const delUserWord = useDelUserWord();
+  const isRightSide = useSignal(false);
   const userState = useContext(userContext);
   const { loggedIn } = userState;
   const alertsState = useContext(alertsContext);
-  const state = useSignal(false);
-  const modalId = `more-info-modal-${typeof word !== "string" ? word._id : word}`;
-  const editWordModalId = modalId + "0";
+  const showTooltip = useSignal(false);
   let isUserWord = false;
   if (typeof word !== "string") {
     isUserWord = loggedIn && userState.words.some((w) => w.chinese === word.chinese);
   }
 
-  return (
-    <>
-      {typeof word === "string" ? (
-        <span class={hasReddened ? "text-error" : ""}>{word}</span>
-      ) : (
-        <div class={""} onMouseLeave$={() => (state.value = false)}>
-          <WordTooltipShell isShown={state.value}>
-            <div
-              onClick$={() => (state.value = true)}
-              q:slot='one'
-              class={`rounded cursor-pointer hover:bg-info hover:text-info-content hover:px-1 ${
-                isUserWord ? "bg-accent text-accent-content" : ""
-              } ${state.value ? "bg-info text-info-content px-1" : ""} ${
-                hasReddened ? "text-error" : ""
-              }`}
-            >
-              {word.chinese}
-            </div>
-            <div q:slot='two' class={"relative w-60 flex flex-col p-2 text-left"}>
-              <label
-                class='btn btn-sm btn-circle absolute right-0 top-0'
-                onClick$={() => (state.value = false)}
-              >
-                ✕
-              </label>
-              <div class={"flex flex-row mb-2"}>
-                <div class={"text-2xl mr-2"}>{word.chinese}</div>
-                <div class={"text-md text-info"}>{word.pinyin}</div>
-              </div>
-              <div
-                class={"text-sm mb-2"}
-                dangerouslySetInnerHTML={parseRussian(word.russian, false)}
-              ></div>
+  // useOnDocument(
+  //   "click",
+  //   $((ev) => {
+  //     // const { x, y } = event as MouseEvent;
+  //     console.log((ev as MouseEvent).target.id);
+  //   })
+  // );
 
-              <div class={"flex flex-row justify-between"}>
-                <div>
-                  <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Больше информации"}>
-                    <label for={modalId} class={"btn btn-sm btn-info mr-1"}>
-                      {moreInfoSvg}
+  return (
+    <div class={`dropdown dropdown-bottom ${isRightSide.value ? "dropdown-end" : ""}`}>
+      <label
+        onMouseEnter$={(ev) => (isRightSide.value = screen.width / 2 < ev.x)}
+        tabIndex={0}
+        onClick$={() => {
+          currentWord.value = word as DictWord;
+          showTooltip.value = true;
+        }}
+        class={`rounded cursor-pointer hover:bg-info hover:text-info-content ${
+          isUserWord ? "bg-accent text-accent-content" : ""
+        } ${hasReddened ? "text-error" : ""}`}
+      >
+        {typeof word !== "string" ? word.chinese : word}
+      </label>
+      {typeof word !== "string" && (
+        <div
+          tabIndex={0}
+          class={`rounded-box dropdown-content card card-compact bg-base-300 w-64 p-1 shadow ${
+            showTooltip.value ? "" : "hidden"
+          } ${isRightSide.value ? "-right-5" : "-left-5"}`}
+        >
+          <div class='card-body text-left'>
+            <label
+              class='btn btn-sm btn-circle absolute right-1 top-1'
+              onClick$={() => (showTooltip.value = false)}
+            >
+              ✕
+            </label>
+            <div class={"flex flex-row mb-2"}>
+              <div class={"text-2xl mr-2"}>{word.chinese}</div>
+              <div class={"text-lg text-info"}>{word.pinyin}</div>
+            </div>
+            <div
+              class={"text-sm mb-2"}
+              dangerouslySetInnerHTML={parseRussian(word.russian, false)}
+            ></div>
+
+            <div class={"flex flex-row justify-between"}>
+              <div>
+                <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Больше информации"}>
+                  <label for={moreInfoModalId} class={"btn btn-sm btn-info mr-1"}>
+                    {moreInfoSvg}
+                  </label>
+                </div>
+                {isUserWord ? (
+                  <div
+                    class='tooltip tooltip-info tooltip-bottom'
+                    data-tip={"Удалить из вокабуляра"}
+                  >
+                    <label
+                      class='btn btn-sm btn-error'
+                      onClick$={() => {
+                        delUserWord.submit({ chinese: word.chinese });
+                        userState.words = userState.words.filter((w) => w.chinese !== word.chinese);
+                        alertsState.push({
+                          bg: "alert-info",
+                          text: "Слово удалено из вашего словарика",
+                        });
+                      }}
+                    >
+                      {minusSvg}
                     </label>
                   </div>
-                  {isUserWord ? (
-                    <div
-                      class='tooltip tooltip-info tooltip-bottom'
-                      data-tip={"Удалить из вокабуляра"}
-                    >
-                      <label
-                        class='btn btn-sm btn-error'
-                        onClick$={() => {
-                          delUserWord.submit({ chinese: word.chinese });
-                          userState.words = userState.words.filter(
-                            (w) => w.chinese !== word.chinese
-                          );
-                          alertsState.push({
-                            bg: "alert-info",
-                            text: "Слово удалено из вашего словарика",
+                ) : (
+                  <div
+                    class='tooltip tooltip-info tooltip-bottom'
+                    data-tip={"Добавить в вокабуляр"}
+                  >
+                    <button
+                      class='btn btn-sm btn-info'
+                      onClick$={() => {
+                        if (!loggedIn) {
+                          return alertsState.push({
+                            bg: "alert-error",
+                            text: "Авторизуйтесь, чтобы добавить слово в ваш словарик",
                           });
-                        }}
-                      >
-                        {minusSvg}
-                      </label>
-                    </div>
-                  ) : (
-                    <div
-                      class='tooltip tooltip-info tooltip-bottom'
-                      data-tip={"Добавить в вокабуляр"}
-                    >
-                      <button
-                        class='btn btn-sm btn-info'
-                        onClick$={() => {
-                          if (!loggedIn) {
-                            return alertsState.push({
-                              bg: "alert-error",
-                              text: "Авторизуйтесь, чтобы добавить слово в ваш словарик",
-                            });
-                          }
-                          addUserWord.submit({
+                        }
+                        addUserWord.submit({
+                          chinese: word.chinese,
+                          translation: word.russian,
+                          pinyin: word.pinyin,
+                        });
+                        userState.words = [
+                          ...userState.words,
+                          {
+                            _id: "0",
+                            date: "",
                             chinese: word.chinese,
                             translation: word.russian,
                             pinyin: word.pinyin,
-                          });
-                          userState.words = [
-                            ...userState.words,
-                            {
-                              _id: "0",
-                              date: "",
-                              chinese: word.chinese,
-                              translation: word.russian,
-                              pinyin: word.pinyin,
-                            },
-                          ];
-                          alertsState.push({
-                            bg: "alert-success",
-                            text: "Слово добавлено в ваш словарик",
-                          });
-                        }}
-                      >
-                        {plusSvg}
-                      </button>
-                    </div>
-                  )}
-                </div>
+                          },
+                        ];
+                        alertsState.push({
+                          bg: "alert-success",
+                          text: "Слово добавлено в ваш словарик",
+                        });
+                      }}
+                    >
+                      {plusSvg}
+                    </button>
+                  </div>
+                )}
+              </div>
 
-                <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Редактировать"}>
-                  <label
-                    for={loggedIn ? editWordModalId : undefined}
-                    class='btn btn-sm btn-info'
-                    onClick$={() => {
-                      if (loggedIn) return;
+              <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Редактировать"}>
+                <label
+                  for={loggedIn ? editWordModalId : undefined}
+                  class='btn btn-sm btn-info'
+                  onClick$={() => {
+                    if (loggedIn) return;
 
-                      alertsState.push({
-                        bg: "alert-error",
-                        text: "Авторизуйтесь, чтобы отредактировать",
-                      });
-                    }}
-                  >
-                    {editSvg}
-                  </label>
-                </div>
+                    alertsState.push({
+                      bg: "alert-error",
+                      text: "Авторизуйтесь, чтобы отредактировать",
+                    });
+                  }}
+                >
+                  {editSvg}
+                </label>
               </div>
             </div>
-          </WordTooltipShell>
+          </div>
         </div>
       )}
-
-      {typeof word === "string" ? null : (
-        <>
-          <EditWordModal word={word} modalId={editWordModalId} />
-          <MoreInfoModal
-            word={{
-              _id: word._id,
-              cn: word.chinese,
-              py: word.pinyin,
-              ru: word.russian,
-              lvl: "unknown",
-              id: 0,
-            }}
-            modalId={modalId}
-          />
-        </>
-      )}
-    </>
+    </div>
   );
 });

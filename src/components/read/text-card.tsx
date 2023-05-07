@@ -1,7 +1,7 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import CONSTANTS from "~/misc/consts/consts";
 import { type TextCardInfo } from "~/routes/read/texts";
-import { type LevelUnion } from "~/routes/watch/videos";
+// import { type LevelUnion } from "~/routes/watch/videos";
 import { WHERE } from "../common/comments/comment-form";
 import { UserDateDiv } from "../common/comments/user-with-date";
 import { TagsLine } from "../common/content-cards/tags-line";
@@ -16,10 +16,11 @@ import { TextSource } from "../common/content-cards/text-source";
 
 type TextCardProps = {
   text: TextCardInfo;
-  showLevel: LevelUnion;
+  // showLevel: LevelUnion;
+  isUnapproved?: boolean;
 };
 
-export const TextCard = component$(({ text, showLevel }: TextCardProps) => {
+export const TextCard = component$(({ text, isUnapproved }: TextCardProps) => {
   const {
     _id: textId,
     title,
@@ -40,14 +41,25 @@ export const TextCard = component$(({ text, showLevel }: TextCardProps) => {
   } = text;
 
   const likesSignal = useSignal(likes);
-  const showLvl = showLevel === "0" || showLevel === lvl + "";
+  // const showLvl = showLevel === "0" || showLevel === lvl + "";
 
-  return !showLvl ? null : (
+  return (
     <div class='card lg:card-side w-full bg-neutral mb-3 lg:max-h-96'>
-      <CardImg contentId={textId} contentType={WHERE.text} picUrl={picUrl} />
+      <CardImg
+        contentId={textId}
+        contentType={WHERE.text}
+        picUrl={picUrl}
+        isUnapproved={isUnapproved}
+      />
 
       <div class='card-body lg:w-2/3'>
-        <CardTitle contentId={textId} contentType={WHERE.text} hits={hits} title={title} />
+        <CardTitle
+          contentId={textId}
+          contentType={WHERE.text}
+          hits={hits}
+          title={title}
+          isUnapproved={isUnapproved}
+        />
         <TagsLine tags={tags} />
         <UserDateDiv userId={userId} userName={userName} date={date} ptNum={0} />
 
@@ -68,6 +80,7 @@ export const TextCard = component$(({ text, showLevel }: TextCardProps) => {
             likes={likesSignal}
             commentIdsLen={commentIds.length}
             withAudio={Boolean(audioSrc)}
+            isUnapproved={isUnapproved}
           />
         </div>
       </div>

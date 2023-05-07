@@ -10,15 +10,15 @@ export const MoreInfoModal = component$(
     return (
       <>
         <input type='checkbox' id={modalId} class='modal-toggle' />
-        <div class='modal text-left'>
-          <div class='modal-box relative'>
+        <label class='modal text-left' for={modalId}>
+          <label class='modal-box relative' for=''>
             <label for={modalId} class='btn btn-sm btn-circle absolute right-2 top-2'>
               ✕
             </label>
 
             <div class={"flex flex-row mb-2"}>
               <div class={"text-2xl mr-2"}>{cn}</div>
-              <div class={"text-md"}>{py}</div>
+              <div class={"text-lg"}>{py}</div>
             </div>
 
             <div class='relative h-8'>
@@ -39,8 +39,8 @@ export const MoreInfoModal = component$(
               </label>
             </div>
             <DictWordTranslation ru={ru} showExamples={showExamples.value} />
-          </div>
-        </div>
+          </label>
+        </label>
       </>
     );
   }

@@ -22,10 +22,19 @@ type CardBtnsProps = {
   userId: string;
   commentIdsLen: number;
   withAudio: boolean;
+  isUnapproved?: boolean;
 };
 
 export const CardBtns = component$(
-  ({ contentId, contentType, likes, userId, commentIdsLen, withAudio }: CardBtnsProps) => {
+  ({
+    contentId,
+    contentType,
+    likes,
+    userId,
+    commentIdsLen,
+    withAudio,
+    isUnapproved,
+  }: CardBtnsProps) => {
     return (
       <div class='flex justify-end'>
         {withAudio && (
@@ -40,6 +49,7 @@ export const CardBtns = component$(
         <LikeBtn likes={likes} contentType={contentType} contentId={contentId} creatorId={userId} />
 
         <CommentsBtn
+          isUnapproved={isUnapproved}
           contentId={contentId}
           contentType={contentType}
           commentIdsLen={commentIdsLen}

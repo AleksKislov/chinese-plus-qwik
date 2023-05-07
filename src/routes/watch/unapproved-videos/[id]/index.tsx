@@ -5,7 +5,6 @@ import { ApiService } from "~/misc/actions/request";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
-import { type VideoCardInfo } from "..";
 
 import YTframeLoader from "youtube-iframe";
 import { YoutubeService } from "~/misc/actions/youtube-service";
@@ -25,31 +24,10 @@ import { getContentComments } from "~/misc/actions/get-content-comments";
 import { CommentsBlock } from "~/components/common/comments/comments-block";
 import { CommentsBlockTitle } from "~/components/common/comments/comments-block-title";
 import { ContentPageHead } from "~/components/common/ui/content-page-head";
-
-export type VideoFromDB = VideoCardInfo & {
-  pySubs: string[];
-  ruSubs: string[];
-  chineseArr: string[][];
-  cnSubs: ChineseSub[];
-};
-
-export type ChineseSub = {
-  _id: ObjectId;
-  start: NumString;
-  dur: NumString;
-  text: string;
-};
-
-export type TooltipSubs = {
-  tooltipSubs: (DictWord | string)[][];
-};
+import { type TooltipSubs, type VideoFromDB, getWordsForTooltips } from "../../videos/[id]";
 
 export const getVideoFromDB = (id: ObjectId): Promise<VideoFromDB> => {
   return ApiService.get(`/api/videos/${id}`, undefined, null);
-};
-
-export const getWordsForTooltips = (wordsArr: string[][]) => {
-  return ApiService.post("/api/dictionary/allWordsForVideo", wordsArr, undefined, []);
 };
 
 export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => {
@@ -135,7 +113,7 @@ export default component$(() => {
 
   return (
     <>
-      <ContentPageHead title={title} hits={hits} path='/watch/videos' />
+      <ContentPageHead title={title} hits={hits} path='/watch/unapproved-videos' />
 
       <FlexRow>
         <Sidebar>

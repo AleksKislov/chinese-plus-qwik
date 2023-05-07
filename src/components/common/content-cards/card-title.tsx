@@ -4,19 +4,27 @@ import { type WhereType } from "../comments/comment-form";
 import { eyeSvg } from "../media/svg";
 import { getUrlToContent } from "./card-img";
 
-type CardTitleProps = { contentId: string; contentType: WhereType; hits: number; title: string };
+type CardTitleProps = {
+  contentId: string;
+  contentType: WhereType;
+  hits: number;
+  title: string;
+  isUnapproved?: boolean;
+};
 
-export const CardTitle = component$(({ contentId, contentType, hits, title }: CardTitleProps) => {
-  return (
-    <h2 class='card-title hover:text-accent'>
-      <Link href={getUrlToContent(contentType, contentId)}>
-        {title}{" "}
-        <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Просмотров: " + (hits || 0)}>
-          <div class='badge badge-secondary'>
-            {eyeSvg} <span class={"pl-1"}>{hits || 0}</span>
+export const CardTitle = component$(
+  ({ contentId, contentType, hits, title, isUnapproved }: CardTitleProps) => {
+    return (
+      <h2 class='card-title hover:text-accent'>
+        <Link href={getUrlToContent(contentType, contentId, isUnapproved)}>
+          {title}{" "}
+          <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Просмотров: " + (hits || 0)}>
+            <div class='badge badge-secondary'>
+              {eyeSvg} <span class={"pl-1"}>{hits || 0}</span>
+            </div>
           </div>
-        </div>
-      </Link>
-    </h2>
-  );
-});
+        </Link>
+      </h2>
+    );
+  }
+);

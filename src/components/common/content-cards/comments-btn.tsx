@@ -7,23 +7,25 @@ type CommentsBtnProps = {
   contentType: WhereType;
   commentIdsLen: number;
   contentId: string;
+  isUnapproved?: boolean;
 };
 
 export const CommentsBtn = component$(
-  ({ contentType, commentIdsLen, contentId }: CommentsBtnProps) => {
-    const getHref = (where: WhereType) => {
+  ({ contentType, commentIdsLen, contentId, isUnapproved }: CommentsBtnProps) => {
+    const getHref = (where: WhereType, isUnapproved?: boolean) => {
+      const s = isUnapproved ? "unapproved-" : "";
       switch (where) {
         case WHERE.post:
           return `/feedback/${contentId}`;
         case WHERE.video:
-          return `/watch/videos/${contentId}`;
+          return `/watch/${s}videos/${contentId}`;
         case WHERE.text:
-          return `/read/texts/${contentId}`;
+          return `/read/${s}texts/${contentId}`;
       }
     };
 
     return (
-      <Link href={getHref(contentType)}>
+      <Link href={getHref(contentType, isUnapproved)}>
         <button class='btn btn-info btn-sm btn-outline ml-1'>
           {commentSvg} {commentIdsLen > 0 && <span class={"ml-1"}>{commentIdsLen}</span>}
         </button>

@@ -2,12 +2,15 @@ import { component$, useSignal } from "@builder.io/qwik";
 import { HideButtons } from "./hide-buttons";
 import { type NewHskWordType } from "~/routes/hsk/3/table";
 import { NewHskTableRow } from "./new-hsk-table-row";
+import { MoreInfoModal } from "../common/modals/more-info-modal";
+import { moreInfoModalId } from "../common/tooltips/word-tooltip";
 
 export type DisplayCardsStore = { bool: boolean };
 export type PinyinAboveStore = { bool: boolean };
 
 export const NewHskTable = component$(({ hskWords }: { hskWords: NewHskWordType[] }) => {
   const hideBtnsSig = useSignal<string[]>([]);
+  const currentWord = useSignal<NewHskWordType | undefined>(undefined);
 
   return (
     <>
@@ -23,10 +26,17 @@ export const NewHskTable = component$(({ hskWords }: { hskWords: NewHskWordType[
                 key={word._id}
                 word={word as NewHskWordType}
                 hideBtnsSig={hideBtnsSig}
+                currentWord={currentWord}
               />
             ))}
           </tbody>
         </table>
+        {/* <MoreInfoModal word={word} modalId={modalId} /> */}
+        {!currentWord.value ? null : (
+          <>
+            <MoreInfoModal word={currentWord.value as NewHskWordType} modalId={moreInfoModalId} />
+          </>
+        )}
       </div>
     </>
   );

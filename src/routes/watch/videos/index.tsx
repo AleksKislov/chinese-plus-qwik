@@ -7,7 +7,7 @@ import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
 import { VideoCard } from "~/components/watch/video-card";
-import { LevelFilter } from "~/components/common/ui/level-filter";
+// import { LevelFilter } from "~/components/common/ui/level-filter";
 import { UnsetFiltersBtn } from "~/components/common/ui/unset-filters-btn";
 import { CategoryFilter } from "~/components/common/ui/category-filter";
 import { WHERE } from "~/components/common/comments/comment-form";
@@ -58,7 +58,7 @@ export type LevelUnion = "0" | "1" | "2" | "3";
 export default component$(() => {
   const initVideos = getInitVideos();
   const videos = useSignal<VideoCardInfo[]>(initVideos.value);
-  const levelSignal = useSignal<LevelUnion>("0");
+  // const levelSignal = useSignal<LevelUnion>("0");
   const categorySignal = useSignal("");
   const skip = useSignal(0);
 
@@ -69,6 +69,7 @@ export default component$(() => {
 
   useTask$(async ({ track }) => {
     track(() => categorySignal.value);
+    // track(() => levelSignal.value);
     videos.value = await getVideos();
   });
 
@@ -89,17 +90,17 @@ export default component$(() => {
 
         <MainContent>
           <div class='grid sm:grid-cols-4 grid-cols-2 gap-1 mb-3'>
-            <LevelFilter levelSignal={levelSignal} />
+            {/* <LevelFilter levelSignal={levelSignal} /> */}
             <CategoryFilter categorySignal={categorySignal} contentType={WHERE.video} />
             <UnsetFiltersBtn
-              levelSignal={levelSignal}
+              // levelSignal={levelSignal}
               categorySignal={categorySignal}
               skipSignal={skip}
             />
           </div>
 
           {videos.value.map((video, ind) => (
-            <VideoCard key={ind} video={video} showLevel={levelSignal.value} />
+            <VideoCard key={ind} video={video} />
           ))}
 
           <div class={"flex flex-col items-center"}>
