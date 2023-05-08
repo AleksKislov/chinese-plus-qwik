@@ -116,6 +116,7 @@ export default component$(() => {
     origintext,
     pages,
     curPage,
+    audioSrc: hasAudio,
   } = text.value;
 
   const isLongTxt = pages && pages.length;
@@ -169,7 +170,7 @@ export default component$(() => {
 
           {isLongTxt ? <LongTxtPagination numOfPages={pages.length} curPage={curPage} /> : null}
 
-          <AudioPlayer title={title} textId={textId} />
+          {!hasAudio ? null : <AudioPlayer textId={textId} />}
           {tooltipTxt.map((parag, i) => (
             <Paragraph
               key={i}
