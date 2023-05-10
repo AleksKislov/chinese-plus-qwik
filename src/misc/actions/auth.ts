@@ -20,6 +20,9 @@ export interface UserFromDB {
     email: string;
     finished_texts: string[] | null;
     seenVideos: string[] | null;
+    daily_reading_goal?: number;
+    read_today_num?: number;
+    read_today_arr: {};
   };
 }
 

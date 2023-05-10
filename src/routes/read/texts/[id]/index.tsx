@@ -29,6 +29,7 @@ import { editWordModalId, moreInfoModalId } from "~/components/common/tooltips/w
 import { FontSizeBtnGroup } from "~/components/common/content-cards/font-size-btns";
 import { LongTxtPagination } from "~/components/read/long-txt-pagination";
 import { AudioPlayer } from "~/components/read/audio-player";
+import { ReadResultCard } from "~/components/private/read-result-card";
 
 export type TextContent = {
   origintext: string[];
@@ -73,18 +74,6 @@ export const useGetText = routeLoader$(
     return { ...textFromDb, tooltipTxt, curPage };
   }
 );
-
-// export const useGetPageWords = routeAction$(
-//   async (params, ev): Promise<TooltipText> => {
-//     console.log("routeAction", ev.query.get("pg"));
-//     const { chineseArr } = params;
-//     const tooltipTxt = parseTextWords(chineseArr, await getWordsForTooltips(chineseArr));
-//     return { tooltipTxt };
-//   },
-//   zod$({
-//     chineseArr: z.array(z.string()),
-//   })
-// );
 
 export default component$(() => {
   const text = useGetText();
@@ -143,6 +132,7 @@ export default component$(() => {
             contentType={WHERE.text}
             contentId={textId}
           />
+          <ReadResultCard />
         </Sidebar>
 
         <MainContent>
@@ -201,7 +191,7 @@ export default component$(() => {
           </div>
 
           {!currentWord.value ? null : (
-            <>
+            <div>
               <EditWordModal word={currentWord.value} modalId={editWordModalId} />
               <MoreInfoModal
                 word={{
@@ -214,7 +204,7 @@ export default component$(() => {
                 }}
                 modalId={moreInfoModalId}
               />
-            </>
+            </div>
           )}
         </MainContent>
       </FlexRow>

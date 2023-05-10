@@ -17,6 +17,7 @@ import {
   type AudioFilterUnion,
   HasAudioFilter,
 } from "~/components/common/ui/has-audio-filter";
+import { ReadResultCard } from "~/components/private/read-result-card";
 
 export type TextCardInfo = {
   _id: ObjectId;
@@ -79,11 +80,6 @@ export default component$(() => {
     texts.value = await getTexts();
   });
 
-  // useTask$(async ({ track }) => {
-  //   track(() => audioSignal.value);
-  //   texts.value = await getTexts();
-  // });
-
   return (
     <>
       <PageTitle txt={"Китайские тексты с озвучкой"} />
@@ -102,6 +98,8 @@ export default component$(() => {
               </p>
             </div>
           </div>
+
+          <ReadResultCard />
         </Sidebar>
 
         <MainContent>

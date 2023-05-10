@@ -14,6 +14,10 @@ import { logout, StatusCodes, getUser } from "./misc/actions/auth";
 import globalStyles from "./global.css?inline";
 import { getUserWords, type UserWord } from "./misc/actions/get-user-words";
 
+type ReadTodayMap = {
+  [key: string]: number[];
+};
+
 export interface User {
   _id: ObjectId;
   name: string;
@@ -25,6 +29,9 @@ export interface User {
   finishedTexts: string[];
   seenVideos: string[];
   words: UserWord[];
+  readDailyGoal: number;
+  readTodayNum: number;
+  readTodayMap: ReadTodayMap;
 }
 
 export interface Alert {
@@ -50,6 +57,9 @@ export default component$(() => {
     finishedTexts: [],
     seenVideos: [],
     words: [],
+    readDailyGoal: 0,
+    readTodayNum: 0,
+    readTodayMap: {},
   });
   const alertsState = useStore<Alert[]>([]);
 
@@ -61,7 +71,7 @@ export default component$(() => {
       getUser(token, cntrlr),
       getUserWords(token),
     ]);
-    // console.log(userWords);
+    // console.log(userResp);
 
     if (userResp.status === "rejected") return cntrlr.abort;
     const resp = userResp.value;
@@ -79,6 +89,9 @@ export default component$(() => {
       userState.finishedTexts = resp.user.finished_texts ? resp.user.finished_texts : [];
       userState.seenVideos = resp.user.seenVideos ? resp.user.seenVideos : [];
       userState.words = userWords.status === "fulfilled" ? userWords.value : [];
+      userState.readDailyGoal = resp.user.daily_reading_goal || 0;
+      userState.readTodayNum = resp.user.read_today_num || 0;
+      userState.readTodayMap = resp.user.read_today_arr || {};
     }
     return cntrlr.abort;
   });

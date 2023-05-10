@@ -1,7 +1,7 @@
 import { component$, type Signal } from "@builder.io/qwik";
 import { type FontSizeBtnsUnion, FontSizeMap } from "../common/content-cards/content-page-card";
-import { plusSvg } from "../common/media/svg";
 import { WordTooltip } from "../common/tooltips/word-tooltip";
+import { ParagPlus } from "./parag-plus";
 
 type ParagraphProps = {
   translation: string;
@@ -33,7 +33,7 @@ export const Paragraph = component$(
           {tooltipedParag.map((word, i) => (
             <WordTooltip key={i} word={word} currentWord={currentWord} />
           ))}
-          <ParagPlus strLen={strLen} />
+          <ParagPlus strLen={strLen} ind={ind} />
         </div>
 
         {!showTranslation ? null : (
@@ -49,18 +49,8 @@ export const Paragraph = component$(
 
 export const ParagNum = component$(({ num }: { num: number }) => (
   <div class='absolute right-1 -top-1'>
-    <div class='tooltip text-sm text-info' data-tip={`Параграф ${num}`}>
+    <div class='tooltip tooltip-left text-sm text-info' data-tip={`Параграф ${num}`}>
       {num}
-    </div>
-  </div>
-));
-
-export const ParagPlus = component$(({ strLen }: { strLen: number }) => (
-  <div class='absolute right-1 -bottom-1'>
-    <div class='tooltip text-sm' data-tip={`Прочитано ${strLen} 字`}>
-      <div onClick$={() => {}} class={"rounded-full bg-neutral-focus"}>
-        {plusSvg}
-      </div>
     </div>
   </div>
 ));

@@ -88,8 +88,8 @@ export const AudioPlayer = component$(({ textId }: { textId: ObjectId }) => {
                 audioPlayer.value!.playbackRate = rate;
               }}
             >
-              {rates.map((rate) => (
-                <option value={rate}>{`${rate}x`}</option>
+              {rates.map((rate, ind) => (
+                <option value={rate} key={ind}>{`${rate}x`}</option>
               ))}
             </select>
           </div>
