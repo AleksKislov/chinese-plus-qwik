@@ -9,23 +9,14 @@ import {
 } from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { Alerts } from "~/components/common/alerts/alerts";
-// import { useLocation } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
 import { searchSvg } from "~/components/common/media/svg";
+import { DictWordTranslation } from "~/components/common/translation/dict-word-translation";
 import { ApiService } from "~/misc/actions/request";
 import { alertsContext } from "~/root";
 import { getWordsForTooltips } from "~/routes/read/texts/[id]";
-
-// export const useGetTranslation = routeAction$(
-//   (params): Promise<(string | DictWord)[]> => {
-//     return getWordsForTooltips(params.words);
-//   },
-//   zod$({
-//     words: z.array(z.string()),
-//   })
-// );
 
 export const segmenter = async (text: string): Promise<string[]> => {
   return ApiService.post("/api/dictionary/segmenter", { text }, undefined, []);
@@ -44,13 +35,13 @@ export const getChineseWordsArr = async (input: string): Promise<string[]> => {
 export default component$(() => {
   const loc = useLocation();
   const nav = useNavigate();
-  // const getTranslationFromDB = useGetTranslation();
   const loadTranslation = useLoadTranslation();
-  const words = useSignal<(string | DictWord)[]>([]);
+  const words = useSignal<(string | DictWord)[] | null>(null);
   const input = useSignal(loc.url.searchParams.get("q") || "");
   const alertsState = useContext(alertsContext);
 
   useTask$(() => {
+    // track(() => input.value);
     words.value = loadTranslation.value;
   });
 
@@ -64,9 +55,9 @@ export default component$(() => {
     if (!isChinese) {
       return alertsState.push({ bg: "alert-error", text: "Введенный текст не является китайским" });
     }
-
-    nav("/search?q=" + chineseStr);
+    words.value = null;
     words.value = await getWordsForTooltips(await getChineseWordsArr(chineseStr));
+    nav("/search?q=" + chineseStr);
   });
 
   useOnDocument(
@@ -103,9 +94,9 @@ export default component$(() => {
             </div>
 
             <div>
-              {words.value.map((word) => (
-                <p>{word.chinese}</p>
-              ))}
+              {words.value && (
+                <DictWordTranslation ru={words.value[0].russian} showExamples={true} />
+              )}
             </div>
           </div>
         </MainContent>

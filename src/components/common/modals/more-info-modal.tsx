@@ -1,6 +1,6 @@
 import { component$, useSignal } from "@builder.io/qwik";
-import { markUpRuText } from "~/misc/helpers/translation";
 import { type NewHskWordType } from "~/routes/hsk/3/table";
+import { DictWordTranslation } from "../translation/dict-word-translation";
 
 export const MoreInfoModal = component$(
   ({ word, modalId }: { word: NewHskWordType; modalId: string }) => {
@@ -43,11 +43,5 @@ export const MoreInfoModal = component$(
         </label>
       </>
     );
-  }
-);
-
-export const DictWordTranslation = component$(
-  ({ ru, showExamples }: { ru: string; showExamples: boolean }) => {
-    return <p dangerouslySetInnerHTML={markUpRuText(ru, showExamples)}></p>;
   }
 );
