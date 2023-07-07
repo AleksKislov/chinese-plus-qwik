@@ -1,6 +1,7 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import { type NewHskWordType } from "~/routes/hsk/3/table";
 import { DictWordTranslation } from "../translation/dict-word-translation";
+import { ShowHideBtn } from "./show-hide-btn";
 
 export const MoreInfoModal = component$(
   ({ word, modalId }: { word: NewHskWordType; modalId: string }) => {
@@ -21,23 +22,7 @@ export const MoreInfoModal = component$(
               <div class={"text-lg"}>{py}</div>
             </div>
 
-            <div class='relative h-8'>
-              <label class='absolute label cursor-pointer right-0'>
-                {showExamples.value ? (
-                  <span class='label-text mr-3'>Без примеров</span>
-                ) : (
-                  <span class='label-text mr-3'>С примерами</span>
-                )}
-                <input
-                  type='checkbox'
-                  class='toggle toggle-accent'
-                  checked={showExamples.value}
-                  onClick$={() => {
-                    showExamples.value = !showExamples.value;
-                  }}
-                />
-              </label>
-            </div>
+            <ShowHideBtn showExamples={showExamples} />
             <DictWordTranslation ru={ru} showExamples={showExamples.value} />
           </label>
         </label>

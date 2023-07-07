@@ -1,4 +1,11 @@
-import { component$, noSerialize, useSignal, useStore, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  noSerialize,
+  useSignal,
+  useStore,
+  useVisibleTask$,
+  type NoSerialize,
+} from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 
@@ -40,6 +47,14 @@ export type ChineseSub = {
   text: string;
 };
 
+export enum PlayerState {
+  ended = 0,
+  playing = 1,
+  paused = 2,
+  buffering = 3,
+  videoCued = 5,
+}
+
 export type TooltipSubs = {
   tooltipSubs: (DictWord | string)[][];
 };
@@ -66,7 +81,10 @@ type YTPlayer = {
   player: {
     playerInfo?: {
       currentTime: number;
+      playerState: number;
     };
+    pauseVideo: NoSerialize<() => void>;
+    playVideo: NoSerialize<() => void>;
   };
 };
 
@@ -75,9 +93,16 @@ export default component$(() => {
   const comments = getComments();
   const YtPlayerId = "ytPlayerId";
   const hideBtnsSig = useSignal<string[]>([]);
-  const ytSig = useStore<YTPlayer>({ player: {} });
+  const ytSig = useStore<YTPlayer>({
+    // @ts-ignore
+    player: {
+      playerInfo: undefined,
+    },
+  });
   const subCurrentInd = useSignal(0);
   const curWordInd = useSignal(-1);
+  const playerState = useSignal<number>(PlayerState.ended);
+  const isPaused = useSignal(false);
 
   const commentIdToReplyStore = useStore<CommentIdToReply>({
     commentId: "",
@@ -110,6 +135,19 @@ export default component$(() => {
 
   const mainSub = useSignal(parseVideoWords(chineseArr, tooltipSubs));
 
+  useVisibleTask$(({ track }) => {
+    track(() => isPaused.value);
+    if (!ytSig.player.pauseVideo) return;
+
+    if (isPaused.value && playerState.value === PlayerState.playing) {
+      ytSig.player.pauseVideo();
+    }
+
+    if (!isPaused.value && playerState.value === PlayerState.paused && ytSig.player.playVideo) {
+      ytSig.player.playVideo();
+    }
+  });
+
   useVisibleTask$(() => {
     if (!ytSig.player.playerInfo) {
       YTframeLoader.load((YT) => {
@@ -119,6 +157,7 @@ export default component$(() => {
     }
 
     setInterval(() => {
+      playerState.value = ytSig.player.playerInfo?.playerState || PlayerState.ended;
       const curTime = ytSig.player.playerInfo?.currentTime || 0;
       const ind = cnSubs.findIndex(({ start, dur }) => {
         return +start < curTime && +start + +dur > curTime;
@@ -168,6 +207,8 @@ export default component$(() => {
             ru={ruSubs[subCurrentInd.value]}
             py={pySubs[subCurrentInd.value]}
             curWordInd={curWordInd.value}
+            playerState={playerState}
+            isPaused={isPaused}
           />
 
           <div class={"mt-2"}>
