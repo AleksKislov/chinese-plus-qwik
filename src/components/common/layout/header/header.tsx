@@ -110,7 +110,7 @@ export default component$(() => {
               <label tabIndex={0} class='btn btn-ghost btn-circle avatar'>
                 <div>
                   {userState.avatar ? (
-                    <img src={`https:${userState.avatar}`} />
+                    <img width="280" height="280" src={`https:${userState.avatar}`} />
                   ) : (
                     <div>{enterSvg}</div>
                   )}

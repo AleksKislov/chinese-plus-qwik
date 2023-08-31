@@ -25,7 +25,6 @@ export const Paragraph = component$(
   }: ParagraphProps) => {
     const blockClass = "my-1 border border-info rounded-md p-2 relative";
     const paragNum = ind + 1;
-    // const currentWord = useSignal<DictWord | undefined>(undefined);
 
     return (
       <div class={`grid ${showTranslation ? "lg:grid-cols-2" : ""} grid-cols-1 gap-2`}>

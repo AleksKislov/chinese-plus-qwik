@@ -1,6 +1,7 @@
 import { component$, Slot } from "@builder.io/qwik";
 import { youtubeSvg } from "~/components/common/media/svg";
 import Header from "../components/common/layout/header/header";
+import { Link } from "@builder.io/qwik-city";
 
 export default component$(() => {
   return (
@@ -12,11 +13,10 @@ export default component$(() => {
             <Slot />
           </div>
           <footer class='footer footer-center p-10 text-base-content rounded bg-neutral mt-4'>
-            <div class='grid grid-flow-col gap-4'>
-              <a class='link link-hover'>About us</a>
-              <a class='link link-hover'>Contact</a>
-              <a class='link link-hover'>Jobs</a>
-              <a class='link link-hover'>Press kit</a>
+            <div>
+              <Link class='link link-hover' href='/contacts'>
+                Контакты / О нас
+              </Link>
             </div>
             <div>
               <div class='grid grid-flow-col gap-4'>
@@ -46,7 +46,7 @@ export default component$(() => {
               </div>
             </div>
             <div>
-              <p>Copyright © 2023 - All right reserved by ACME Industries Ltd</p>
+              <p>Copyright © 2023</p>
             </div>
           </footer>
         </section>
