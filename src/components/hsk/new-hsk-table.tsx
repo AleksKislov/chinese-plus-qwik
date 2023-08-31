@@ -31,7 +31,6 @@ export const NewHskTable = component$(({ hskWords }: { hskWords: NewHskWordType[
             ))}
           </tbody>
         </table>
-        {/* <MoreInfoModal word={word} modalId={modalId} /> */}
         {!currentWord.value ? null : (
           <>
             <MoreInfoModal word={currentWord.value as NewHskWordType} modalId={moreInfoModalId} />

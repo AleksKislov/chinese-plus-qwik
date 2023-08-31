@@ -30,14 +30,12 @@ export const Subs = component$(
                 class={`flex ${FontSizeMap[fontSizeSig.value]}`}
                 onMouseEnter$={() => {
                   if (playerState.value === PlayerState.playing) {
-                    console.log("paused");
                     isPaused.value = true;
                   }
                 }}
                 onMouseLeave$={() => {
                   if (isPaused.value && playerState.value === PlayerState.paused) {
                     isPaused.value = false;
-                    console.log("playing");
                   }
                 }}
               >

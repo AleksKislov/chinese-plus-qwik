@@ -14,6 +14,7 @@ type SearchResultRowType = {
 export const SearchResultRow = component$(
   ({ word, hideBtnsSig, currentWord }: SearchResultRowType) => {
     const nav = useNavigate();
+
     return (
       <>
         <tr class={"hover"}>
@@ -50,7 +51,9 @@ export const SearchResultRow = component$(
               <label
                 for={moreInfoModalId}
                 class={"btn btn-sm btn-info"}
-                onClick$={() => (currentWord.value = word)}
+                onClick$={() => {
+                  currentWord.value = word;
+                }}
               >
                 {moreInfoSvg}
               </label>

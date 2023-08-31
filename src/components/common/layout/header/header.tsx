@@ -96,6 +96,9 @@ export default component$(() => {
                 </li>
 
                 <li tabIndex={0}>
+                  <Link href='/search'>Словарь</Link>
+                </li>
+                <li tabIndex={0}>
                   <Link href='/feedback'>Фидбэк</Link>
                 </li>
               </ul>

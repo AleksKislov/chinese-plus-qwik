@@ -1,5 +1,13 @@
-import { $, component$, useContext, useOnDocument, useSignal, useTask$ } from "@builder.io/qwik";
-import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
+import {
+  $,
+  component$,
+  useContext,
+  useOnDocument,
+  useSignal,
+  useTask$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
+import { Link, routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { MainContent } from "~/components/common/layout/main-content";
@@ -15,6 +23,18 @@ import { SearchResutlTable } from "~/components/search/search-result-table";
 import { ApiService } from "~/misc/actions/request";
 import { alertsContext } from "~/root";
 import { getWordsForTooltips } from "~/routes/read/texts/[id]";
+import HanziWriter from "hanzi-writer";
+
+export const writerSettings = {
+  width: 60,
+  height: 60,
+  padding: 0,
+  showOutline: true,
+  radicalColor: "#168F16",
+  delayBetweenLoops: 3000,
+};
+
+export const delay = (time: number) => new Promise((res) => setTimeout(res, time));
 
 export const segmenter = async (text: string): Promise<string[]> => {
   return ApiService.post("/api/dictionary/segmenter", { text }, undefined, []);
@@ -45,7 +65,24 @@ export default component$(() => {
     words.value = loadTranslation.value;
   });
 
+  useVisibleTask$(({ track }) => {
+    track(() => words.value);
+
+    if (
+      words.value &&
+      words.value.length === 1 &&
+      typeof words.value[0] !== "string" &&
+      words.value[0].chinese.length === 1
+    ) {
+      const writer = HanziWriter.create("showCharDiv", words.value[0].chinese, writerSettings);
+      writer.loopCharacterAnimation();
+    }
+  });
+
   const getTranslation = $(async () => {
+    const charDiv = document.getElementById("showCharDiv");
+    if (charDiv) charDiv!.innerHTML = "";
+
     const chineseStr = input.value.trim();
     if (!chineseStr) return (input.value = "");
 
@@ -74,7 +111,12 @@ export default component$(() => {
           <div class='prose'>
             <div class='form-control'>
               <label class='label'>
-                <span class='label-text'>База слов взята с БКРС</span>
+                <span class='label-text'>
+                  База слов взята с{" "}
+                  <Link href={"https://bkrs.info/"} target='_blank'>
+                    БКРС
+                  </Link>
+                </span>
               </label>
               <div class='input-group w-full'>
                 <input
@@ -93,6 +135,8 @@ export default component$(() => {
             <div>
               {words.value && words.value.length === 1 && (
                 <>
+                  {/* <div>{words.value[0].chinese}</div> */}
+                  <div id='showCharDiv' class={"mt-3"}></div>
                   <div class={"mt-3 flex justify-between"}>
                     <div class={"flex"}>
                       <OwnWordBtn word={words.value[0] as DictWord} />

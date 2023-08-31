@@ -24,7 +24,7 @@ export const markUpRuText = (text: string, showExamples: boolean = false): strin
 
   const regex = /\[ref\](.+?)\[\/ref\]/;
   for (let i = 0; i < 12; i++) {
-    text = text.replace(regex, `<a href="/search/$1" target="_blank">$1</a>`);
+    text = text.replace(regex, `<a href="/search/?q=$1" target="_blank">$1</a>`);
   }
   return text;
 };
