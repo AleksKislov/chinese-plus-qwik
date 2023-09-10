@@ -16,6 +16,6 @@ module.exports = {
     utils: true,
     rtl: false,
     prefix: "",
-    darkTheme: "dark",
+    darkTheme: "night",
   },
 };

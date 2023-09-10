@@ -1,17 +1,19 @@
-import { component$, useStore, $, useOnDocument, useContext } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
+import { component$, useStore, $, useOnDocument } from "@builder.io/qwik";
+import { type RequestEvent } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
-import { userContext } from "~/root";
 import { ApiService } from "~/misc/actions/request";
+
+export const onGet = async ({ cookie, redirect }: RequestEvent) => {
+  const token = cookie.get("token");
+  if (token?.value) throw redirect(302, "/me");
+};
 
 export const login = (email: string, password: string): Promise<{ token: string } | null> => {
   return ApiService.post("/api/auth", { email, password }, "", null);
 };
 
 export default component$(() => {
-  const nav = useNavigate();
   const store = useStore({ email: "", password: "" });
-  const state = useContext(userContext);
 
   const submit = $(async () => {
     const res = await login(store.email, store.password);
@@ -23,12 +25,8 @@ export default component$(() => {
 
   useOnDocument(
     "keydown",
-    $((e) => {
-      if ((e as KeyboardEvent).key === "Enter") submit();
-    })
+    $((e) => (e as KeyboardEvent).key === "Enter" && submit())
   );
-
-  if (state.name) nav("/");
 
   return (
     <div class='text-center'>
