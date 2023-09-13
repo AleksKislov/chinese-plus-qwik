@@ -1,6 +1,7 @@
 // import { globalAction$ } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
 import { BASE_URL } from "./request";
+import { Cookie } from "@builder.io/qwik-city";
 
 export enum StatusCodes {
   NotFound = 404,
@@ -49,3 +50,7 @@ export async function getUser(token: string, controller?: AbortController): Prom
     return { err: StatusCodes.NotFound };
   }
 }
+
+export const getTokenFromCookie = (cookie: Cookie) => {
+  return cookie.get("token")?.value || "";
+};

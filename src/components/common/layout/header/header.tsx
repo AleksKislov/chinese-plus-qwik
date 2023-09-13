@@ -1,4 +1,4 @@
-import { component$, useContext } from "@builder.io/qwik";
+import { component$, useContext, useTask$ } from "@builder.io/qwik";
 import { userContext } from "~/root";
 import { logout } from "~/misc/actions/auth";
 import { Link } from "@builder.io/qwik-city";
@@ -12,10 +12,15 @@ import {
   enterSvg,
   exitSvg,
 } from "../../media/svg";
+import { getNewMentions } from "~/routes/layout";
 
 export default component$(() => {
+  const newMentions = getNewMentions();
   const userState = useContext(userContext);
 
+  useTask$(() => {
+    userState.newMentions = newMentions.value;
+  });
   return (
     <header class='bg-neutral mb-4'>
       <div class='md:container md:mx-auto'>
@@ -110,7 +115,7 @@ export default component$(() => {
               <label tabIndex={0} class='btn btn-ghost btn-circle avatar'>
                 <div>
                   {userState.avatar ? (
-                    <img width="280" height="280" src={`https:${userState.avatar}`} />
+                    <img width='280' height='280' src={`https:${userState.avatar}`} />
                   ) : (
                     <div>{enterSvg}</div>
                   )}

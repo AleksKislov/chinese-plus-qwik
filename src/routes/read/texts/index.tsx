@@ -39,7 +39,7 @@ export type TextCardInfo = {
   date: ISODate;
 };
 
-type TextsNumInfo = {
+export type TextsNumInfo = {
   total: number;
   approved: number;
   notApproved: number;

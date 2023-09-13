@@ -32,6 +32,7 @@ export interface User {
   readDailyGoal: number;
   readTodayNum: number;
   readTodayMap: ReadTodayMap;
+  newMentions: string[];
 }
 
 export interface Alert {
@@ -60,6 +61,7 @@ export default component$(() => {
     readDailyGoal: 0,
     readTodayNum: 0,
     readTodayMap: {},
+    newMentions: [],
   });
   const alertsState = useStore<Alert[]>([]);
 

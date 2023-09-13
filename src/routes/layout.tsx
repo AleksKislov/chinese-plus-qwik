@@ -1,7 +1,16 @@
 import { component$, Slot } from "@builder.io/qwik";
 import { youtubeSvg } from "~/components/common/media/svg";
 import Header from "../components/common/layout/header/header";
-import { Link } from "@builder.io/qwik-city";
+import { Link, routeLoader$ } from "@builder.io/qwik-city";
+import { ApiService } from "~/misc/actions/request";
+import { getTokenFromCookie } from "~/misc/actions/auth";
+
+// @todo change type to MentionType or CommentType
+export const getNewMentions = routeLoader$(async ({ cookie }): Promise<[]> => {
+  const token = getTokenFromCookie(cookie);
+  if (!token) return [];
+  return ApiService.get("/api/comments/to_me/false", token, []);
+});
 
 export default component$(() => {
   return (
