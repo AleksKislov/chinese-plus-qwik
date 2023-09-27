@@ -13,6 +13,8 @@ import { logout, StatusCodes, getUser } from "./misc/actions/auth";
 
 import globalStyles from "./global.css?inline";
 import { getUserWords, type UserWord } from "./misc/actions/get-user-words";
+import { getUserHsk2WordsTotal } from "./misc/actions/get-user-hsk2-total";
+import { type CommentType } from "./components/common/comments/comment-card";
 
 type ReadTodayMap = {
   [key: string]: number[];
@@ -32,7 +34,8 @@ export interface User {
   readDailyGoal: number;
   readTodayNum: number;
   readTodayMap: ReadTodayMap;
-  newMentions: string[];
+  newMentions: CommentType[];
+  hsk2WordsTotal: number;
 }
 
 export interface Alert {
@@ -58,6 +61,7 @@ export default component$(() => {
     finishedTexts: [],
     seenVideos: [],
     words: [],
+    hsk2WordsTotal: 0,
     readDailyGoal: 0,
     readTodayNum: 0,
     readTodayMap: {},
@@ -69,9 +73,10 @@ export default component$(() => {
     const cntrlr = new AbortController();
     const token = Cookies.get("token");
     if (!token) return;
-    const [userResp, userWords] = await Promise.allSettled([
+    const [userResp, userWords, hsk2WordsTotal] = await Promise.allSettled([
       getUser(token, cntrlr),
       getUserWords(token),
+      getUserHsk2WordsTotal(token),
     ]);
     // console.log(userResp);
 
@@ -94,6 +99,7 @@ export default component$(() => {
       userState.readDailyGoal = resp.user.daily_reading_goal || 0;
       userState.readTodayNum = resp.user.read_today_num || 0;
       userState.readTodayMap = resp.user.read_today_arr || {};
+      userState.hsk2WordsTotal = hsk2WordsTotal.status === "fulfilled" ? hsk2WordsTotal.value : 0;
     }
     return cntrlr.abort;
   });

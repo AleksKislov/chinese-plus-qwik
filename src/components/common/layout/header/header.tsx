@@ -1,7 +1,7 @@
-import { component$, useContext, useTask$ } from "@builder.io/qwik";
+import { component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
 import { userContext } from "~/root";
 import { logout } from "~/misc/actions/auth";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useNavigate } from "@builder.io/qwik-city";
 import MenuItem from "./menu-item";
 import type { MenuItemProps } from "./menu-item";
 import {
@@ -17,6 +17,8 @@ import { getNewMentions } from "~/routes/layout";
 export default component$(() => {
   const newMentions = getNewMentions();
   const userState = useContext(userContext);
+  const nav = useNavigate();
+  const showDoubleClickTip = useSignal(false);
 
   useTask$(() => {
     userState.newMentions = newMentions.value;
@@ -111,11 +113,34 @@ export default component$(() => {
           </div>
 
           <div class='flex-none'>
+            {!showDoubleClickTip.value ? null : (
+              <div class='badge badge-xs'>double click ={">"} ЛК</div>
+            )}
+
             <div class='dropdown dropdown-end'>
-              <label tabIndex={0} class='btn btn-ghost btn-circle avatar'>
+              <label
+                tabIndex={0}
+                class={`btn btn-ghost btn-circle avatar ${
+                  newMentions.value.length ? "online" : ""
+                }`}
+              >
                 <div>
                   {userState.avatar ? (
-                    <img width='280' height='280' src={`https:${userState.avatar}`} />
+                    <img
+                      onMouseEnter$={() => {
+                        showDoubleClickTip.value = true;
+                      }}
+                      onMouseLeave$={() => {
+                        showDoubleClickTip.value = false;
+                      }}
+                      onClick$={(e) => {
+                        // @ts-ignore
+                        if (e.detail === 2) nav("/me");
+                      }}
+                      width='280'
+                      height='280'
+                      src={`https:${userState.avatar}`}
+                    />
                   ) : (
                     <div>{enterSvg}</div>
                   )}
@@ -149,7 +174,7 @@ export const unAuthMenu = (
 export const authMenu = (
   <>
     <li>
-      <Link href='/me'>Мой кабинет</Link>
+      <Link href='/me'>Личный кабинет</Link>
     </li>
     <li>
       <Link href='/me/hsk-words'>Мой словарик HSK</Link>
@@ -158,10 +183,7 @@ export const authMenu = (
       <Link href='/me/words'>Мой словарик</Link>
     </li>
     <li>
-      <Link href='/me/texts'>Мои тексты</Link>
-    </li>
-    <li>
-      <Link href='/me/mentions'>Обращения ко мне</Link>
+      <Link href='/me/texts'>Мой контент</Link>
     </li>
     <li>
       <Link href='/create-content'>Поделиться контентом</Link>

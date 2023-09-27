@@ -21,7 +21,7 @@ export const ReadingDiagram = component$(
     const maxX = useSignal(1000);
     const MONTH_DAYS = 31;
     const CHART_COLUMNS: [string, string, string] = ["Дата", "Прочитано, 字", "Цель, 字"];
-
+    const isLoading = useSignal(true);
     // if (+localStorage.isDarkTheme) {
     //   const textColor = { color: "#fff" };
     //   options.hAxis.titleTextStyle = textColor;
@@ -103,15 +103,20 @@ export const ReadingDiagram = component$(
       }
 
       GoogleCharts.load(drawChart);
+      isLoading.value = false;
     });
 
     return (
-      <div class='mb-3'>
+      <div class='mb-3 w-full h-80'>
         <div class='prose'>
           <h3>Статистика по чтению за месяц</h3>
         </div>
 
-        <div id='readingChart' class='stats h-80 w-full'></div>
+        {isLoading.value ? (
+          <p>Загрузка...</p>
+        ) : (
+          <div id='readingChart' class='stats h-80 w-full'></div>
+        )}
       </div>
     );
   }

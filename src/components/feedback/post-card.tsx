@@ -5,6 +5,7 @@ import { msgTypes, type Post } from "~/routes/feedback";
 import { WHERE, type Addressee } from "../common/comments/comment-form";
 import { UserDateDiv } from "../common/comments/user-with-date";
 import { CommentsBtn } from "../common/content-cards/comments-btn";
+import { AvatarImg } from "../common/media/avatar-img";
 
 type PostCardProps = {
   post: Post;
@@ -45,7 +46,7 @@ export const PostCard = component$(({ post, isPostPage, addressees }: PostCardPr
                   addressees.value = [...addressees.value, { id: userId, name: userName }];
                 }}
               >
-                <img src={`https:${avatar}`} />
+                <AvatarImg avatarUrl={avatar} />
               </div>
             </div>
           </div>

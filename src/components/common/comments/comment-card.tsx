@@ -7,6 +7,7 @@ import { ApiService } from "~/misc/actions/request";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { EditCommentModal } from "./edit-comment-modal";
 import { getLikeBtnTooltipTxt } from "../content-cards/like-btn";
+import { AvatarImg } from "../media/avatar-img";
 
 export type CommentType = {
   addressees: string[];
@@ -17,6 +18,11 @@ export type CommentType = {
   user: string; // userId
   post_id: ObjectId;
   likes: ContentLike[];
+  commentIdToReply?: {
+    commentId: ObjectId;
+    userId: ObjectId;
+    name: string;
+  };
   destination: string;
   date: ISODate;
 };
@@ -69,7 +75,7 @@ export const CommentCard = component$(
                   }}
                 >
                   <div class='w-12 mask mask-squircle'>
-                    <img src={`https:${comment.avatar}`} />
+                    <AvatarImg avatarUrl={comment.avatar} />
                   </div>
                 </div>
               </div>

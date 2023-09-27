@@ -10,6 +10,7 @@ import { PageTitle } from "~/components/common/layout/title";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
+import { getTokenFromCookie } from "~/misc/actions/auth";
 
 export type OldHskWordType = {
   _id: ObjectId;
@@ -31,14 +32,14 @@ export type UserOldHskWordType = {
 };
 
 export const getUserHsk2Words = routeLoader$(async ({ cookie }): Promise<UserOldHskWordType[]> => {
-  const token = cookie.get("token")?.value || "";
+  const token = getTokenFromCookie(cookie);
   if (!token) return [];
   return await ApiService.get("/api/words", token, []);
 });
 
-export const getHskWords = routeLoader$(async (ev): Promise<OldHskWordType[]> => {
-  const lvl = ev.query.get("lvl") || "1";
-  const lmt = ev.query.get("pg") || "0";
+export const getHskWords = routeLoader$(async ({ query }): Promise<OldHskWordType[]> => {
+  const lvl = query.get("lvl") || "1";
+  const lmt = query.get("pg") || "0";
   return await ApiService.get(`/api/lexicon?hsk_level=${lvl}&limit=${lmt}`, undefined, []);
 });
 
