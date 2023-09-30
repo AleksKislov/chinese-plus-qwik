@@ -26,6 +26,7 @@ export const getReadStats = routeLoader$(async ({ cookie }): Promise<ReadStatTyp
   if (!token) return [];
   return ApiService.get(`/api/users/reading_results`, token, []);
 
+  // for tests
   // return [
   //   {
   //     // user_id: "5f301a8f0aa5c18",

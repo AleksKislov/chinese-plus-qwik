@@ -13,6 +13,7 @@ import {
   exitSvg,
 } from "../../media/svg";
 import { getNewMentions } from "~/routes/layout";
+import { getAvatarUrl } from "~/misc/helpers/content/get-avatar-url";
 
 export default component$(() => {
   const newMentions = getNewMentions();
@@ -139,7 +140,7 @@ export default component$(() => {
                       }}
                       width='280'
                       height='280'
-                      src={`https:${userState.avatar}`}
+                      src={getAvatarUrl(userState.avatar)}
                     />
                   ) : (
                     <div>{enterSvg}</div>
