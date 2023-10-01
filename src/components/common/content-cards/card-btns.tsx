@@ -1,19 +1,9 @@
 import { component$, type Signal } from "@builder.io/qwik";
-import { WHERE, type WhereType } from "../comments/comment-form";
+import { type WhereType } from "../comments/comment-form";
 import { audioSvg } from "../media/svg";
 import { BookmarkBtn } from "./bookmark-btn";
 import { CommentsBtn } from "./comments-btn";
 import { LikeBtn } from "./like-btn";
-
-export const getUrlToContent = (contentType: WhereType, contentId: string): string => {
-  switch (contentType) {
-    case WHERE.text:
-      return `/read/texts/${contentId}`;
-    case WHERE.video:
-      return `/watch/videos/${contentId}`;
-  }
-  return "/";
-};
 
 type CardBtnsProps = {
   contentId: string;

@@ -1,5 +1,5 @@
 import { component$, useContext } from "@builder.io/qwik";
-import { routeLoader$, type RequestEvent } from "@builder.io/qwik-city";
+import { routeLoader$, type RequestEvent, routeAction$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { ReadResultCard } from "~/components/private/read-result-card";
@@ -11,6 +11,7 @@ import { PersonalStats } from "~/components/me/personal-stats";
 import { getTokenFromCookie } from "~/misc/actions/auth";
 import { PersonalMentions } from "~/components/me/mentions";
 import { AvatarImg } from "~/components/common/media/avatar-img";
+import { type CommentType } from "~/components/common/comments/comment-card";
 
 export const onGet = async ({ cookie, redirect }: RequestEvent) => {
   const token = getTokenFromCookie(cookie);
@@ -19,6 +20,18 @@ export const onGet = async ({ cookie, redirect }: RequestEvent) => {
 
 export const getTextsStats = routeLoader$((): Promise<TextsNumInfo> => {
   return ApiService.get(`/api/texts/texts_num`, undefined, {});
+});
+
+export const getOldMentions = routeLoader$(async ({ cookie }): Promise<CommentType[]> => {
+  const token = getTokenFromCookie(cookie);
+  if (!token) return [];
+  return ApiService.get("/api/comments/to_me/true", token, []);
+});
+
+// await axios.post("/api/comments/mark_mentions_as_seen", {}, config);
+export const markMentionsAsOld = routeAction$((_param, ev) => {
+  const token = getTokenFromCookie(ev.cookie);
+  return ApiService.post("/api/comments/mark_mentions_as_seen", {}, token);
 });
 
 export const getReadStats = routeLoader$(async ({ cookie }): Promise<ReadStatType[]> => {

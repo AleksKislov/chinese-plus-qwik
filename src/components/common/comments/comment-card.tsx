@@ -23,7 +23,8 @@ export type CommentType = {
     userId: ObjectId;
     name: string;
   };
-  destination: string;
+  path?: string; // only for books, not in quick yet:
+  destination: "book" | "text" | "video" | "post";
   date: ISODate;
 };
 

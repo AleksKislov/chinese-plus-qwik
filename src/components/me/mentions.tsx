@@ -1,34 +1,75 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useSignal } from "@builder.io/qwik";
 import { type CommentType } from "../common/comments/comment-card";
-import { AvatarImg } from "../common/media/avatar-img";
+import { Mention } from "./mention";
+import { getOldMentions, markMentionsAsOld } from "~/routes/me";
 
 type PersonalMentionsType = {
   newMentions: CommentType[];
 };
 
 export const PersonalMentions = component$(({ newMentions }: PersonalMentionsType) => {
+  const showOldMentions = useSignal(newMentions.length === 0);
+  const oldMentions = getOldMentions();
+  const markAsOld = markMentionsAsOld();
+
+  // console.log(oldMentions.value);
   return (
     <div class='mb-3 mt-3 w-full'>
       <div class='prose'>
         <h3>Общение</h3>
       </div>
 
-      <div class='join join-vertical border-secondary mt-2'>
-        {!newMentions.length ? (
-          <p>Нет уведомлений</p>
-        ) : (
-          [...newMentions, ...newMentions].map((comment, ind) => (
-            <div class='join-item flex w-full pb-2 hover:bg-base-200 rounded-md' key={ind}>
-              <div class='w-12 mask mask-squircle mr-3'>
-                <AvatarImg avatarUrl={comment.avatar} />
-              </div>
-              <div>
-                <p class={"mt-2"} dangerouslySetInnerHTML={comment.text}></p>
-              </div>
-            </div>
-          ))
-        )}
+      <div class='flex'>
+        <div class='tabs'>
+          <a
+            class={`tab tab-bordered ${showOldMentions.value ? "" : "tab-active"}`}
+            onClick$={() => {
+              showOldMentions.value = false;
+            }}
+          >
+            Новые
+          </a>
+          <a
+            class={`tab tab-bordered ${showOldMentions.value ? "tab-active" : ""}`}
+            onClick$={() => {
+              showOldMentions.value = true;
+            }}
+          >
+            Прочитанные
+          </a>
+        </div>
+        {newMentions.length > 0 && !showOldMentions.value ? (
+          <div class='tooltip tooltip-info' data-tip={"Пометить как прочитанные"}>
+            <button
+              class='btn btn-sm btn-primary ml-3'
+              onClick$={async () => {
+                await markAsOld.submit();
+                location.reload();
+              }}
+            >
+              Я прочитал
+            </button>
+          </div>
+        ) : null}
       </div>
+
+      {showOldMentions.value ? (
+        <div class='join join-vertical border-secondary mt-2'>
+          {!oldMentions.value?.length ? (
+            <p>Нет комментариев</p>
+          ) : (
+            oldMentions.value?.map((comment, ind) => <Mention comment={comment} ind={ind} />)
+          )}
+        </div>
+      ) : (
+        <div class='join join-vertical border-secondary mt-2'>
+          {!newMentions.length ? (
+            <p>Нет новых комментариев</p>
+          ) : (
+            newMentions.map((comment, ind) => <Mention comment={comment} ind={ind} />)
+          )}
+        </div>
+      )}
     </div>
   );
 });
