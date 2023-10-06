@@ -12,7 +12,7 @@ import {
 
 type TypingGameProps = {
   words: TestWord[];
-  level: string;
+  level?: string;
 };
 
 type WrongStore = {
@@ -72,7 +72,9 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
       wrongStore.answers.push("");
       setNewQuestion();
     }
-    answer.value = "";
+    setTimeout(() => {
+      answer.value = "";
+    });
   });
 
   const setNewGame = $(() => {
@@ -92,7 +94,7 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
 
   return (
     shuffled.words && (
-      <div class='card bg-neutral w-full mb-3'>
+      <div class='card bg-neutral w-full mb-6'>
         <div class='card-body'>
           {start.value ? (
             <div>
@@ -126,7 +128,7 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
                       answer.value = e.target.value;
                     }}
                     onKeyDown$={(e: QwikKeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === "Enter") return checkIt();
+                      if (e.key === "Enter") return setTimeout(checkIt);
                     }}
                     autoComplete='off'
                   />

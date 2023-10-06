@@ -20,28 +20,39 @@ export const TableCard = component$(({ level, isOldHsk, isForTests }: TabelCardP
 
   const rmHyphen = (str: string): string => str.replaceAll("-", "");
   return (
-    <div class='card bg-primary-focus text-primary-content'>
+    <div class='card bg-primary text-primary-content'>
       <div class='card-body'>
         <CardInfo isForTests={isForTests} isOldHsk={isOldHsk} />
+      </div>
 
-        <ul class='menu rounded-box bg-primary'>
-          {levels.map((lvl) => (
-            <li class={level === lvl ? "active bg-primary-focus" : ""} key={lvl}>
-              <Link class='flex' href={`?lvl=${rmHyphen(lvl)}&pg=0`}>
-                <span class='flex-1'>
-                  {isOldHsk ? "HSK " : "Band "} {lvl}
-                </span>
-                <span class='badge bg-warning text-warning-content'>{infoToUse[lvl]}</span>
-              </Link>
-            </li>
-          ))}
-          <li>
-            <div class='flex'>
-              <span class='text-success flex-1'>Всего слов </span>
-              <span class='badge bg-warning text-warning-content'>{allWordsNum}</span>
-            </div>
-          </li>
-        </ul>
+      <div class='overflow-x-auto'>
+        <table class='table w-full overflow-hidden !rounded-t-none'>
+          <tbody>
+            {levels.map((lvl) => (
+              <tr
+                key={lvl}
+                class={`hover hover:text-primary-focus ${
+                  level === lvl ? "bg-base-200 text-primary-focus" : ""
+                }`}
+              >
+                <td class='pl-8'>
+                  <Link href={`?lvl=${rmHyphen(lvl)}&pg=0`}>
+                    {isOldHsk ? "HSK " : "Band "} {lvl}
+                  </Link>
+                </td>
+                <td class={`float-right pr-8`}>
+                  <span class={`badge bg-warning text-warning-content`}>{infoToUse[lvl]}</span>
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td class='pl-8'>Всего слов</td>
+              <td class='float-right pr-8'>
+                <span class='badge bg-warning text-warning-content'>{allWordsNum}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -13,9 +13,10 @@ export type PinyinAboveStore = { bool: boolean };
 type OldHskTableType = {
   hskWords: OldHskWordType[];
   userHskWords: UserOldHskWordType[];
+  isPrivate?: boolean;
 };
 
-export const OldHskTable = component$(({ hskWords, userHskWords }: OldHskTableType) => {
+export const OldHskTable = component$(({ hskWords, userHskWords, isPrivate }: OldHskTableType) => {
   const hideBtnsSig = useSignal<string[]>([]);
   const pinyinAbove = useStore<PinyinAboveStore>({ bool: false });
   const displayCardsStore = useStore<DisplayCardsStore>({ bool: false });
@@ -42,6 +43,7 @@ export const OldHskTable = component$(({ hskWords, userHskWords }: OldHskTableTy
             <tbody>
               {hskWords.map((word) => (
                 <OldHskTableRow
+                  isPrivate={isPrivate}
                   key={word._id}
                   word={word as OldHskWordType}
                   hideBtnsSig={hideBtnsSig}

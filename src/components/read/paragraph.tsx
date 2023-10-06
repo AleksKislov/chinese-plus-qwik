@@ -11,6 +11,7 @@ type ParagraphProps = {
   currentWord: Signal<DictWord | undefined>;
   strLen: number;
   showTranslation: boolean;
+  forEditing?: boolean;
 };
 
 export const Paragraph = component$(
@@ -22,6 +23,7 @@ export const Paragraph = component$(
     currentWord,
     strLen,
     showTranslation,
+    forEditing,
   }: ParagraphProps) => {
     const blockClass = "my-1 border border-info rounded-md p-2 relative";
     const paragNum = ind + 1;
@@ -33,7 +35,7 @@ export const Paragraph = component$(
           {tooltipedParag.map((word, i) => (
             <WordTooltip key={i} word={word} currentWord={currentWord} hasReddened={undefined} />
           ))}
-          <ParagPlus strLen={strLen} ind={ind} />
+          {!forEditing && <ParagPlus strLen={strLen} ind={ind} />}
         </div>
 
         {!showTranslation ? null : (

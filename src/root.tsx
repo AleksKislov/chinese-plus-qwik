@@ -36,14 +36,21 @@ export interface User {
   readTodayMap: ReadTodayMap;
   newMentions: CommentType[];
   hsk2WordsTotal: number;
+  role?: "admin" | "moderator";
 }
 
 export interface Alert {
   bg: AlertBgUnion;
   text: string;
 }
-
 type AlertBgUnion = "alert-info" | "alert-success" | "alert-warning" | "alert-error";
+
+export const AlertColorEnum = {
+  info: "alert-info" as AlertBgUnion,
+  success: "alert-success" as AlertBgUnion,
+  warning: "alert-warning" as AlertBgUnion,
+  error: "alert-error" as AlertBgUnion,
+};
 
 export const userContext = createContextId<User>("user-context");
 export const alertsContext = createContextId<Alert[]>("alerts-context");
@@ -66,6 +73,7 @@ export default component$(() => {
     readTodayNum: 0,
     readTodayMap: {},
     newMentions: [],
+    role: undefined,
   });
   const alertsState = useStore<Alert[]>([]);
 
@@ -91,6 +99,7 @@ export default component$(() => {
       userState.name = resp.user.name;
       userState.email = resp.user.email;
       userState.loggedIn = true;
+      userState.role = resp.user.role;
       userState.isAdmin = resp.user.role === "admin";
       userState.isModerator = resp.user.role === "moderator";
       userState.finishedTexts = resp.user.finished_texts ? resp.user.finished_texts : [];

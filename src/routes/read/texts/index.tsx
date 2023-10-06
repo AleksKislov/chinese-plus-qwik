@@ -17,7 +17,7 @@ import {
   type AudioFilterUnion,
   HasAudioFilter,
 } from "~/components/common/ui/has-audio-filter";
-import { ReadResultCard } from "~/components/private/read-result-card";
+import { ReadResultCard } from "~/components/me/read-result-card";
 
 export type TextCardInfo = {
   _id: ObjectId;

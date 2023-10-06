@@ -37,7 +37,7 @@ export const ReadResultCard = component$(() => {
           </small>
           <div class='relative w-full h-3 overflow-hidden'>
             <progress
-              class={`progress border absolute w-full h-full z-30 ${
+              class={`progress border absolute w-full h-full z-20 ${
                 progress.value < 100 ? "border-info" : "border-success"
               }`}
               value={0.0001}

@@ -2,7 +2,7 @@ import { itirateWordsFromDB } from "./itirate-words-from-db";
 
 export const parseTextWords = (chineseArr: string[], wordsFromDB: (string | DictWord)[]) => {
   const newArr = itirateWordsFromDB(chineseArr, wordsFromDB);
-  return chunkTxtArr(newArr); // array of object arrays
+  return chunkTxtArr(newArr).filter((chunk) => Boolean(chunk)); // array of object arrays
 };
 
 const chunkTxtArr = (arr: (string | DictWord)[]): (string | DictWord)[][] => {

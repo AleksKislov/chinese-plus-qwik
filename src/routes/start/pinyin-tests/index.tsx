@@ -19,7 +19,7 @@ export default component$(() => {
 
       <FlexRow>
         <Sidebar>
-          <div class='card bg-accent text-info-content'>
+          <div class='card bg-primary text-primary-content'>
             <div class='card-body'>
               <h2 class='card-title'>Пиньинь</h2>
               <p>Пиньинь - первое, чем нужно овладеть изучающим китайский язык.</p>

@@ -13,6 +13,7 @@ type TableRowType = {
   hideBtnsSig: Signal<string[]>;
   userSelected: boolean;
   userWordsLen: number;
+  isPrivate?: boolean;
 };
 
 export const pronounce = (id: number, lvl: number) => {
@@ -37,9 +38,9 @@ export const removeUserHskWord = async (wordId: number, token: string) => {
 };
 
 export const OldHskTableRow = component$(
-  ({ word, hideBtnsSig, userSelected: clickedByUser, userWordsLen }: TableRowType) => {
+  ({ word, hideBtnsSig, userSelected: clickedByUser, userWordsLen, isPrivate }: TableRowType) => {
     const userSelectedSignal = useSignal(clickedByUser);
-    const userSelected = userSelectedSignal.value;
+    const userSelected = userSelectedSignal.value && !isPrivate;
     const userWordsLenSignal = useSignal(userWordsLen);
 
     const alertsState = useContext(alertsContext);
@@ -54,10 +55,10 @@ export const OldHskTableRow = component$(
         return alertsState.push({ bg: "alert-error", text: "Нужно войти" });
       }
 
-      if (userSelected) {
+      if (userSelectedSignal.value) {
         removeUserHskWord(word.word_id, token);
         userWordsLenSignal.value--;
-        userSelectedSignal.value = !userSelected;
+        userSelectedSignal.value = !userSelectedSignal.value;
         return alertsState.push({ bg: "alert-info", text: "Слово удалено из вашего словарика" });
       }
 
@@ -70,7 +71,7 @@ export const OldHskTableRow = component$(
 
       addUserHskWord(word, token);
       userWordsLenSignal.value++;
-      userSelectedSignal.value = !userSelected;
+      userSelectedSignal.value = !userSelectedSignal.value;
       return alertsState.push({ bg: "alert-success", text: "Слово добавлено в ваш словарик" });
     });
 
@@ -97,12 +98,15 @@ export const OldHskTableRow = component$(
             </button>
           </td>
           <td class={userSelected ? "bg-secondary" : ""}>
-            <button
-              class={userSelected ? "btn btn-sm btn-warning" : "btn btn-sm btn-info"}
-              onClick$={addOrRemoveHskWord}
-            >
-              {userSelected ? minusSvg : plusSvg}
-            </button>
+            {userSelectedSignal.value ? (
+              <button class='btn btn-sm btn-warning' onClick$={addOrRemoveHskWord}>
+                {minusSvg}
+              </button>
+            ) : (
+              <button class='btn btn-sm btn-info' onClick$={addOrRemoveHskWord}>
+                {plusSvg}
+              </button>
+            )}
           </td>
         </tr>
       </>

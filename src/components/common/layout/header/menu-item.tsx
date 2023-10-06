@@ -15,7 +15,7 @@ export default component$(({ links, name }: MenuItemProps) => {
         {name}
         {dropdownArrowBottom}
       </label>
-      <ul class='dropdown-content menu shadow bg-neutral rounded-box p-2'>
+      <ul class='dropdown-content menu shadow bg-neutral rounded-box p-2 w-52 z-40'>
         {links.map((link, ind) => (
           <MenuLink href={link.href} text={link.text} key={ind} />
         ))}

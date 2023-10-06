@@ -17,7 +17,7 @@ export interface UserFromDB {
     _id: ObjectId;
     name: string;
     avatar: string;
-    role: string | null;
+    role?: "admin" | "moderator";
     email: string;
     finished_texts: string[] | null;
     seenVideos: string[] | null;

@@ -36,9 +36,12 @@ export const OwnWordBtn = component$(({ word }: { word: DictWord }) => {
   return (
     <>
       {isUserWord ? (
-        <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Удалить из вокабуляра"}>
+        <div
+          class='tooltip tooltip-info tooltip-bottom z-40'
+          data-tip={"Удалить из своего словарика"}
+        >
           <label
-            class='btn btn-sm btn-error'
+            class='btn btn-sm btn-warning'
             onClick$={() => {
               delUserWord.submit({ chinese: word.chinese });
               userState.words = userState.words.filter((w) => w.chinese !== word.chinese);
@@ -52,7 +55,7 @@ export const OwnWordBtn = component$(({ word }: { word: DictWord }) => {
           </label>
         </div>
       ) : (
-        <div class='tooltip tooltip-info tooltip-bottom' data-tip={"Добавить в вокабуляр"}>
+        <div class='tooltip tooltip-info tooltip-bottom z-10' data-tip={"Добавить в свой словарик"}>
           <button
             class='btn btn-sm btn-info'
             onClick$={() => {

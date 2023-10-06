@@ -138,7 +138,7 @@ export default component$(() => {
 
       <div class='flex'>
         {buttons.map(({ func, txt }, ind) => (
-          <button type='button' class='btn btn-accent btn-sm mr-1' key={ind} onClick$={func}>
+          <button type='button' class='btn btn-primary btn-sm mr-1' key={ind} onClick$={func}>
             {txt}
           </button>
         ))}

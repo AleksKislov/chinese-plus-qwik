@@ -29,7 +29,7 @@ import { editWordModalId, moreInfoModalId } from "~/components/common/tooltips/w
 import { FontSizeBtnGroup } from "~/components/common/content-cards/font-size-btns";
 import { LongTxtPagination } from "~/components/read/long-txt-pagination";
 import { AudioPlayer } from "~/components/read/audio-player";
-import { ReadResultCard } from "~/components/private/read-result-card";
+import { ReadResultCard } from "~/components/me/read-result-card";
 
 export type TextContent = {
   origintext: string[];

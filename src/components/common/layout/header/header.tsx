@@ -35,7 +35,7 @@ export default component$(() => {
               </label>
               <ul
                 tabIndex={0}
-                class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52'
+                class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52 z-40'
               >
                 <li tabIndex={0}>
                   <a class='justify-between'>
@@ -73,8 +73,7 @@ export default component$(() => {
                     HSK
                     {dropdownArrowBottom}
                   </label>
-                  {/* dropdown-content menu shadow bg-neutral rounded-box p-2 */}
-                  <ul class='dropdown-content menu shadow bg-neutral rounded-box w-52 p-2'>
+                  <ul class='dropdown-content menu shadow bg-neutral rounded-box w-52 p-2 z-40'>
                     <li class='menu-title'>
                       <small>HSK 2.0</small>
                     </li>
@@ -149,7 +148,7 @@ export default component$(() => {
               </label>
               <ul
                 tabIndex={0}
-                class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52'
+                class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52 z-40'
               >
                 {userState.name ? authMenu : unAuthMenu}
               </ul>
@@ -178,16 +177,13 @@ export const authMenu = (
       <Link href='/me'>Личный кабинет</Link>
     </li>
     <li>
-      <Link href='/me/hsk-words'>Мой словарик HSK</Link>
+      <Link href='/me/hsk/2'>Мой словарик HSK</Link>
     </li>
     <li>
       <Link href='/me/words'>Мой словарик</Link>
     </li>
     <li>
-      <Link href='/me/texts'>Мой контент</Link>
-    </li>
-    <li>
-      <Link href='/create-content'>Поделиться контентом</Link>
+      <Link href='/create'>Поделиться контентом</Link>
     </li>
     <hr class='h-px my-1 bg-primary border-0' />
 

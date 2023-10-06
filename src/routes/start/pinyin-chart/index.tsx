@@ -4,6 +4,7 @@ import { tableMap, pinyinMap } from "~/misc/consts/pinyin";
 import styles from "./table.css?inline";
 import CONST_URLS from "~/misc/consts/urls";
 import { PageTitle } from "~/components/common/layout/title";
+import { infoAlertSvg } from "~/components/common/media/svg";
 
 export const initHiglights = () => {
   const tbody = document.querySelector("tbody") as HTMLTableSectionElement;
@@ -52,23 +53,9 @@ export default component$(() => {
     <>
       <PageTitle txt={"Таблица пиньиня с озвучкой"} />
 
-      <div class='alert alert-info shadow-lg my-3'>
-        <div>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            class='stroke-current flex-shrink-0 w-6 h-6'
-          >
-            <path
-              stroke-linecap='round'
-              stroke-linejoin='round'
-              stroke-width='2'
-              d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-            ></path>
-          </svg>
-          <span>New software update available.</span>
-        </div>
+      <div class='alert shadow-lg my-3'>
+        {infoAlertSvg}
+        <span>Таблица озвучена носителем языка. Кликайте на слог, чтобы прослушать</span>
       </div>
 
       <div class='overflow-x-auto'>

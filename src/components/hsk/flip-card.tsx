@@ -17,8 +17,8 @@ export const FlipCard = component$(
         >
           <h3 class='flip-front text-center mt-12'>{pinyinAbove ? pinyin : chinese}</h3>
 
-          <span class={`flip-back bg-primary px-2 rounded-lg leading-3`}>
-            <h4 class='text-info'>{!pinyinAbove ? pinyin : chinese}</h4>
+          <span class={`flip-back bg-primary px-2 rounded-lg leading-3 text-primary-content`}>
+            <h4 class='text-primary-content'>{!pinyinAbove ? pinyin : chinese}</h4>
             <small>{translation}</small>
           </span>
         </div>

@@ -4,6 +4,7 @@ import { moreInfoSvg } from "../common/media/svg";
 import { moreInfoModalId } from "../common/tooltips/word-tooltip";
 import { HideBtnsEnum } from "../hsk/hide-buttons";
 import { useNavigate } from "@builder.io/qwik-city";
+import { OwnWordBtn } from "../common/tooltips/own-word-btn";
 
 type SearchResultRowType = {
   word: string | DictWord;
@@ -20,7 +21,7 @@ export const SearchResultRow = component$(
         <tr class={"hover"}>
           {!hideBtnsSig.value.includes(HideBtnsEnum.cn) && (
             <td
-              class={"prose"}
+              class={"prose cursor-pointer"}
               onClick$={() => {
                 nav("/search?q=" + (typeof word === "string" ? word : word.chinese));
               }}
@@ -58,6 +59,20 @@ export const SearchResultRow = component$(
                 {moreInfoSvg}
               </label>
             )}
+          </td>
+          <td>
+            {/* {typeof word === "string" ? (
+              ""
+            ) : userWords.some((x) => x.chinese === word.chinese) ? (
+              <button class='btn btn-sm btn-warning' onClick$={() => {}}>
+                {minusSvg}
+              </button>
+            ) : (
+              <button class='btn btn-sm btn-info' onClick$={() => {}}>
+                {plusSvg}
+              </button>
+            )} */}
+            <OwnWordBtn word={word as DictWord} />
           </td>
         </tr>
       </>
