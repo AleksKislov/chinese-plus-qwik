@@ -40,6 +40,7 @@ export const OtherTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='Заголовок'
                 class='input input-bordered w-full'
                 value={store.title}
+                onChange$={(e) => (store.title = e.target.value)}
               />
             </div>
           </div>
@@ -54,6 +55,7 @@ export const OtherTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='Тэги'
                 class='input input-bordered w-full'
                 value={store.tags}
+                onChange$={(e) => (store.tags = e.target.value)}
               />
             </div>
           </div>
@@ -90,6 +92,7 @@ export const OtherTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='О чем текст'
                 class='input input-bordered w-full'
                 value={store.description}
+                onChange$={(e) => (store.description = e.target.value)}
               />
             </div>
           </div>
@@ -158,6 +161,7 @@ export const OtherTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='Автор, книга, журнал, сайт...'
                 class='input input-bordered w-full'
                 value={store.source}
+                onChange$={(e) => (store.source = e.target.value)}
               />
             </div>
           </div>

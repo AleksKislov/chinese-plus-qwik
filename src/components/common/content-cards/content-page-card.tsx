@@ -7,6 +7,7 @@ import { LikeBtn } from "./like-btn";
 import { TagsLine } from "./tags-line";
 import { TextDesc } from "./text-desc";
 import { type WhereType } from "../comments/comment-form";
+import { TextSource } from "./text-source";
 
 type ContentPageCardProps = {
   contentType: WhereType;
@@ -21,7 +22,7 @@ type ContentPageCardProps = {
   length: number;
   desc: string;
   likes: ContentLike[];
-  // fontSizeSig: Signal<FontSizeBtnsUnion>;
+  textSource?: string;
 };
 
 export enum FontSizeBtns {
@@ -52,6 +53,7 @@ export const ContentPageCard = component$(
     likes,
     contentType,
     contentId,
+    textSource,
   }: ContentPageCardProps) => {
     const likesSignal = useSignal(likes);
 
@@ -76,6 +78,7 @@ export const ContentPageCard = component$(
           <ContentLvl lvl={lvl} />
           <ContentCat txt={category} />
           <ContentLen len={length} />
+          {textSource && <TextSource source={textSource} />}
           <TextDesc desc={desc} />
         </div>
       </div>

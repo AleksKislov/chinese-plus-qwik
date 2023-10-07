@@ -73,6 +73,7 @@ export default component$(() => {
     translation,
     tooltipTxt,
     origintext,
+    source,
   } = text.value;
 
   const currentWord = useSignal<DictWord | undefined>(undefined);
@@ -97,6 +98,7 @@ export default component$(() => {
             likes={likes}
             contentType={WHERE.text}
             contentId={textId}
+            textSource={source}
           />
         </Sidebar>
 

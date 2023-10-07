@@ -9,12 +9,13 @@ import { EditTextStore } from "~/routes/(content)/edit/text/[id]";
 
 type OtherTextFieldsProps = {
   store: EditTextStore;
+  isAdmin: boolean;
 };
 
 /**
  * @desc заголовок, уровень, описание, тэги, тема картинки, категория, источник
  */
-export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
+export const EditTextFields = component$(({ store, isAdmin }: OtherTextFieldsProps) => {
   const alertsState = useContext(alertsContext);
   const STARS_LVL = [1, 2, 3];
   const picTheme = useSignal("");
@@ -22,13 +23,42 @@ export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
   const alreadyGotPics = useSignal(false);
 
   return (
-    <div tabIndex={0} class={`collapse collapse-arrow border border-base-300 bg-base-200`}>
-      <input type='checkbox' />
-      <div class='collapse-title text-xl px-7'>
-        Нужен только текст и перевод. Клик здесь, чтобы заполнить остальные необязательные поля
-      </div>
+    <div tabIndex={0} class={`collapse collapse-open border border-base-300 bg-base-200`}>
+      <div class={`collapse-content mt-4`}>
+        {isAdmin && (
+          <FlexRow>
+            <div class='form-control'>
+              <div class='mx-4 label'>Для админа:</div>
+            </div>
+            <div>
+              <div class='form-control'>
+                <label class='label cursor-pointer'>
+                  <span class='label-text mr-2'>Опубликован</span>
+                  <input
+                    type='checkbox'
+                    checked={Boolean(store.isApproved)}
+                    class='checkbox checkbox-primary'
+                    onChange$={() => (store.isApproved = !store.isApproved ? 1 : 0)}
+                  />
+                </label>
+              </div>
+            </div>
+            <div class='ml-3'>
+              <div class='form-control'>
+                <label class='label cursor-pointer'>
+                  <span class='label-text mr-2'>С аудио</span>
+                  <input
+                    type='checkbox'
+                    checked={Boolean(store.audioSrc)}
+                    onChange$={() => (store.audioSrc = !store.audioSrc ? 1 : 0)}
+                    class='checkbox checkbox-primary'
+                  />
+                </label>
+              </div>
+            </div>
+          </FlexRow>
+        )}
 
-      <div class={`collapse-content`}>
         {/* заголовок и тэги */}
         <FlexRow>
           <div class='w-full basis-1/2 mx-3'>
@@ -41,6 +71,7 @@ export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='Заголовок'
                 class='input input-bordered w-full'
                 value={store.title}
+                onChange$={(e) => (store.title = e.target.value)}
               />
             </div>
           </div>
@@ -55,6 +86,7 @@ export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='Тэги'
                 class='input input-bordered w-full'
                 value={store.tags}
+                onChange$={(e) => (store.tags = e.target.value)}
               />
             </div>
           </div>
@@ -92,6 +124,7 @@ export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='О чем текст'
                 class='input input-bordered w-full'
                 value={store.description}
+                onChange$={(e) => (store.description = e.target.value)}
               />
             </div>
           </div>
@@ -143,7 +176,7 @@ export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 onChange$={(e) => (store.categoryInd = +e.target.value)}
               >
                 {CONSTANTS.textCategories.map((category, ind) => (
-                  <option key={ind} value={ind}>
+                  <option key={ind} value={ind} selected={store.categoryInd === ind}>
                     {category}
                   </option>
                 ))}
@@ -160,12 +193,13 @@ export const EditTextFields = component$(({ store }: OtherTextFieldsProps) => {
                 placeholder='Автор, книга, журнал, сайт...'
                 class='input input-bordered w-full'
                 value={store.source}
+                onChange$={(e) => (store.source = e.target.value)}
               />
             </div>
           </div>
         </FlexRow>
 
-        {/* картинки */}
+        {/* выбор картинки */}
         {Array.isArray(getPics.value) && getPics.value.length > 0 && (
           <TextThemePics pics={getPics.value} store={store} />
         )}

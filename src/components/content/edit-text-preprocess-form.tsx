@@ -6,7 +6,6 @@ import {
   useTask$,
   type QwikMouseEvent,
 } from "@builder.io/qwik";
-import { usePublishText, type NewTextStore } from "~/routes/(content)/create/text";
 import CONSTANTS from "~/misc/consts/consts";
 import { AlertColorEnum, alertsContext } from "~/root";
 import { countZnChars, parseTags, parseTextWords } from "~/misc/helpers/content";
@@ -16,20 +15,20 @@ import { getWordsForTooltips } from "~/routes/read/texts/[id]";
 import { Paragraph } from "../read/paragraph";
 import { FontSizeBtns } from "../common/content-cards/content-page-card";
 import { useNavigate } from "@builder.io/qwik-city";
+import { type EditTextStore, useEditText } from "~/routes/(content)/edit/text/[id]";
 
 type TextPreprocessFormProps = {
-  store: NewTextStore;
-  userName: string;
+  store: EditTextStore;
 };
 
-export const TextPreprocessForm = component$(({ store, userName }: TextPreprocessFormProps) => {
-  const publishTextAction = usePublishText();
+export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormProps) => {
+  const editTextAction = useEditText();
   const canPublish = useSignal(false);
   const nav = useNavigate();
 
   const alertsState = useContext(alertsContext);
-  const chineseText = useSignal("");
-  const origTranslation = useSignal("");
+  const chineseText = useSignal(store.chineseTextParagraphs.join("\n\n"));
+  const origTranslation = useSignal(store.translationParagraphs.join("\n\n"));
   const tooltipTxt = useSignal<(string | DictWord)[][] | string[]>([]);
   const currentWord = useSignal<DictWord | undefined>(undefined);
 
@@ -50,11 +49,11 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
   });
 
   useTask$(({ track }) => {
-    track(() => publishTextAction.value);
+    track(() => editTextAction.value);
 
-    if (publishTextAction.value?._id) {
+    if (editTextAction.value?.status === "done") {
       setTimeout(() => {
-        nav("/read/unapproved-texts/" + publishTextAction.value?._id);
+        nav(`/read/${store.isApproved ? "" : "unapproved-"}texts/${store.textId}`);
       }, 3000);
     }
   });
@@ -99,8 +98,9 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
     canPublish.value = true;
   });
 
-  const publishText = $(async () => {
+  const editText = $(async () => {
     const {
+      textId,
       lvl,
       tags,
       title,
@@ -111,31 +111,33 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
       isLongText,
       description,
       categoryInd,
+      isApproved,
+      audioSrc,
       chineseTextParagraphs,
       translationParagraphs,
     } = store;
 
-    await publishTextAction.submit({
+    await editTextAction.submit({
+      textId,
       length,
       source,
+      level: lvl,
       isLongText,
       description,
       categoryInd,
-      level: lvl,
-      title: title || "Default_title",
-      audioSrc: 0, // only for admin to change
-      isApproved: 0,
-      name: userName,
       pic_url: picUrl,
       tags: parseTags(tags),
       chinese_arr: allwords,
+      title: title || "Default_title",
       origintext: chineseTextParagraphs,
       translation: translationParagraphs,
+      audioSrc, // only for admin to change
+      isApproved, // only for admin to change
     });
 
     alertsState.push({
       bg: AlertColorEnum.info,
-      text: "Спасибо! Через 3 секунды вы попадете на страницу нового текста",
+      text: "Спасибо! Через 3 секунды вы попадете на страницу отредактированного текста",
     });
   });
 
@@ -229,8 +231,8 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
 
       <FlexRow>
         <div class='mt-3 ml-7'>
-          <button class='btn btn-primary w-48' disabled={!canPublish.value} onClick$={publishText}>
-            Опубликовать
+          <button class='btn btn-primary w-48' disabled={!canPublish.value} onClick$={editText}>
+            Отредактировать
           </button>
         </div>
       </FlexRow>

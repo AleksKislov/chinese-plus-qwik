@@ -32,7 +32,6 @@ export type NewTextStore = {
   translationParagraphs: string[];
   allwords: string[];
   isLongText: boolean;
-  name: string;
 };
 
 export const onGet = async ({ cookie, redirect }: RequestEvent) => {
@@ -57,7 +56,6 @@ export default component$(() => {
 
   const store: NewTextStore = useStore({
     lvl: 1,
-    name: "",
     title: "",
     description: "",
     length: 0,

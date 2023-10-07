@@ -1,12 +1,14 @@
-import { type RequestEvent, routeLoader$ } from "@builder.io/qwik-city";
-import { component$, useStore } from "@builder.io/qwik";
+import { type RequestEvent, routeLoader$, routeAction$ } from "@builder.io/qwik-city";
+import { component$, useContext, useStore } from "@builder.io/qwik";
 import { PageTitle } from "~/components/common/layout/title";
 import { getTokenFromCookie } from "~/misc/actions/auth";
-import { TextPreprocessForm } from "~/components/content/text-preprocess-form";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { getTextFromDB, type TextFromDB } from "~/routes/read/texts/[id]";
 import { type NewTextStore } from "~/routes/(content)/create/text";
 import { EditTextFields } from "~/components/content/edit-text-fields";
+import { userContext } from "~/root";
+import { ApiService } from "~/misc/actions/request";
+import { EditTextPreprocessForm } from "~/components/content/edit-text-preprocess-form";
 
 export type ThemePicType = {
   full: string;
@@ -18,8 +20,9 @@ export type ThemePicType = {
 };
 
 export type EditTextStore = NewTextStore & {
-  _id: ObjectId;
+  textId: ObjectId;
   isApproved?: 0 | 1;
+  audioSrc?: 0 | 1;
 };
 
 export const onGet = async ({ cookie, redirect }: RequestEvent) => {
@@ -54,18 +57,18 @@ export const useGetText = routeLoader$(
   }
 );
 
-// export const usePublishText = routeAction$(async (params, ev): Promise<TextFromDB | null> => {
-//   const token = getTokenFromCookie(ev.cookie);
-//   if (!token) return null;
-//   return ApiService.post("/api/texts/create", params, token, null);
-// });
+export const useEditText = routeAction$(async (params, ev): Promise<{ status: "done" } | null> => {
+  const token = getTokenFromCookie(ev.cookie);
+  if (!token) return null;
+  return ApiService.post("/api/texts/update", params, token, null);
+});
 
 export default component$(() => {
-  const textToEdit = useGetText();
+  const { isAdmin } = useContext(userContext);
+
   const {
     _id,
     level: lvl,
-    name,
     title,
     description,
     tags,
@@ -77,12 +80,12 @@ export default component$(() => {
     isApproved,
     origintext: chineseTextParagraphs,
     pages,
-  } = textToEdit.value;
+    audioSrc,
+  } = useGetText().value;
 
   const store: EditTextStore = useStore({
-    _id,
+    textId: _id,
     lvl,
-    name,
     title,
     source,
     picUrl,
@@ -95,6 +98,7 @@ export default component$(() => {
     tags: tags.join(", "),
     length: 0,
     isLongText: Boolean(pages && pages.length),
+    audioSrc,
   });
 
   return (
@@ -102,9 +106,9 @@ export default component$(() => {
       <PageTitle txt={"Редактировать текст"} />
       <Alerts />
 
-      <EditTextFields store={store} />
+      <EditTextFields store={store} isAdmin={isAdmin} />
 
-      <TextPreprocessForm store={store} userName={name} />
+      <EditTextPreprocessForm store={store} />
     </>
   );
 });

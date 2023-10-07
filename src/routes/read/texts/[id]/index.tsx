@@ -105,6 +105,7 @@ export default component$(() => {
     origintext,
     pages,
     curPage,
+    source,
     audioSrc: hasAudio,
   } = text.value;
 
@@ -131,6 +132,7 @@ export default component$(() => {
             likes={likes}
             contentType={WHERE.text}
             contentId={textId}
+            textSource={source}
           />
           <ReadResultCard />
         </Sidebar>
