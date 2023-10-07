@@ -109,7 +109,7 @@ export default component$(() => {
     audioSrc: hasAudio,
   } = text.value;
 
-  const isLongTxt = pages && pages.length;
+  const isLongTxt = Boolean(pages && pages.length);
   const currentWord = useSignal<DictWord | undefined>(undefined);
   const showTranslation = useSignal(true);
 
@@ -160,7 +160,7 @@ export default component$(() => {
             </div>
           </div>
 
-          {isLongTxt ? <LongTxtPagination numOfPages={pages.length} curPage={curPage} /> : null}
+          {isLongTxt && <LongTxtPagination numOfPages={pages.length} curPage={curPage} />}
 
           {!hasAudio ? null : <AudioPlayer textId={textId} />}
           {tooltipTxt.map((parag, i) => (

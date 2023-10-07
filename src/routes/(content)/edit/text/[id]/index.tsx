@@ -23,6 +23,7 @@ export type EditTextStore = NewTextStore & {
   textId: ObjectId;
   isApproved?: 0 | 1;
   audioSrc?: 0 | 1;
+  curPage: number;
 };
 
 export const onGet = async ({ cookie, redirect }: RequestEvent) => {
@@ -79,10 +80,13 @@ export default component$(() => {
     chinese_arr: allwords,
     isApproved,
     origintext: chineseTextParagraphs,
-    pages,
     audioSrc,
+    // for long texts
+    pages,
+    curPage,
   } = useGetText().value;
 
+  const isLongText = Boolean(pages && pages.length);
   const store: EditTextStore = useStore({
     textId: _id,
     lvl,
@@ -93,12 +97,13 @@ export default component$(() => {
     isApproved,
     description,
     categoryInd,
-    translationParagraphs,
-    chineseTextParagraphs,
+    translationParagraphs: isLongText ? pages[curPage].translation : translationParagraphs,
+    chineseTextParagraphs: isLongText ? pages[curPage].origintext : chineseTextParagraphs,
     tags: tags.join(", "),
     length: 0,
-    isLongText: Boolean(pages && pages.length),
+    isLongText,
     audioSrc,
+    curPage,
   });
 
   return (

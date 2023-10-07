@@ -28,24 +28,39 @@ export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormP
 
   const alertsState = useContext(alertsContext);
   const chineseText = useSignal(store.chineseTextParagraphs.join("\n\n"));
+  // const textLengthSignal = useSignal("text-primary");
   const origTranslation = useSignal(store.translationParagraphs.join("\n\n"));
   const tooltipTxt = useSignal<(string | DictWord)[][] | string[]>([]);
   const currentWord = useSignal<DictWord | undefined>(undefined);
 
   useTask$(({ track }) => {
     track(() => chineseText.value.length);
-    track(() => origTranslation.value.length);
     canPublish.value = false;
 
-    if (chineseText.value.length > CONSTANTS.bgTextLen) {
-      store.isLongText = true;
-      alertsState.push({
-        bg: AlertColorEnum.error,
-        text: `Текст превышает лимит в ${CONSTANTS.bgTextLen}字. Опубликуйте его частями`,
-      });
-    } else {
-      store.isLongText = false;
-    }
+    // if (chineseText.value.length > CONSTANTS.bgTextLen) {
+    //   store.isLongText = true;
+    //   alertsState.push({
+    //     bg: AlertColorEnum.error,
+    //     text: `Текст превышает лимит в ${CONSTANTS.bgTextLen}字. Опубликуйте его частями`,
+    //   });
+    //   textLengthSignal.value = "text-error";
+    // }
+    // if (chineseText.value.length > CONSTANTS.smTextLen) {
+    //   store.isLongText = true;
+    //   // alertsState.push({
+    //   //   bg: AlertColorEnum.warning,
+    //   //   text: `Большие тексты можно будет отредактировать позже на конкретных страницах`,
+    //   // });
+    //   textLengthSignal.value = "text-warning";
+    // } else {
+    //   store.isLongText = false;
+    //   textLengthSignal.value = "text-primary";
+    // }
+  });
+
+  useTask$(({ track }) => {
+    track(() => origTranslation.value.length);
+    canPublish.value = false;
   });
 
   useTask$(({ track }) => {
@@ -82,13 +97,13 @@ export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormP
     origTranslation.value = translationParagraphs.join("\n\n");
     chineseText.value = chineseTextParagraphs.join("\n\n");
 
-    let allwords;
-    if (store.isLongText) {
-      tooltipTxt.value = chineseTextParagraphs; // as is, segementation is done while u edit pages
-    } else {
-      allwords = (await segmenter(trimmedChineseTxt)).filter((word) => word !== " ");
-      tooltipTxt.value = parseTextWords(allwords, await getWordsForTooltips(allwords));
-    }
+    // let allwords;
+    // if (store.isLongText) { ??
+    //   tooltipTxt.value = chineseTextParagraphs; // as is, segementation is done while u edit pages
+    // } else {
+    const allwords = (await segmenter(trimmedChineseTxt)).filter((word) => word !== " ");
+    tooltipTxt.value = parseTextWords(allwords, await getWordsForTooltips(allwords));
+    // }
 
     store.length = countZnChars(chineseText.value);
     store.chineseTextParagraphs = chineseTextParagraphs;
@@ -108,13 +123,14 @@ export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormP
       source,
       picUrl,
       allwords,
-      isLongText,
       description,
       categoryInd,
       isApproved,
       audioSrc,
       chineseTextParagraphs,
       translationParagraphs,
+      isLongText,
+      curPage,
     } = store;
 
     await editTextAction.submit({
@@ -122,7 +138,6 @@ export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormP
       length,
       source,
       level: lvl,
-      isLongText,
       description,
       categoryInd,
       pic_url: picUrl,
@@ -133,6 +148,9 @@ export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormP
       translation: translationParagraphs,
       audioSrc, // only for admin to change
       isApproved, // only for admin to change
+      // for long texts
+      isLongText,
+      pageToEdit: curPage,
     });
 
     alertsState.push({
@@ -169,13 +187,7 @@ export const EditTextPreprocessForm = component$(({ store }: TextPreprocessFormP
               )}
               <span
                 data-tip={"Длина большого текста, не превышайте лимит"}
-                class={`label-text-alt tooltip tooltip-info ${
-                  store.isLongText
-                    ? "text-error"
-                    : chineseText.value.length > CONSTANTS.smTextLen
-                    ? "text-warning"
-                    : "text-primary"
-                }`}
+                class={`label-text-alt tooltip tooltip-info text-primary`}
               >{`${chineseText.value.length} / ${CONSTANTS.bgTextLen}`}</span>
             </label>
           </div>

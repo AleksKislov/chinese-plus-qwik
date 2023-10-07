@@ -29,13 +29,13 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
 
   const alertsState = useContext(alertsContext);
   const chineseText = useSignal("");
+  const textLengthSignal = useSignal("text-primary");
   const origTranslation = useSignal("");
   const tooltipTxt = useSignal<(string | DictWord)[][] | string[]>([]);
   const currentWord = useSignal<DictWord | undefined>(undefined);
 
   useTask$(({ track }) => {
     track(() => chineseText.value.length);
-    track(() => origTranslation.value.length);
     canPublish.value = false;
 
     if (chineseText.value.length > CONSTANTS.bgTextLen) {
@@ -44,9 +44,24 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
         bg: AlertColorEnum.error,
         text: `Текст превышает лимит в ${CONSTANTS.bgTextLen}字. Опубликуйте его частями`,
       });
+      textLengthSignal.value = "text-error";
+    }
+    if (chineseText.value.length > CONSTANTS.smTextLen) {
+      store.isLongText = true;
+      alertsState.push({
+        bg: AlertColorEnum.warning,
+        text: `Большие тексты можно будет отредактировать позже на конкретных страницах`,
+      });
+      textLengthSignal.value = "text-warning";
     } else {
       store.isLongText = false;
+      textLengthSignal.value = "text-primary";
     }
+  });
+
+  useTask$(({ track }) => {
+    track(() => origTranslation.value.length);
+    canPublish.value = false;
   });
 
   useTask$(({ track }) => {
@@ -144,6 +159,8 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
     trgt.style.height = trgt.scrollHeight + "px";
   });
 
+  const blockClass = "my-1 border border-info rounded-md p-2 relative";
+
   return (
     <>
       <FlexRow>
@@ -167,13 +184,7 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
               )}
               <span
                 data-tip={"Длина большого текста, не превышайте лимит"}
-                class={`label-text-alt tooltip tooltip-info ${
-                  store.isLongText
-                    ? "text-error"
-                    : chineseText.value.length > CONSTANTS.smTextLen
-                    ? "text-warning"
-                    : "text-primary"
-                }`}
+                class={`label-text-alt tooltip tooltip-info ${textLengthSignal.value}`}
               >{`${chineseText.value.length} / ${CONSTANTS.bgTextLen}`}</span>
             </label>
           </div>
@@ -212,6 +223,7 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
 
       <div class='mr-7 ml-7'>
         {tooltipTxt.value.length > 0 &&
+          !store.isLongText &&
           tooltipTxt.value.map((parag, i) => (
             <Paragraph
               key={i}
@@ -224,6 +236,14 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
               showTranslation={true}
               forEditing={true}
             />
+          ))}
+        {tooltipTxt.value.length > 0 &&
+          store.isLongText &&
+          tooltipTxt.value.map((parag, i) => (
+            <div key={i} class={`grid lg:grid-cols-2 grid-cols-1 gap-2`}>
+              <div class={blockClass}>{parag as string}</div>
+              <div class={blockClass}>{store.translationParagraphs[i]}</div>
+            </div>
           ))}
       </div>
 

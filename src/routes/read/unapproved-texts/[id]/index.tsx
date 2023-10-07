@@ -27,6 +27,7 @@ import { EditWordModal } from "~/components/common/modals/edit-word-modal";
 import { editWordModalId, moreInfoModalId } from "~/components/common/tooltips/word-tooltip";
 import { FontSizeBtnGroup } from "~/components/common/content-cards/font-size-btns";
 import { getWordsForTooltips, type TextFromDB, type TooltipText } from "../../texts/[id]";
+import { LongTxtPagination } from "~/components/read/long-txt-pagination";
 
 export const getTextFromDB = (id: ObjectId): Promise<TextFromDB> => {
   return ApiService.get(`/api/texts/${id}`, undefined, null);
@@ -36,14 +37,31 @@ export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => 
   return getContentComments(WHERE.text, params.id);
 });
 
-export const useGetText = routeLoader$(async ({ params }): Promise<TextFromDB & TooltipText> => {
-  const textFromDb = await getTextFromDB(params.id);
-  // todo: chinese_arr for long texts is [],
-  // if (text.pages && text.pages.length) {
-  const dbWords = await getWordsForTooltips(textFromDb.chinese_arr);
-  const tooltipTxt = parseTextWords(textFromDb.chinese_arr, dbWords);
-  return { ...textFromDb, tooltipTxt };
-});
+// export const useGetText = routeLoader$(async ({ params }): Promise<TextFromDB & TooltipText> => {
+//   const textFromDb = await getTextFromDB(params.id);
+//   // todo: chinese_arr for long texts is [],
+//   // if (text.pages && text.pages.length) {
+//   const dbWords = await getWordsForTooltips(textFromDb.chinese_arr);
+//   const tooltipTxt = parseTextWords(textFromDb.chinese_arr, dbWords);
+//   return { ...textFromDb, tooltipTxt }; ??
+// });
+
+export const useGetText = routeLoader$(
+  async ({ params, query }): Promise<TextFromDB & TooltipText & { curPage: number }> => {
+    let curPage = 0;
+    const pg = query.get("pg") || "1";
+    if (+pg && +pg > 0) curPage = +pg - 1;
+
+    const textFromDb = await getTextFromDB(params.id);
+    let chineseArr = textFromDb.chinese_arr;
+    if (textFromDb.pages && textFromDb.pages.length) {
+      chineseArr = textFromDb.pages[curPage].chinese_arr;
+    }
+    const dbWords = await getWordsForTooltips(chineseArr);
+    const tooltipTxt = parseTextWords(chineseArr, dbWords);
+    return { ...textFromDb, tooltipTxt, curPage };
+  }
+);
 
 export default component$(() => {
   const text = useGetText();
@@ -74,8 +92,11 @@ export default component$(() => {
     tooltipTxt,
     origintext,
     source,
+    pages,
+    curPage,
   } = text.value;
 
+  const isLongTxt = Boolean(pages && pages.length);
   const currentWord = useSignal<DictWord | undefined>(undefined);
   const showTranslation = useSignal(true);
 
@@ -125,13 +146,15 @@ export default component$(() => {
             </div>
           </div>
 
+          {isLongTxt && <LongTxtPagination numOfPages={pages.length} curPage={curPage} />}
+
           {tooltipTxt.map((parag, i) => (
             <Paragraph
               key={i}
               fontSize={fontSizeSig.value}
               tooltipedParag={parag}
-              translation={translation[i]}
-              strLen={countZnChars(origintext[i])}
+              translation={isLongTxt ? pages[curPage].translation[i] : translation[i]}
+              strLen={countZnChars(isLongTxt ? pages[curPage].origintext[i] : origintext[i])}
               ind={i}
               currentWord={currentWord}
               showTranslation={showTranslation.value}
