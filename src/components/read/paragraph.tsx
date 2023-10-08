@@ -38,7 +38,7 @@ export const Paragraph = component$(
           {!forEditing && <ParagPlus strLen={strLen} ind={ind} />}
         </div>
 
-        {!showTranslation ? null : (
+        {showTranslation && (
           <div class={blockClass}>
             <ParagNum num={paragNum} />
             {translation}

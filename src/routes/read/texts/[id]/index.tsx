@@ -133,6 +133,7 @@ export default component$(() => {
             contentType={WHERE.text}
             contentId={textId}
             textSource={source}
+            isApproved={true}
           />
           <ReadResultCard />
         </Sidebar>

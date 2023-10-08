@@ -5,10 +5,10 @@ import { getTokenFromCookie } from "~/misc/actions/auth";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { getTextFromDB, type TextFromDB } from "~/routes/read/texts/[id]";
 import { type NewTextStore } from "~/routes/(content)/create/text";
-import { EditTextFields } from "~/components/content/edit-text-fields";
+import { EditTextFields } from "~/components/create-edit/edit-text-fields";
 import { userContext } from "~/root";
 import { ApiService } from "~/misc/actions/request";
-import { EditTextPreprocessForm } from "~/components/content/edit-text-preprocess-form";
+import { EditTextPreprocessForm } from "~/components/create-edit/edit-text-preprocess-form";
 
 export type ThemePicType = {
   full: string;

@@ -120,6 +120,7 @@ export default component$(() => {
             contentType={WHERE.text}
             contentId={textId}
             textSource={source}
+            isApproved={false}
           />
         </Sidebar>
 

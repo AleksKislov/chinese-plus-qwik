@@ -8,6 +8,7 @@ import { TagsLine } from "./tags-line";
 import { TextDesc } from "./text-desc";
 import { type WhereType } from "../comments/comment-form";
 import { TextSource } from "./text-source";
+import { EditBtn } from "./edit-btn";
 
 type ContentPageCardProps = {
   contentType: WhereType;
@@ -23,6 +24,7 @@ type ContentPageCardProps = {
   desc: string;
   likes: ContentLike[];
   textSource?: string;
+  isApproved: boolean;
 };
 
 export enum FontSizeBtns {
@@ -54,13 +56,14 @@ export const ContentPageCard = component$(
     contentType,
     contentId,
     textSource,
+    isApproved,
   }: ContentPageCardProps) => {
     const likesSignal = useSignal(likes);
 
     return (
       <div class='card w-full bg-neutral mb-3'>
         <figure>
-          <img src={picUrl} alt='Content pic' />
+          <img src={picUrl} width='400' height='711' alt='Content pic' />
         </figure>
 
         <div class='card-body'>
@@ -80,6 +83,12 @@ export const ContentPageCard = component$(
           <ContentLen len={length} />
           {textSource && <TextSource source={textSource} />}
           <TextDesc desc={desc} />
+          <EditBtn
+            contentType={contentType}
+            contentId={contentId}
+            creatorId={userId}
+            isApproved={isApproved}
+          />
         </div>
       </div>
     );
