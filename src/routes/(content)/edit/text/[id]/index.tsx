@@ -32,29 +32,13 @@ export const onGet = async ({ cookie, redirect }: RequestEvent) => {
 };
 
 export const useGetText = routeLoader$(
-  async ({
-    params,
-    query,
-  }): Promise<
-    TextFromDB & { curPage: number }
-    // & TooltipText
-  > => {
+  async ({ params, query }): Promise<TextFromDB & { curPage: number }> => {
     let curPage = 0;
     const pg = query.get("pg") || "1";
     if (+pg && +pg > 0) curPage = +pg - 1;
 
     const textFromDb = await getTextFromDB(params.id);
-    // let chineseArr = textFromDb.chinese_arr;
-    // if (textFromDb.pages && textFromDb.pages.length) {
-    //   chineseArr = textFromDb.pages[curPage].chinese_arr;
-    // }
-    // const dbWords = await getWordsForTooltips(chineseArr);
-    // const tooltipTxt = parseTextWords(chineseArr, dbWords);
-    return {
-      ...textFromDb,
-      curPage,
-      // tooltipTxt,
-    };
+    return { ...textFromDb, curPage };
   }
 );
 

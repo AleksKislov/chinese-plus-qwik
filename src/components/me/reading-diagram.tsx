@@ -1,4 +1,4 @@
-//@ts-ignore
+// @ts-ignore
 import { GoogleCharts } from "google-charts";
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { dateToStr } from "~/misc/helpers/tools";
@@ -21,7 +21,6 @@ export const ReadingDiagram = component$(
     const maxX = useSignal(1000);
     const MONTH_DAYS = 31;
     const CHART_COLUMNS: [string, string, string] = ["Дата", "Прочитано, 字", "Цель, 字"];
-    const isLoading = useSignal(true);
     // if (+localStorage.isDarkTheme) {
     //   const textColor = { color: "#fff" };
     //   options.hAxis.titleTextStyle = textColor;
@@ -103,7 +102,6 @@ export const ReadingDiagram = component$(
       }
 
       GoogleCharts.load(drawChart);
-      isLoading.value = false;
     });
 
     return (
@@ -112,11 +110,7 @@ export const ReadingDiagram = component$(
           <h3>Статистика по чтению за месяц</h3>
         </div>
 
-        {isLoading.value ? (
-          <p>Загрузка...</p>
-        ) : (
-          <div id='readingChart' class='stats h-80 w-full'></div>
-        )}
+        <div id='readingChart' class='stats h-80 w-full'></div>
       </div>
     );
   }

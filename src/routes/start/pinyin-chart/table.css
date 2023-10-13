@@ -4,5 +4,6 @@
 }
 
 #pinyinTable td:hover {
-  color: yellow;
+  color: orange;
+  font-weight: bold;
 }

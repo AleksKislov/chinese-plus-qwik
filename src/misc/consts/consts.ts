@@ -2,6 +2,7 @@ const CONSTANTS = {
   appVersion: "2.30.1",
   bgTextLen: 16000,
   smTextLen: 900,
+  videoTextLen: 1500,
   symbolsToIgnore: [
     " ",
     "．",

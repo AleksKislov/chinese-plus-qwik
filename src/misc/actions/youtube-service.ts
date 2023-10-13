@@ -9,12 +9,12 @@ export class YoutubeService {
     return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
   }
 
-  static getVideoCaption(id: string, lang: string) {
-    return ApiService.get(`/gcloud/youtube/getSubs?videoId=${id}&lang=${lang}`);
+  static getVideoCaption(id: string, lang: string, token: string) {
+    return ApiService.get(`/gcloud/youtube/getSubs?videoId=${id}&lang=${lang}`, token);
   }
 
-  static getVideoInfo(id: string) {
-    return ApiService.get(`/gcloud/youtube/getInfo?videoId=${id}`);
+  static getVideoInfo(id: string, token: string) {
+    return ApiService.get(`/gcloud/youtube/getInfo?videoId=${id}`, token);
   }
 
   static updateVideo(body: Object) {

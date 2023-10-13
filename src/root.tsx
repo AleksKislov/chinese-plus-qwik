@@ -54,6 +54,7 @@ export const AlertColorEnum = {
 
 export const userContext = createContextId<User>("user-context");
 export const alertsContext = createContextId<Alert[]>("alerts-context");
+export const isDarkThemeContext = createContextId<{ bool: boolean }>("theme-context");
 
 export default component$(() => {
   useStyles$(globalStyles);
@@ -76,6 +77,7 @@ export default component$(() => {
     role: undefined,
   });
   const alertsState = useStore<Alert[]>([]);
+  const isDarkThemeState = useStore({ bool: true });
 
   useVisibleTask$(async () => {
     const cntrlr = new AbortController();
@@ -115,6 +117,7 @@ export default component$(() => {
 
   useContextProvider(userContext, userState);
   useContextProvider(alertsContext, alertsState);
+  useContextProvider(isDarkThemeContext, isDarkThemeState);
 
   return (
     <QwikCityProvider>
@@ -123,7 +126,7 @@ export default component$(() => {
         <link rel='manifest' href='/manifest.json' />
         <RouterHead />
       </head>
-      <body lang='en'>
+      <body lang='en' data-theme={isDarkThemeState.bool ? "night" : "wireframe"}>
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>

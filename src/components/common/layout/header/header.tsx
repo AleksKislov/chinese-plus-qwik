@@ -1,5 +1,5 @@
-import { component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
-import { userContext } from "~/root";
+import { component$, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { isDarkThemeContext, userContext } from "~/root";
 import { logout } from "~/misc/actions/auth";
 import { Link, useNavigate } from "@builder.io/qwik-city";
 import MenuItem from "./menu-item";
@@ -11,6 +11,8 @@ import {
   earthPicSvg,
   enterSvg,
   exitSvg,
+  moonSvg,
+  sunSvg,
 } from "../../media/svg";
 import { getNewMentions } from "~/routes/layout";
 import { getAvatarUrl } from "~/misc/helpers/content/get-avatar-url";
@@ -18,12 +20,20 @@ import { getAvatarUrl } from "~/misc/helpers/content/get-avatar-url";
 export default component$(() => {
   const newMentions = getNewMentions();
   const userState = useContext(userContext);
+  const isDarkTheme = useContext(isDarkThemeContext);
+  const themeChanged = useSignal(true);
   const nav = useNavigate();
   const showDoubleClickTip = useSignal(false);
 
   useTask$(() => {
     userState.newMentions = newMentions.value;
   });
+
+  useVisibleTask$(({ track }) => {
+    track(() => themeChanged.value);
+    isDarkTheme.bool = themeChanged.value;
+  });
+
   return (
     <header class='bg-neutral mb-4'>
       <div class='md:container md:mx-auto'>
@@ -107,6 +117,13 @@ export default component$(() => {
                 </li>
                 <li tabIndex={0}>
                   <Link href='/feedback'>Фидбэк</Link>
+                </li>
+                <li tabIndex={0}>
+                  <label class='swap swap-rotate'>
+                    <input type='checkbox' bind:checked={themeChanged} />
+                    <div class='swap-on'>{moonSvg}</div>
+                    <div class='swap-off'>{sunSvg}</div>
+                  </label>
                 </li>
               </ul>
             </div>

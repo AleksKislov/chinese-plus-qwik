@@ -16,6 +16,7 @@ module.exports = {
     utils: true,
     rtl: false,
     prefix: "",
-    darkTheme: "night",
+    // darkTheme: "night",
+    themes: ["night", "wireframe"],
   },
 };
