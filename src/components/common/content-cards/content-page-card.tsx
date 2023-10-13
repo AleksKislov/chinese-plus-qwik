@@ -9,6 +9,7 @@ import { TextDesc } from "./text-desc";
 import { type WhereType } from "../comments/comment-form";
 import { TextSource } from "./text-source";
 import { EditBtn } from "./edit-btn";
+import CONST_URLS from "~/misc/consts/urls";
 
 type ContentPageCardProps = {
   contentType: WhereType;
@@ -59,11 +60,18 @@ export const ContentPageCard = component$(
     isApproved,
   }: ContentPageCardProps) => {
     const likesSignal = useSignal(likes);
+    const imageSrc = useSignal(picUrl);
 
     return (
       <div class='card w-full bg-neutral mb-3'>
         <figure>
-          <img src={picUrl} width='400' height='711' alt='Content pic' />
+          <img
+            src={imageSrc.value}
+            width='400'
+            height='711'
+            alt='Content pic'
+            onError$={() => (imageSrc.value = CONST_URLS.defaultTextPic)}
+          />
         </figure>
 
         <div class='card-body'>
