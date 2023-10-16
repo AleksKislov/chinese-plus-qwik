@@ -54,7 +54,7 @@ export default component$(() => {
   const textsStats = getTextsStats();
   const readStats = getReadStats();
   const {
-    avatar,
+    newAvatar,
     name,
     finishedTexts,
     readDailyGoal,
@@ -72,7 +72,13 @@ export default component$(() => {
 
       <FlexRow>
         <div class='w-full basis-1/2  mt-3'>
-          <UserMainInfo id={userId} avatar={avatar} role={role} name={name} isPrivate={true} />
+          <UserMainInfo
+            id={userId}
+            newAvatar={newAvatar}
+            role={role}
+            name={name}
+            isPrivate={true}
+          />
           <PersonalStats
             approvedTextsNum={textsStats.value.approved}
             finishedTextsTotal={finishedTexts.length}

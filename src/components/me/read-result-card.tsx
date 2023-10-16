@@ -15,6 +15,7 @@ export const ReadResultCard = component$(() => {
     track(() => readDailyGoal);
     if (!loggedIn) return;
     progress.value = (readTodayNum / readDailyGoal) * 100;
+    if (!progress.value) progress.value = 0;
   });
 
   return !loggedIn ? null : (

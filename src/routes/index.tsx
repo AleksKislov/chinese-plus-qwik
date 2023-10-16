@@ -6,7 +6,7 @@ export default component$(() => {
   return (
     <div>
       <h1>
-        Chinese+ <span class='lightning'>⚡️</span>
+        Chinese plus<span class='lightning'>⚡️</span>
       </h1>
 
       <ul>

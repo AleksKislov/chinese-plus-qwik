@@ -5,7 +5,7 @@ import { msgTypes, type Post } from "~/routes/feedback";
 import { WHERE, type Addressee } from "../common/comments/comment-form";
 import { UserDateDiv } from "../common/comments/user-with-date";
 import { CommentsBtn } from "../common/content-cards/comments-btn";
-import { AvatarImg } from "../common/media/avatar-img";
+import { SmallAvatar } from "../common/ui/small-avatar";
 
 type PostCardProps = {
   post: Post;
@@ -16,7 +16,6 @@ type PostCardProps = {
 export const PostCard = component$(({ post, isPostPage, addressees }: PostCardProps) => {
   const {
     _id,
-    avatar,
     title,
     tag,
     user: userId,
@@ -33,21 +32,19 @@ export const PostCard = component$(({ post, isPostPage, addressees }: PostCardPr
       <div class='card-body'>
         <div class='flex'>
           <div
-            class='tooltip tooltip-info'
+            class='tooltip tooltip-info mr-4'
             data-tip={ownsPost ? "Это вы" : "Обратиться к пользователю"}
           >
-            <div class='avatar mr-4'>
-              <div
-                class='w-12 mask mask-squircle'
-                onClick$={() => {
-                  if (!addressees || ownsPost || addressees.value.some((x) => x.id === userId)) {
-                    return;
-                  }
-                  addressees.value = [...addressees.value, { id: userId, name: userName }];
-                }}
-              >
-                <AvatarImg avatarUrl={avatar} />
-              </div>
+            <div
+              class='avatar'
+              onClick$={() => {
+                if (!addressees || ownsPost || addressees.value.some((x) => x.id === userId)) {
+                  return;
+                }
+                addressees.value = [...addressees.value, { id: userId, name: userName }];
+              }}
+            >
+              <SmallAvatar newAvatar={undefined} userName={userName} />
             </div>
           </div>
           <div>

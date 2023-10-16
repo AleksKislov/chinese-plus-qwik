@@ -8,14 +8,13 @@ import {
   collapsedMenuSvg,
   dropdownArrowBottom,
   dropdownArrowRight,
-  earthPicSvg,
   enterSvg,
   exitSvg,
   moonSvg,
   sunSvg,
 } from "../../media/svg";
 import { getNewMentions } from "~/routes/layout";
-import { getAvatarUrl } from "~/misc/helpers/content/get-avatar-url";
+import { AvatarImg } from "../../media/avatar-img";
 
 export default component$(() => {
   const newMentions = getNewMentions();
@@ -68,8 +67,9 @@ export default component$(() => {
             </div>
 
             <Link class='btn btn-ghost normal-case text-xl' href='/'>
-              {earthPicSvg}
-              Chinese+
+              <span>
+                Chinese<span class='text-success font-extrabold text-2xl'>+</span>
+              </span>
             </Link>
 
             <div class='hidden lg:flex'>
@@ -139,29 +139,31 @@ export default component$(() => {
                 tabIndex={0}
                 class={`btn btn-ghost btn-circle avatar ${
                   newMentions.value.length ? "online" : ""
-                }`}
+                } ${userState.name ? "mt-2" : ""}`}
               >
-                <div>
-                  {userState.avatar ? (
-                    <img
-                      onMouseEnter$={() => {
-                        showDoubleClickTip.value = true;
-                      }}
-                      onMouseLeave$={() => {
-                        showDoubleClickTip.value = false;
-                      }}
-                      onClick$={(e) => {
-                        // @ts-ignore
-                        if (e.detail === 2) nav("/me");
-                      }}
-                      width='280'
-                      height='280'
-                      src={getAvatarUrl(userState.avatar)}
+                {userState.name ? (
+                  <div
+                    class='rounded-full '
+                    onMouseEnter$={() => {
+                      showDoubleClickTip.value = true;
+                    }}
+                    onMouseLeave$={() => {
+                      showDoubleClickTip.value = false;
+                    }}
+                    onClick$={(e) => {
+                      // @ts-ignore
+                      if (e.detail === 2) nav("/me");
+                    }}
+                  >
+                    <AvatarImg
+                      userName={userState.name}
+                      size={46}
+                      newAvatar={userState.newAvatar}
                     />
-                  ) : (
-                    <div>{enterSvg}</div>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div>{enterSvg}</div>
+                )}
               </label>
               <ul
                 tabIndex={0}

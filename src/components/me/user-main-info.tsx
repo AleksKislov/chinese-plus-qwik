@@ -1,38 +1,42 @@
 import { component$, useContext } from "@builder.io/qwik";
-import { AvatarImg } from "../common/media/avatar-img";
 import { copySvg } from "../common/media/svg";
-import { alertsContext } from "~/root";
+import { type NewAvatar, alertsContext } from "~/root";
 import { Link } from "@builder.io/qwik-city";
+import { BigAvatar } from "./avatar/big-avatar";
 
 type UserMainInfoType = {
   id: ObjectId;
-  avatar: string;
+  newAvatar?: NewAvatar;
   role?: "moderator" | "admin";
   name: string;
   isPrivate: boolean;
 };
 
 export const UserMainInfo = component$(
-  ({ id, avatar, role, name, isPrivate }: UserMainInfoType) => {
+  ({ id, newAvatar, role, name, isPrivate }: UserMainInfoType) => {
     const alertsState = useContext(alertsContext);
 
     const getRole = (): { name: string; desc: string } => {
       if (role === "admin") return { name: "админ", desc: "full power" };
-      if (role === "moderator") return { name: "модератор", desc: "редактирует тексты" };
-      return { name: "изучающий", desc: "редактировать свои тексты до публикации" };
+      if (role === "moderator") return { name: "модератор", desc: "может редактировать тексты" };
+      return { name: "изучающий", desc: "может редактировать свои тексты до публикации" };
     };
 
     return (
       <div class='flex'>
-        <div class='tooltip tooltip-info tooltip-bottom h-24 w-24 mr-4' data-tip='Сменить аватар'>
-          <div class='avatar'>
-            <div class='w-24 mask mask-squircle'>
-              <AvatarImg avatarUrl={avatar} />
-            </div>
+        {isPrivate ? (
+          <div class='tooltip tooltip-info tooltip-bottom mr-4' data-tip='Сменить аватар'>
+            <Link class='avatar' href={"/me/avatar"}>
+              {name && <BigAvatar userName={name} newAvatar={newAvatar} />}
+            </Link>
           </div>
-        </div>
+        ) : (
+          <div class='avatar mr-4'>
+            {name && <BigAvatar userName={name} newAvatar={newAvatar} />}
+          </div>
+        )}
         <div>
-          <div class='text-base-content mt-2'>
+          <div class='text-base-content mt-1'>
             <div>
               Nihao, <span class='badge badge-lg badge-primary'>{name}</span>
             </div>

@@ -16,7 +16,6 @@ export interface UserFromDB {
   user?: {
     _id: ObjectId;
     name: string;
-    avatar: string;
     role?: "admin" | "moderator";
     email: string;
     finished_texts: string[] | null;
@@ -24,6 +23,7 @@ export interface UserFromDB {
     daily_reading_goal?: number;
     read_today_num?: number;
     read_today_arr: {};
+    newAvatar?: { type: string; background: string; seed: string };
   };
 }
 

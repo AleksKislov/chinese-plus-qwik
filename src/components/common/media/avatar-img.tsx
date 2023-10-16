@@ -1,6 +1,27 @@
 import { component$ } from "@builder.io/qwik";
-import { getAvatarUrl } from "~/misc/helpers/content/get-avatar-url";
+import { createAvatar } from "@dicebear/core";
+import { type NewAvatar } from "~/root";
+import { AvatarTypes } from "~/routes/me/avatar";
 
-export const AvatarImg = component$(({ avatarUrl }: { avatarUrl: string }) => {
-  return <img width='280' height='280' src={getAvatarUrl(avatarUrl)} />;
+type AvatarImgProps = {
+  userName: string;
+  newAvatar?: NewAvatar;
+  size: number;
+};
+
+/**
+ * make avatar using api from https://www.dicebear.com/
+ */
+export const AvatarImg = component$(({ userName, newAvatar, size }: AvatarImgProps) => {
+  const seed = newAvatar?.seed || userName;
+  const backgroundColor = [newAvatar?.background || "transparent"];
+  // @ts-ignore
+  const type = AvatarTypes[newAvatar?.type] || AvatarTypes.adventurer;
+  const newAva = createAvatar(type, {
+    seed,
+    size,
+    backgroundColor,
+  }).toDataUriSync();
+
+  return <img src={newAva} width={size} height={size} />;
 });

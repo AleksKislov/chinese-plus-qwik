@@ -58,7 +58,9 @@ export const PersonalMentions = component$(({ newMentions }: PersonalMentionsTyp
           {!oldMentions.value?.length ? (
             <p>Нет комментариев</p>
           ) : (
-            oldMentions.value?.map((comment, ind) => <Mention comment={comment} ind={ind} />)
+            oldMentions.value?.map((comment, ind) => (
+              <Mention comment={comment} ind={ind} key={ind} />
+            ))
           )}
         </div>
       ) : (
@@ -66,7 +68,7 @@ export const PersonalMentions = component$(({ newMentions }: PersonalMentionsTyp
           {!newMentions.length ? (
             <p>Нет новых комментариев</p>
           ) : (
-            newMentions.map((comment, ind) => <Mention comment={comment} ind={ind} />)
+            newMentions.map((comment, ind) => <Mention comment={comment} ind={ind} key={ind} />)
           )}
         </div>
       )}

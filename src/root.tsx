@@ -20,10 +20,15 @@ type ReadTodayMap = {
   [key: string]: number[];
 };
 
+export type NewAvatar = {
+  type: string;
+  background: string;
+  seed: string;
+};
+
 export interface User {
   _id: ObjectId;
   name: string;
-  avatar: string;
   loggedIn: boolean;
   isAdmin: boolean;
   isModerator: boolean;
@@ -37,6 +42,7 @@ export interface User {
   newMentions: CommentType[];
   hsk2WordsTotal: number;
   role?: "admin" | "moderator";
+  newAvatar?: NewAvatar;
 }
 
 export interface Alert {
@@ -61,7 +67,6 @@ export default component$(() => {
   const userState = useStore<User>({
     _id: "",
     name: "",
-    avatar: "",
     loggedIn: false,
     isAdmin: false,
     isModerator: false,
@@ -75,6 +80,7 @@ export default component$(() => {
     readTodayMap: {},
     newMentions: [],
     role: undefined,
+    newAvatar: undefined,
   });
   const alertsState = useStore<Alert[]>([]);
   const isDarkThemeState = useStore({ bool: true });
@@ -97,7 +103,6 @@ export default component$(() => {
     }
     if (resp.user) {
       userState._id = resp.user._id;
-      userState.avatar = resp.user.avatar;
       userState.name = resp.user.name;
       userState.email = resp.user.email;
       userState.loggedIn = true;
@@ -111,6 +116,7 @@ export default component$(() => {
       userState.readTodayNum = resp.user.read_today_num || 0;
       userState.readTodayMap = resp.user.read_today_arr || {};
       userState.hsk2WordsTotal = hsk2WordsTotal.status === "fulfilled" ? hsk2WordsTotal.value : 0;
+      userState.newAvatar = resp.user.newAvatar ? resp.user.newAvatar : undefined;
     }
     return cntrlr.abort;
   });

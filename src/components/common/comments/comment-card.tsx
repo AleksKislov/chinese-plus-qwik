@@ -1,21 +1,25 @@
 import { component$, type Signal, useContext } from "@builder.io/qwik";
 import { arrorUturnDown, editSvg, thumbUpSvg } from "../media/svg";
 import { UserDateDiv } from "./user-with-date";
-import { userContext } from "~/root";
+import { type NewAvatar, userContext } from "~/root";
 import { type Addressee, type CommentIdToReply } from "./comment-form";
 import { ApiService } from "~/misc/actions/request";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { EditCommentModal } from "./edit-comment-modal";
 import { getLikeBtnTooltipTxt } from "../content-cards/like-btn";
-import { AvatarImg } from "../media/avatar-img";
+import { SmallAvatar } from "../ui/small-avatar";
 
 export type CommentType = {
   addressees: string[];
   _id: ObjectId;
   text: string;
-  name: string; // userName
-  avatar: string; // userAvatar
-  user: string; // userId
+  // name: string; // userName deprecated
+  // avatar: string; // userAvatar deprecated
+  user: {
+    _id: ObjectId;
+    name: string;
+    newAvatar?: NewAvatar;
+  };
   post_id: ObjectId;
   likes: ContentLike[];
   commentIdToReply?: {
@@ -44,7 +48,13 @@ export const CommentCard = component$(
     const addDelLike = useCommentLike();
     const userState = useContext(userContext);
     const { loggedIn, isAdmin } = userState;
-    const { _id, date, text, name: userName, user: userId, likes } = comment;
+    const {
+      _id,
+      date,
+      text,
+      user: { _id: userId, name: userName, newAvatar },
+      likes,
+    } = comment;
     const ownsComment = userState._id === userId;
     const canEdit = ownsComment || isAdmin;
     const isLiked = loggedIn && likes.some((like) => like.user === userState._id);
@@ -59,11 +69,11 @@ export const CommentCard = component$(
           <div class='card-body'>
             <div class='flex'>
               <div
-                class='tooltip tooltip-info'
+                class='tooltip tooltip-info mr-4'
                 data-tip={ownsComment ? "Это вы" : "Обратиться к пользователю"}
               >
                 <div
-                  class='avatar mr-4 cursor-pointer'
+                  class='avatar cursor-pointer'
                   onClick$={() => {
                     if (ownsComment || addressees.value.some((x) => x.id === userId)) return;
                     addressees.value = [
@@ -75,9 +85,7 @@ export const CommentCard = component$(
                     ];
                   }}
                 >
-                  <div class='w-12 mask mask-squircle'>
-                    <AvatarImg avatarUrl={comment.avatar} />
-                  </div>
+                  <SmallAvatar newAvatar={newAvatar} userName={userName} />
                 </div>
               </div>
               <div>
