@@ -16,7 +16,6 @@ import { CardBtns } from "../common/content-cards/card-btns";
 
 type VideoCardProps = {
   video: VideoCardInfo;
-  // showLevel: LevelUnion;
   isUnapproved?: boolean;
 };
 
@@ -28,8 +27,7 @@ export const VideoCard = component$(({ video, isUnapproved }: VideoCardProps) =>
     date,
     hits,
     tags,
-    user: userId,
-    userName,
+    user: { _id: userId, name: userName },
     category,
     lvl,
     length,

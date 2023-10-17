@@ -14,18 +14,9 @@ type PostCardProps = {
 };
 
 export const PostCard = component$(({ post, isPostPage, addressees }: PostCardProps) => {
-  const {
-    _id,
-    title,
-    tag,
-    user: userId,
-    name: userName,
-    date,
-    comments_id: commentIds,
-    text,
-  } = post;
+  const { _id, title, tag, user: userInfo, date, comments_id: commentIds, text } = post;
   const userState = useContext(userContext);
-  const ownsPost = userState._id === userId;
+  const ownsPost = userState._id === userInfo._id;
 
   return (
     <div class='card w-full bg-neutral mb-3'>
@@ -38,13 +29,17 @@ export const PostCard = component$(({ post, isPostPage, addressees }: PostCardPr
             <div
               class='avatar'
               onClick$={() => {
-                if (!addressees || ownsPost || addressees.value.some((x) => x.id === userId)) {
+                if (
+                  !addressees ||
+                  ownsPost ||
+                  addressees.value.some((x) => x.id === userInfo._id)
+                ) {
                   return;
                 }
-                addressees.value = [...addressees.value, { id: userId, name: userName }];
+                addressees.value = [...addressees.value, { id: userInfo._id, name: userInfo.name }];
               }}
             >
-              <SmallAvatar newAvatar={undefined} userName={userName} />
+              <SmallAvatar newAvatar={userInfo.newAvatar} userName={userInfo.name} />
             </div>
           </div>
           <div>
@@ -57,7 +52,7 @@ export const PostCard = component$(({ post, isPostPage, addressees }: PostCardPr
         <p class={"mt-2"} dangerouslySetInnerHTML={text}></p>
 
         <div class={"flex justify-between"}>
-          <UserDateDiv userId={userId} userName={userName} date={date} ptNum={2} />
+          <UserDateDiv userId={userInfo._id} userName={userInfo.name} date={date} ptNum={2} />
 
           {!isPostPage && (
             <CommentsBtn

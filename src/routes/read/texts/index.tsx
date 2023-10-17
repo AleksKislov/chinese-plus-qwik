@@ -28,8 +28,7 @@ export type TextCardInfo = {
   description: string;
   level: 1 | 2 | 3;
   length: number;
-  name: string; // user name
-  user: string; // user id
+  user: ShortUserInfo; // user id
   pic_url: string;
   isApproved: 1 | 0 | undefined;
   source: string;

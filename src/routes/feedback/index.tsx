@@ -26,9 +26,7 @@ export type Post = {
   text: string;
   title: string;
   tag: MsgType;
-  name: string; // user name
-  avatar: string;
-  user: string;
+  user: ShortUserInfo;
   comments_id: CommentId[];
   date: ISODate;
 };

@@ -40,10 +40,9 @@ export type VideoCardInfo = {
   desc: string;
   lvl: 1 | 2 | 3;
   length: number;
-  userName: string;
   source: string;
   isApproved: 1 | 0 | undefined;
-  user: string;
+  user: ShortUserInfo;
   comments_id: CommentId[];
   likes: ContentLike[];
   date: ISODate;

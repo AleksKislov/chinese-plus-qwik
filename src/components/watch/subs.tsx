@@ -39,14 +39,15 @@ export const Subs = component$(
                   }
                 }}
               >
-                {main.map((word, ind) => (
-                  <WordTooltip
-                    key={ind}
-                    word={word}
-                    hasReddened={ind <= curWordInd}
-                    currentWord={currentWord}
-                  />
-                ))}
+                {main &&
+                  main.map((word, ind) => (
+                    <WordTooltip
+                      key={ind}
+                      word={word}
+                      hasReddened={ind <= curWordInd}
+                      currentWord={currentWord}
+                    />
+                  ))}
               </div>
             )}
             {!hideBtnsSig.value.includes(HideBtnsEnum.py) && (

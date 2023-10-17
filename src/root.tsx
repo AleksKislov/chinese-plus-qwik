@@ -20,12 +20,6 @@ type ReadTodayMap = {
   [key: string]: number[];
 };
 
-export type NewAvatar = {
-  type: string;
-  background: string;
-  seed: string;
-};
-
 export interface User {
   _id: ObjectId;
   name: string;

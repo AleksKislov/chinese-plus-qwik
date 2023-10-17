@@ -119,8 +119,7 @@ export default component$(() => {
     date,
     hits,
     tags,
-    user: userId,
-    userName,
+    user: { _id: userId, name: userName },
     category,
     lvl,
     length,
@@ -179,6 +178,7 @@ export default component$(() => {
       <FlexRow>
         <Sidebar>
           <ContentPageCard
+            isApproved={true}
             desc={desc}
             length={length}
             tags={tags}

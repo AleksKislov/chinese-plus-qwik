@@ -20,3 +20,15 @@ type DictWord = {
     russian: string;
   }[];
 };
+
+type NewAvatar = {
+  type: string;
+  background: string;
+  seed: string;
+};
+
+type ShortUserInfo = {
+  _id: ObjectId;
+  name: string;
+  newAvatar?: NewAvatar;
+};

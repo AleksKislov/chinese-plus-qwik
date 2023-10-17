@@ -16,7 +16,6 @@ import { TextSource } from "../common/content-cards/text-source";
 
 type TextCardProps = {
   text: TextCardInfo;
-  // showLevel: LevelUnion;
   isUnapproved?: boolean;
 };
 
@@ -29,8 +28,7 @@ export const TextCard = component$(({ text, isUnapproved }: TextCardProps) => {
     hits,
     tags,
     pic_url: picUrl,
-    user: userId,
-    name: userName,
+    user: { _id: userId, name: userName },
     categoryInd: category,
     level: lvl,
     length,
@@ -41,7 +39,6 @@ export const TextCard = component$(({ text, isUnapproved }: TextCardProps) => {
   } = text;
 
   const likesSignal = useSignal(likes);
-  // const showLvl = showLevel === "0" || showLevel === lvl + "";
 
   return (
     <div class='card lg:card-side w-full bg-neutral mb-3 lg:max-h-96'>

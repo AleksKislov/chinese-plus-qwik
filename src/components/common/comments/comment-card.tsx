@@ -1,7 +1,7 @@
 import { component$, type Signal, useContext } from "@builder.io/qwik";
 import { arrorUturnDown, editSvg, thumbUpSvg } from "../media/svg";
 import { UserDateDiv } from "./user-with-date";
-import { type NewAvatar, userContext } from "~/root";
+import { userContext } from "~/root";
 import { type Addressee, type CommentIdToReply } from "./comment-form";
 import { ApiService } from "~/misc/actions/request";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
@@ -15,11 +15,7 @@ export type CommentType = {
   text: string;
   // name: string; // userName deprecated
   // avatar: string; // userAvatar deprecated
-  user: {
-    _id: ObjectId;
-    name: string;
-    newAvatar?: NewAvatar;
-  };
+  user: ShortUserInfo;
   post_id: ObjectId;
   likes: ContentLike[];
   commentIdToReply?: {

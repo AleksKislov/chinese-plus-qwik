@@ -7,7 +7,7 @@ export const PostForm = component$(() => {
   const TITLE_LENGTH = 80;
   const userState = useContext(userContext);
   const addPost = useAddPost();
-  const { loggedIn, isAdmin } = userState;
+  const { loggedIn } = userState;
   const newPostStore = useStore({
     emo: "",
     title: "",
@@ -27,8 +27,8 @@ export const PostForm = component$(() => {
     const tag = Object.keys(chosenBtn).find((tag) => chosenBtn[tag as MsgType]);
     await addPost.submit({
       title: `${newPostStore.emo} ${newPostStore.title}`,
-      tag: isAdmin ? "news" : tag,
       text,
+      tag,
     });
     location.reload();
   });

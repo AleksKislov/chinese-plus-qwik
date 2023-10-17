@@ -37,15 +37,6 @@ export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => 
   return getContentComments(WHERE.text, params.id);
 });
 
-// export const useGetText = routeLoader$(async ({ params }): Promise<TextFromDB & TooltipText> => {
-//   const textFromDb = await getTextFromDB(params.id);
-//   // todo: chinese_arr for long texts is [],
-//   // if (text.pages && text.pages.length) {
-//   const dbWords = await getWordsForTooltips(textFromDb.chinese_arr);
-//   const tooltipTxt = parseTextWords(textFromDb.chinese_arr, dbWords);
-//   return { ...textFromDb, tooltipTxt }; ??
-// });
-
 export const useGetText = routeLoader$(
   async ({ params, query }): Promise<TextFromDB & TooltipText & { curPage: number }> => {
     let curPage = 0;
@@ -80,8 +71,7 @@ export default component$(() => {
     description: desc,
     tags,
     hits,
-    user: userId,
-    name: userName,
+    user: { _id: userId, name: userName },
     date,
     level: lvl,
     pic_url: picUrl,

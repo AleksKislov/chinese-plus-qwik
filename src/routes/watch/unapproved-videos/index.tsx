@@ -36,7 +36,7 @@ export default component$(() => {
 
         <MainContent>
           {videos.value.map((video, ind) => (
-            <VideoCard key={ind} video={video} showLevel={"0"} isUnapproved={true} />
+            <VideoCard key={ind} video={video} isUnapproved={true} />
           ))}
 
           <div class={"flex flex-col items-center"}>

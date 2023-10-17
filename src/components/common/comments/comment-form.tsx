@@ -18,7 +18,6 @@ export type WhereType = "post" | "video" | "text" | "book";
 export const useAddComment = globalAction$(
   (params, ev) => {
     const token = ev.cookie.get("token")?.value;
-    // console.log(token, params);
     const { path, addressees, commentIdToReply, text } = params;
 
     return ApiService.post(

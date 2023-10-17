@@ -24,7 +24,12 @@ import { getContentComments } from "~/misc/actions/get-content-comments";
 import { CommentsBlock } from "~/components/common/comments/comments-block";
 import { CommentsBlockTitle } from "~/components/common/comments/comments-block-title";
 import { ContentPageHead } from "~/components/common/ui/content-page-head";
-import { type TooltipSubs, type VideoFromDB, getWordsForTooltips } from "../../videos/[id]";
+import {
+  type TooltipSubs,
+  type VideoFromDB,
+  getWordsForTooltips,
+  PlayerState,
+} from "../../videos/[id]";
 
 export const getVideoFromDB = (id: ObjectId): Promise<VideoFromDB> => {
   return ApiService.get(`/api/videos/${id}`, undefined, null);
@@ -56,6 +61,8 @@ export default component$(() => {
   const ytSig = useStore<YTPlayer>({ player: {} });
   const subCurrentInd = useSignal(0);
   const curWordInd = useSignal(-1);
+  const playerState = useSignal<number>(PlayerState.ended);
+  const isPaused = useSignal(false);
 
   const commentIdToReplyStore = useStore<CommentIdToReply>({
     commentId: "",
@@ -72,8 +79,7 @@ export default component$(() => {
     date,
     hits,
     tags,
-    user: userId,
-    userName,
+    user: { _id: userId, name: userName },
     category,
     lvl,
     length,
@@ -118,6 +124,7 @@ export default component$(() => {
       <FlexRow>
         <Sidebar>
           <ContentPageCard
+            isApproved={false}
             desc={desc}
             length={length}
             tags={tags}
@@ -146,6 +153,8 @@ export default component$(() => {
             ru={ruSubs[subCurrentInd.value]}
             py={pySubs[subCurrentInd.value]}
             curWordInd={curWordInd.value}
+            playerState={playerState}
+            isPaused={isPaused}
           />
 
           <div class={"mt-2"}>
