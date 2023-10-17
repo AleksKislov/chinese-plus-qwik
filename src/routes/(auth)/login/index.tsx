@@ -8,6 +8,7 @@ import {
 } from "@builder.io/qwik";
 import { routeAction$, type RequestEvent, Link } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
+import { GoogleButton } from "~/components/auth/google-btn";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { getTokenFromCookie } from "~/misc/actions/auth";
 import { ApiService } from "~/misc/actions/request";
@@ -56,7 +57,7 @@ export default component$(() => {
   return (
     <div class='text-center'>
       <article class={"prose max-w-none"}>
-        <h1>Логин</h1>
+        <h1>Войти</h1>
         <Alerts />
         <div class='mb-3'>
           Нет аккаунта?{" "}
@@ -86,14 +87,19 @@ export default component$(() => {
                 bind:value={password}
               />
             </label>
-            <button
-              class='btn btn-info mt-2'
-              onClick$={() => {
-                login.submit({ email: email.value, password: password.value });
-              }}
-            >
-              войти
-            </button>
+
+            <div class='flex flex-col w-full border-opacity-50'>
+              <button
+                class='btn btn-info btn-sm mt-2'
+                onClick$={() => {
+                  login.submit({ email: email.value, password: password.value });
+                }}
+              >
+                войти
+              </button>
+              <div class='divider'>или</div>
+              <GoogleButton />
+            </div>
           </div>
         </div>
       </article>

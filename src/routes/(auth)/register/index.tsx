@@ -1,6 +1,7 @@
 import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { routeAction$, type RequestEvent, Link } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
+import { GoogleButton } from "~/components/auth/google-btn";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { getTokenFromCookie } from "~/misc/actions/auth";
 import { ApiService } from "~/misc/actions/request";
@@ -96,30 +97,35 @@ export default component$(() => {
                 bind:value={secondPassword}
               />
             </label>
-            <button
-              class='btn btn-info mt-2'
-              onClick$={() => {
-                if (!name.value || !email.value || !password.value) {
-                  return alertsState.push({
-                    bg: AlertColorEnum.error,
-                    text: "Не все поля заполнены",
+
+            <div class='flex flex-col w-full border-opacity-50'>
+              <button
+                class='btn btn-info mt-2'
+                onClick$={() => {
+                  if (!name.value || !email.value || !password.value) {
+                    return alertsState.push({
+                      bg: AlertColorEnum.error,
+                      text: "Не все поля заполнены",
+                    });
+                  }
+                  if (password.value !== secondPassword.value) {
+                    return alertsState.push({
+                      bg: AlertColorEnum.error,
+                      text: `Пароли не совпадают`,
+                    });
+                  }
+                  registerUser.submit({
+                    email: email.value,
+                    password: password.value,
+                    name: name.value,
                   });
-                }
-                if (password.value !== secondPassword.value) {
-                  return alertsState.push({
-                    bg: AlertColorEnum.error,
-                    text: `Пароли не совпадают`,
-                  });
-                }
-                registerUser.submit({
-                  email: email.value,
-                  password: password.value,
-                  name: name.value,
-                });
-              }}
-            >
-              регистрация
-            </button>
+                }}
+              >
+                регистрация
+              </button>
+              <div class='divider'>или</div>
+              <GoogleButton />
+            </div>
           </div>
         </div>
       </article>

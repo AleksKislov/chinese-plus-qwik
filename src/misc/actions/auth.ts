@@ -1,7 +1,7 @@
 // import { globalAction$ } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
 import { BASE_URL } from "./request";
-import { Cookie } from "@builder.io/qwik-city";
+import { type Cookie } from "@builder.io/qwik-city";
 
 export enum StatusCodes {
   NotFound = 404,

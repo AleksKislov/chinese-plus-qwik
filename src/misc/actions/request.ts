@@ -1,5 +1,6 @@
-export const BASE_URL = "http://localhost:5000";
+export const BASE_URL = import.meta.env.PUBLIC_BASE_URL;
 
+console.log(import.meta.env.PUBLIC_ENV);
 type ReqHeaders = {
   "Content-Type": string;
   "x-auth-token"?: string;
