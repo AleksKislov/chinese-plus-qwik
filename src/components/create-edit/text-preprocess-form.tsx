@@ -19,10 +19,9 @@ import { useNavigate } from "@builder.io/qwik-city";
 
 type TextPreprocessFormProps = {
   store: NewTextStore;
-  userName: string;
 };
 
-export const TextPreprocessForm = component$(({ store, userName }: TextPreprocessFormProps) => {
+export const TextPreprocessForm = component$(({ store }: TextPreprocessFormProps) => {
   const publishTextAction = usePublishText();
   const canPublish = useSignal(false);
   const nav = useNavigate();
@@ -140,7 +139,6 @@ export const TextPreprocessForm = component$(({ store, userName }: TextPreproces
       title: title || "Default_title",
       audioSrc: 0, // only for admin to change
       isApproved: 0,
-      name: userName,
       pic_url: picUrl,
       tags: parseTags(tags),
       chinese_arr: allwords,

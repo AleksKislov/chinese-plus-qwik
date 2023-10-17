@@ -21,10 +21,6 @@ export class YoutubeService {
     return ApiService.post(`/api/videos/update`, body);
   }
 
-  static createVideo(body: Object) {
-    return ApiService.post(`/api/videos/create`, body);
-  }
-
   static getTextPinyin(body: Object) {
     return ApiService.post(`/api/dictionary/getTextPinyin`, body);
   }

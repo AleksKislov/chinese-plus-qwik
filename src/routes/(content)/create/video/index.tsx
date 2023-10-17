@@ -16,7 +16,7 @@ import { PageTitle } from "~/components/common/layout/title";
 import { getTokenFromCookie } from "~/misc/actions/auth";
 import { ApiService } from "~/misc/actions/request";
 import { Alerts } from "~/components/common/alerts/alerts";
-import { AlertColorEnum, alertsContext, userContext } from "~/root";
+import { AlertColorEnum, alertsContext } from "~/root";
 import { type VideoFromDB } from "~/routes/watch/videos/[id]";
 import CONSTANTS from "~/misc/consts/consts";
 import { OtherVideoFields } from "~/components/create-edit/other-video-fields";
@@ -89,7 +89,6 @@ export const useGetPyCaptions = routeAction$(getVideoCaptions);
 
 export default component$(() => {
   const alertsState = useContext(alertsContext);
-  const { name } = useContext(userContext);
   const youtubeLink = useSignal("");
   const getVideoInfo = useGetVideoInfo();
 
@@ -163,7 +162,6 @@ export default component$(() => {
           <OtherVideoFields store={store} />
           <VideoPreprocessForm
             store={store}
-            userName={name}
             captionLangs={getVideoInfo.value?.captionLangs || []}
           />
         </>

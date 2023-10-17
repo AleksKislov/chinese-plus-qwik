@@ -26,12 +26,11 @@ import { WordTooltip } from "../common/tooltips/word-tooltip";
 
 type VideoPreprocessFormProps = {
   store: NewVideoStore;
-  userName: string;
   captionLangs: string[];
 };
 
 export const VideoPreprocessForm = component$(
-  ({ store, userName, captionLangs }: VideoPreprocessFormProps) => {
+  ({ store, captionLangs }: VideoPreprocessFormProps) => {
     const getCnCaptions = useGetCnCaptions();
     const getPyCaptions = useGetPyCaptions();
     const getRuCaptions = useGetRuCaptions();
@@ -168,7 +167,6 @@ export const VideoPreprocessForm = component$(
         cnSubs,
         ruSubs,
         pySubs,
-        userName,
         category,
         chineseArr,
         tags: parseTags(tags),

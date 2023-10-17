@@ -1,5 +1,5 @@
 import { routeAction$, type RequestEvent, globalAction$ } from "@builder.io/qwik-city";
-import { component$, useContext, useStore } from "@builder.io/qwik";
+import { component$, useStore } from "@builder.io/qwik";
 import { PageTitle } from "~/components/common/layout/title";
 import { getTokenFromCookie } from "~/misc/actions/auth";
 import { ApiService } from "~/misc/actions/request";
@@ -7,7 +7,6 @@ import CONST_URLS from "~/misc/consts/urls";
 import { OtherTextFields } from "~/components/create-edit/other-text-fields";
 import { TextPreprocessForm } from "~/components/create-edit/text-preprocess-form";
 import { Alerts } from "~/components/common/alerts/alerts";
-import { userContext } from "~/root";
 import { type TextFromDB } from "~/routes/read/texts/[id]";
 
 export type ThemePicType = {
@@ -52,8 +51,6 @@ export const usePublishText = routeAction$(async (params, ev): Promise<TextFromD
 });
 
 export default component$(() => {
-  const { name } = useContext(userContext);
-
   const store: NewTextStore = useStore({
     lvl: 1,
     title: "",
@@ -76,7 +73,7 @@ export default component$(() => {
 
       <OtherTextFields store={store} />
 
-      <TextPreprocessForm store={store} userName={name} />
+      <TextPreprocessForm store={store} />
     </>
   );
 });
