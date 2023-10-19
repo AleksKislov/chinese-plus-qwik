@@ -5,7 +5,7 @@ import { BASE_URL } from "~/misc/actions/request";
 export const GoogleButton = component$(() => {
   return (
     <Link class='btn btn-success btn-sm' href={`${BASE_URL}/api/auth/google`}>
-      войти через гугл
+      google oauth
     </Link>
   );
 });

@@ -25,7 +25,7 @@ import { alertsContext } from "~/root";
 import { getWordsForTooltips } from "~/routes/read/texts/[id]";
 import HanziWriter from "hanzi-writer";
 
-export const writerSettings = {
+export const HanziWriterSettings = {
   width: 60,
   height: 60,
   padding: 0,
@@ -74,7 +74,7 @@ export default component$(() => {
       typeof words.value[0] !== "string" &&
       words.value[0].chinese.length === 1
     ) {
-      const writer = HanziWriter.create("showCharDiv", words.value[0].chinese, writerSettings);
+      const writer = HanziWriter.create("showCharDiv", words.value[0].chinese, HanziWriterSettings);
       writer.loopCharacterAnimation();
     }
   });

@@ -1,112 +1,84 @@
-import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
-import { Link } from "@builder.io/qwik-city";
+import { component$, useContext } from "@builder.io/qwik";
+import { Link, type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
+import { GoogleButton } from "~/components/auth/google-btn";
+import { FlexRow } from "~/components/common/layout/flex-row";
+import { Features } from "~/components/home/features";
+import { LandingVideo } from "~/components/home/landing-video";
+import { ApiService } from "~/misc/actions/request";
+import { userContext } from "~/root";
+import { type Post } from "./feedback";
+import { PostCard } from "~/components/feedback/post-card";
+import { CommentCard, type CommentType } from "~/components/common/comments/comment-card";
+
+export const getPosts = routeLoader$((): Promise<Post[]> => {
+  return ApiService.get(`/api/posts/infinite?skip=0&tag=`, undefined, []);
+});
+
+export const getComments = routeLoader$((): Promise<CommentType[]> => {
+  return ApiService.get("/api/comments/last", undefined, []);
+});
 
 export default component$(() => {
+  const { loggedIn } = useContext(userContext);
   return (
-    <div>
-      <h1>
-        Chinese plus<span class='lightning'>⚡️</span>
-      </h1>
+    <>
+      <div class='text-center mt-8'>
+        <article class={"prose max-w-none"}>
+          <h1>
+            Клуб Chinese<span class='text-success font-extrabold text-5xl'>+</span>
+          </h1>
+          <p class='font-semibold -mt-6 mb-5'>web-приложение для изучения китайского языка</p>
+        </article>
+      </div>
 
-      <ul>
-        <li>
-          Check out the <code>src/routes</code> directory to get started.
-        </li>
-        <li>
-          Add integrations with <code>npm run qwik add</code>.
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
+      {!loggedIn && (
+        <FlexRow>
+          <div class='flex justify-center w-full mb-3'>
+            <Link href='/login' class='btn btn-success btn-sm mr-1'>
+              войти
+            </Link>
+            <GoogleButton />
+            <Link href='/register' class='btn btn-primary btn-sm ml-1'>
+              регистрация
+            </Link>
+          </div>
+        </FlexRow>
+      )}
 
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
+      <Features />
 
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-      </ul>
+      <LandingVideo />
 
-      <h2>Commands</h2>
+      <FlexRow>
+        <div class='w-full md:w-1/2 mb-3 mr-4'>
+          <div class='prose mb-2'>
+            <h3>Свежие комментарии</h3>
+          </div>
+          {getComments().value?.map((comment, ind) => (
+            <CommentCard
+              key={ind}
+              comment={comment}
+              commentIdToReply={{ commentId: "", userId: "", name: "" }}
+              addressees={{ value: [] }}
+            />
+          ))}
+        </div>
 
-      <h2>Add Integrations</h2>
-
-      <h2>Community</h2>
-
-      <ul>
-        <li>
-          <span>Questions or just want to say hi? </span>
-          <a href='https://qwik.builder.io/chat' target='_blank'>
-            Chat on discord!
-          </a>
-        </li>
-        <li>
-          <span>Follow </span>
-          <a href='https://twitter.com/QwikDev' target='_blank'>
-            @QwikDev
-          </a>
-          <span> on Twitter</span>
-        </li>
-        <li>
-          <span>Open issues and contribute on </span>
-          <a href='https://github.com/BuilderIO/qwik' target='_blank'>
-            GitHub
-          </a>
-        </li>
-        <li>
-          <span>Watch </span>
-          <a href='https://qwik.builder.io/media/' target='_blank'>
-            Presentations, Podcasts, Videos, etc.
-          </a>
-        </li>
-      </ul>
-      <Link class='mindblow' href='/flower/'>
-        Blow my mind 🤯
-      </Link>
-    </div>
+        <div class='w-full md:w-1/2'>
+          <div class='prose mb-2'>
+            <h3>Свежий фидбэк</h3>
+          </div>
+          {getPosts().value?.map((post, ind) => (
+            <PostCard post={post} isPostPage={false} key={ind} addressees={null} />
+          ))}
+        </div>
+      </FlexRow>
+    </>
   );
 });
 
 export const head: DocumentHead = {
-  title: "ChinesePlus",
+  title: "ChinesePlus - китайский с удовольствием",
   meta: [
     {
       name: "description",

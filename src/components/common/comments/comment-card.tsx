@@ -13,8 +13,6 @@ export type CommentType = {
   addressees: string[];
   _id: ObjectId;
   text: string;
-  // name: string; // userName deprecated
-  // avatar: string; // userAvatar deprecated
   user: ShortUserInfo;
   post_id: ObjectId;
   likes: ContentLike[];

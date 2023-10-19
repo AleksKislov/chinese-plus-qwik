@@ -55,9 +55,7 @@ export const getInitVideos = routeLoader$((): Promise<VideoCardInfo[]> => {
 export type LevelUnion = "0" | "1" | "2" | "3";
 
 export default component$(() => {
-  const initVideos = getInitVideos();
-  const videos = useSignal<VideoCardInfo[]>(initVideos.value);
-  // const levelSignal = useSignal<LevelUnion>("0");
+  const videos = useSignal<VideoCardInfo[]>(getInitVideos().value);
   const categorySignal = useSignal("");
   const skip = useSignal(0);
 

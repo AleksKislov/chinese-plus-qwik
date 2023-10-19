@@ -44,8 +44,7 @@ export const getInitPosts = routeLoader$((): Promise<Post[]> => {
 export default component$(() => {
   const chosenMsgsType = useSignal<MsgsType>("all");
   const skip = useSignal(0);
-  const initialPosts = getInitPosts();
-  const posts = useSignal<Post[]>(initialPosts.value);
+  const posts = useSignal<Post[]>(getInitPosts().value);
 
   const getPosts = $((): Promise<Post[]> => {
     const t = chosenMsgsType.value === "all" ? "" : chosenMsgsType.value;

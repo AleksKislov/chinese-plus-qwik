@@ -18,13 +18,13 @@ export default component$(() => {
       <main class={"flex flex-col min-h-screen"}>
         <Header />
         <section class={"relative flex flex-col min-h-screen justify-between"}>
-          <div class='relative container mx-auto px-4 lg:px-28 '>
+          <div class='relative container mx-auto px-4 lg:px-28'>
             <Slot />
           </div>
           <footer class='footer footer-center p-10 text-base-content rounded bg-neutral mt-4'>
             <div>
               <Link class='link link-hover' href='/contacts'>
-                Контакты / О нас
+                Контакты
               </Link>
             </div>
             <div>

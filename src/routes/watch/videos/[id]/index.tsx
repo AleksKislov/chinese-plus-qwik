@@ -198,7 +198,7 @@ export default component$(() => {
           <Alerts />
 
           <div class='aspect-w-16 aspect-h-9 mb-3'>
-            <div class={"rounded-lg"} id={YtPlayerId}></div>
+            <div class='rounded-lg' id={YtPlayerId}></div>
           </div>
 
           <Subs

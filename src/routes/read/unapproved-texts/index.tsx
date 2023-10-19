@@ -14,8 +14,7 @@ export const getInitTexts = routeLoader$((): Promise<TextCardInfo[]> => {
 });
 
 export default component$(() => {
-  const initTexts = getInitTexts();
-  const texts = useSignal<TextCardInfo[]>(initTexts.value);
+  const texts = useSignal<TextCardInfo[]>(getInitTexts().value);
   const skip = useSignal(0);
 
   const getTexts = $((): Promise<TextCardInfo[]> => {

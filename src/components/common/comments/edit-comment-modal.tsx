@@ -16,7 +16,6 @@ type EditCommentProps = {
   comment: CommentType;
 };
 
-// @todo
 export const pathWhereMap: { [key: string]: WhereType } = {
   feedback: WHERE.post,
   texts: WHERE.text,
@@ -26,11 +25,9 @@ export const pathWhereMap: { [key: string]: WhereType } = {
 
 export const useDelComment = globalAction$((params, ev) => {
   const token = ev.cookie.get("token")?.value;
-  const { commentId, contentId } = params;
-  const path = ev.pathname.split("/")[1];
-  const where = WHERE[pathWhereMap[path]];
-  return ApiService.delete(`/api/${where}s/comment/${contentId}/${commentId}`, token, {});
-}, zod$({ commentId: z.string(), contentId: z.string() }));
+  const { commentId, contentId, destination } = params;
+  return ApiService.delete(`/api/${destination}s/comment/${contentId}/${commentId}`, token, {});
+}, zod$({ commentId: z.string(), contentId: z.string(), destination: z.string() }));
 
 export const useEditComment = globalAction$((body, ev) => {
   const token = ev.cookie.get("token")?.value;
@@ -40,7 +37,7 @@ export const useEditComment = globalAction$((body, ev) => {
 export const EditCommentModal = component$(({ modalId, comment }: EditCommentProps) => {
   const delComment = useDelComment();
   const editComment = useEditComment();
-  const { _id: commentId, post_id: contentId, text } = comment;
+  const { _id: commentId, post_id: contentId, text, destination } = comment;
   const emoji = useSignal("");
   const newText = useSignal(text);
   const addressees = useSignal<Addressee[]>([]);
@@ -88,7 +85,7 @@ export const EditCommentModal = component$(({ modalId, comment }: EditCommentPro
             <label
               for={modalId}
               class='btn btn-error btn-outline btn-sm'
-              onClick$={() => delComment.submit({ commentId, contentId })}
+              onClick$={() => delComment.submit({ commentId, contentId, destination })}
             >
               Удалить
             </label>

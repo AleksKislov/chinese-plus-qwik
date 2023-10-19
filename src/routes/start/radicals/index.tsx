@@ -11,7 +11,7 @@ export default component$(() => {
 
       <FlexRow>
         <Sidebar>
-          <div class='card bg-accent text-info-content'>
+          <div class='card bg-primary text-primary-content'>
             <div class='card-body'>
               <h2 class='card-title'>Ключи</h2>
               <p>
