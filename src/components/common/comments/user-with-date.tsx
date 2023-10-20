@@ -8,8 +8,8 @@ export const UserDateDiv = component$(({ userId, userName, date, ptNum }: UserDa
   const pt = "pt-" + ptNum;
   return (
     <>
-      <div class={"flex " + pt}>
-        <div>
+      <div class={`flex ${pt} lg:flex-row flex-col`}>
+        <div class='mr-1'>
           <UserLink userId={userId} userName={userName} />
         </div>
         <div>

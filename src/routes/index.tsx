@@ -20,6 +20,8 @@ export const getComments = routeLoader$((): Promise<CommentType[]> => {
 
 export default component$(() => {
   const { loggedIn } = useContext(userContext);
+  const comments = getComments();
+  const posts = getPosts();
   return (
     <>
       <div class='text-center mt-8'>
@@ -54,12 +56,13 @@ export default component$(() => {
           <div class='prose mb-2'>
             <h3>Свежие комментарии</h3>
           </div>
-          {getComments().value?.map((comment, ind) => (
+          {comments.value?.map((comment, ind) => (
             <CommentCard
               key={ind}
               comment={comment}
               commentIdToReply={{ commentId: "", userId: "", name: "" }}
               addressees={{ value: [] }}
+              notForReply={true}
             />
           ))}
         </div>
@@ -68,7 +71,7 @@ export default component$(() => {
           <div class='prose mb-2'>
             <h3>Свежий фидбэк</h3>
           </div>
-          {getPosts().value?.map((post, ind) => (
+          {posts.value?.map((post, ind) => (
             <PostCard post={post} isPostPage={false} key={ind} addressees={null} />
           ))}
         </div>

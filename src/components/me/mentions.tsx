@@ -1,6 +1,5 @@
 import { component$, useSignal } from "@builder.io/qwik";
-import { type CommentType } from "../common/comments/comment-card";
-import { Mention } from "./mention";
+import { CommentCard, type CommentType } from "../common/comments/comment-card";
 import { getOldMentions, markMentionsAsOld } from "~/routes/me";
 
 type PersonalMentionsType = {
@@ -54,21 +53,35 @@ export const PersonalMentions = component$(({ newMentions }: PersonalMentionsTyp
       </div>
 
       {showOldMentions.value ? (
-        <div class='join join-vertical border-secondary mt-2'>
+        <div class='join join-vertical border-secondary mt-2 w-full'>
           {!oldMentions.value?.length ? (
             <p>Нет комментариев</p>
           ) : (
             oldMentions.value?.map((comment, ind) => (
-              <Mention comment={comment} ind={ind} key={ind} />
+              <CommentCard
+                key={ind}
+                comment={comment}
+                commentIdToReply={{ commentId: "", userId: "", name: "" }}
+                addressees={{ value: [] }}
+                notForReply={true}
+              />
             ))
           )}
         </div>
       ) : (
-        <div class='join join-vertical border-secondary mt-2'>
+        <div class='join join-vertical border-secondary mt-2 w-full'>
           {!newMentions.length ? (
             <p>Нет новых комментариев</p>
           ) : (
-            newMentions.map((comment, ind) => <Mention comment={comment} ind={ind} key={ind} />)
+            newMentions.map((comment, ind) => (
+              <CommentCard
+                key={ind}
+                comment={comment}
+                commentIdToReply={{ commentId: "", userId: "", name: "" }}
+                addressees={{ value: [] }}
+                notForReply={true}
+              />
+            ))
           )}
         </div>
       )}

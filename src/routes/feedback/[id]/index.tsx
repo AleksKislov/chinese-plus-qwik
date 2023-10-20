@@ -26,6 +26,7 @@ export const getComments = routeLoader$(({ params }): Promise<CommentType[]> => 
 
 export default component$(() => {
   const post = getPost();
+  const comments = getComments();
 
   const commentIdToReplyStore = useStore<CommentIdToReply>({
     commentId: "",
@@ -54,7 +55,7 @@ export default component$(() => {
           <CommentsBlockTitle />
 
           <CommentsBlock
-            comments={getComments().value}
+            comments={comments.value}
             commentIdToReply={commentIdToReplyStore}
             addressees={addressees}
           />

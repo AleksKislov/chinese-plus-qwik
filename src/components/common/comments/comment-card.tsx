@@ -4,10 +4,11 @@ import { UserDateDiv } from "./user-with-date";
 import { userContext } from "~/root";
 import { type Addressee, type CommentIdToReply } from "./comment-form";
 import { ApiService } from "~/misc/actions/request";
-import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
+import { Link, globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { EditCommentModal } from "./edit-comment-modal";
 import { getLikeBtnTooltipTxt } from "../content-cards/like-btn";
 import { SmallAvatar } from "../ui/small-avatar";
+import { getContentPath } from "~/misc/helpers/content";
 
 export type CommentType = {
   addressees: string[];
@@ -30,6 +31,7 @@ type CommentCardProps = {
   comment: CommentType;
   commentIdToReply: CommentIdToReply;
   addressees: Signal<Addressee[]>;
+  notForReply?: boolean;
 };
 
 export const useCommentLike = globalAction$((params, ev) => {
@@ -38,7 +40,7 @@ export const useCommentLike = globalAction$((params, ev) => {
 }, zod$({ _id: z.string() }));
 
 export const CommentCard = component$(
-  ({ comment, commentIdToReply, addressees }: CommentCardProps) => {
+  ({ comment, commentIdToReply, addressees, notForReply }: CommentCardProps) => {
     const addDelLike = useCommentLike();
     const userState = useContext(userContext);
     const { loggedIn, isAdmin } = userState;
@@ -48,17 +50,27 @@ export const CommentCard = component$(
       text,
       user: { _id: userId, name: userName, newAvatar },
       likes,
+      destination: contentType,
+      post_id: contentId,
     } = comment;
     const ownsComment = userState._id === userId;
     const canEdit = ownsComment || isAdmin;
     const isLiked = loggedIn && likes.some((like) => like.user === userState._id);
 
     const modalId = `edit-modal-${_id}`;
+    const href = getContentPath(contentType, contentId, false);
+    const anchor = `${_id.slice(-3)}`;
     return (
       <>
-        <div class='card w-full bg-neutral mb-3'>
+        <div class='card w-full bg-neutral mb-3' id={anchor}>
           <div class='text-neutral-500 absolute right-0 top-0'>
-            <small class='float-right mr-2 mt-1'>{`#${_id.slice(-3)}`}</small>
+            <Link
+              href={`${href}#${anchor}`}
+              scroll={true}
+              class='float-right mr-2 mt-1 badge badge-xs hover:badge-info'
+            >
+              {`#${anchor}`}
+            </Link>
           </div>
           <div class='card-body'>
             <div class='flex'>
@@ -113,10 +125,10 @@ export const CommentCard = component$(
                     {thumbUpSvg} {likes.length > 0 && <span>{likes.length}</span>}
                   </button>
                 </div>
-                {!ownsComment && (
+                {!ownsComment && !notForReply && (
                   <div
                     class='tooltip tooltip-info'
-                    data-tip={loggedIn ? "Ответить" : "Авторизуйтесь"}
+                    data-tip={loggedIn ? "Ответить" : "Авторизуйтесь для ответа"}
                   >
                     <button
                       class={`btn btn-sm btn-info lowercase btn-outline`}

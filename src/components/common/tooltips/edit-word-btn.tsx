@@ -19,7 +19,7 @@ export const EditWordBtn = component$(() => {
 
           alertsState.push({
             bg: "alert-error",
-            text: "Авторизуйтесь, чтобы отредактировать",
+            text: "Авторизуйтесь для редактирования",
           });
         }}
       >

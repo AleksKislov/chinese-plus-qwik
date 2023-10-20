@@ -34,7 +34,7 @@ export const WordTooltip = component$(({ word, hasReddened, currentWord }: WordT
           showTooltip.value = true;
         }}
         class={`rounded cursor-pointer hover:bg-info hover:text-info-content ${
-          isUserWord ? "bg-accent text-accent-content" : ""
+          isUserWord ? "bg-success text-success-content" : ""
         } ${hasReddened ? "text-error" : ""}`}
       >
         {typeof word !== "string" ? word.chinese : word}

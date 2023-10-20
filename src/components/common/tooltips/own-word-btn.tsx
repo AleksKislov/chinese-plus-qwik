@@ -62,7 +62,7 @@ export const OwnWordBtn = component$(({ word }: { word: DictWord }) => {
               if (!loggedIn) {
                 return alertsState.push({
                   bg: "alert-error",
-                  text: "Авторизуйтесь, чтобы добавить слово в ваш словарик",
+                  text: "Авторизуйтесь для добавления слова в ваш словарик",
                 });
               }
               addUserWord.submit({
