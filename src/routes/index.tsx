@@ -81,11 +81,12 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "ChinesePlus - китайский с удовольствием",
+  title: "ChinesePlus - изучать китайский с удовольствием",
   meta: [
     {
       name: "description",
-      content: "Qwik site description",
+      content:
+        "Изучение китайского языка онлайн: уроки, тексты с переводом, видео с субтитрами, пиньинь, лексика HSK, иероглифы, тесты и пр.",
     },
   ],
 };

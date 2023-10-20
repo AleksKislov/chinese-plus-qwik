@@ -12,7 +12,7 @@ type FeatureCardProps = {
 export const FeatureCard = component$(({ ind }: FeatureCardProps) => {
   const { title, desc, pic } = featuresArr[ind];
   useVisibleTask$(() => {
-    if (ind !== 3) return;
+    if (ind !== 4) return;
     const writer = HanziWriter.create("showCharDiv", "字", HanziWriterSettings);
     writer.loopCharacterAnimation();
   });

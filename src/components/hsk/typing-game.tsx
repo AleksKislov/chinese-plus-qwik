@@ -1,5 +1,5 @@
 import { shuffleArr } from "~/misc/helpers/tools/shuffle-arr";
-import { arrorUturnDown } from "../common/media/svg";
+import { arrorUturnDown, faceSadBigSvg, faceSmileBigSvg, thumbUpBigSvg } from "../common/media/svg";
 import { type TestWord } from "~/routes/hsk/2/tests";
 import {
   $,
@@ -156,20 +156,13 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
               {questionNum.value > QUEST_NUM && (
                 <div class='flex justify-center mb-3'>
                   <div class=''>
-                    <img
-                      width={64}
-                      height={64}
-                      src={
-                        corrects.value > 8
-                          ? "/img/typing-game/002positive.png"
-                          : corrects.value < 6
-                          ? "/img/typing-game/001bad.png"
-                          : "/img/typing-game/003ok.png"
-                      }
-                      alt='your result'
-                    />
+                    {corrects.value > 8
+                      ? thumbUpBigSvg
+                      : corrects.value < 6
+                      ? faceSadBigSvg
+                      : faceSmileBigSvg}
                   </div>
-                  <div class='mx-4 mt-2 text-center'>
+                  <div class='mx-4  text-center'>
                     <div class='prose'>
                       <h4>Верно</h4>
                     </div>
@@ -177,7 +170,7 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
                       <strong>{corrects.value}</strong>
                     </p>
                   </div>
-                  <div class='mt-2 text-center'>
+                  <div class=' text-center'>
                     <div class='prose'>
                       <h4>Ошибки</h4>
                     </div>

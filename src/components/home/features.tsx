@@ -38,7 +38,8 @@ export const featuresArr = [
         <Link href='/watch/videos' class='link link-info'>
           видео
         </Link>{" "}
-        не только с параллельным переводом, но и с переводом каждого слова. Кликните на иероглиф
+        не только с параллельным переводом, но и с переводом каждого слова. Кликните на{" "}
+        <span class='text-info'>иероглиф</span>
       </p>
     ),
   },
@@ -81,20 +82,6 @@ export const featuresArr = [
     ),
   },
   {
-    title: "Словарь с анимацией",
-    pic: <div id='showCharDiv'></div>,
-
-    desc: (
-      <p>
-        Каждый иероглиф в{" "}
-        <Link href='/search' class='link link-info'>
-          словаре
-        </Link>{" "}
-        снабжен анимированным порядком написания черт иероглифа
-      </p>
-    ),
-  },
-  {
     title: "Ценное для начинающих",
     pic: academicCapExtraBigSvg,
     desc: (
@@ -112,6 +99,20 @@ export const featuresArr = [
           пиньиня
         </Link>
         , некоторых текстов
+      </p>
+    ),
+  },
+  {
+    title: "Словарь с анимацией",
+    pic: <div id='showCharDiv'></div>,
+
+    desc: (
+      <p>
+        Каждый иероглиф в{" "}
+        <Link href='/search' class='link link-info'>
+          словаре
+        </Link>{" "}
+        снабжен анимированным порядком написания черт иероглифа
       </p>
     ),
   },

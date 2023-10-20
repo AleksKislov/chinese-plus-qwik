@@ -10,6 +10,7 @@ import {
   dropdownArrowRight,
   enterSvg,
   exitSvg,
+  logoSvg,
   moonSvg,
   sunSvg,
 } from "../../media/svg";
@@ -67,6 +68,7 @@ export default component$(() => {
             </div>
 
             <Link class='btn btn-ghost normal-case text-xl' href='/'>
+              <div class=''>{logoSvg}</div>
               <span>
                 Chinese<span class='text-success font-extrabold text-2xl'>+</span>
               </span>
