@@ -1,6 +1,6 @@
 import { component$, useContext } from "@builder.io/qwik";
 import { copySvg } from "../common/media/svg";
-import { type NewAvatar, alertsContext } from "~/root";
+import { alertsContext } from "~/root";
 import { Link } from "@builder.io/qwik-city";
 import { BigAvatar } from "./avatar/big-avatar";
 

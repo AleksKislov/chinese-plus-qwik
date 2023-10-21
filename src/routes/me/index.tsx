@@ -1,5 +1,10 @@
 import { component$, useContext } from "@builder.io/qwik";
-import { routeLoader$, type RequestEvent, routeAction$ } from "@builder.io/qwik-city";
+import {
+  routeLoader$,
+  type RequestEvent,
+  routeAction$,
+  type DocumentHead,
+} from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { ReadResultCard } from "~/components/me/read-result-card";
@@ -106,3 +111,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Личный кабинет",
+};

@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { useLocation } from "@builder.io/qwik-city";
+import { type DocumentHead, useLocation } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { TableCard } from "~/components/hsk/table-card";
 import { Pagination } from "~/components/hsk/pagination";
@@ -55,3 +55,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Лексика HSK 3.0",
+  meta: [
+    {
+      name: "description",
+      content: "Все слова нового HSK версии 3.0 разбитые по уровням.",
+    },
+  ],
+};

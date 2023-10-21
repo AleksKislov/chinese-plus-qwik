@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { useLocation } from "@builder.io/qwik-city";
+import { type DocumentHead, useLocation } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { TableCard } from "~/components/hsk/table-card";
@@ -76,3 +76,14 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Лексика HSK 2.0 с озвучкой",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Все слова HSK версии 2.0 разбитые по уровням, озвученные носителем языка. Добавляйте слова с личный словарик для дальнейшего повторения.",
+    },
+  ],
+};

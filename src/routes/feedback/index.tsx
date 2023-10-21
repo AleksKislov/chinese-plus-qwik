@@ -1,5 +1,5 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
-import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { telegramSvg, vkSvg, youtubeSvg } from "~/components/common/media/svg";
@@ -131,3 +131,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Фидбэк",
+  meta: [
+    {
+      name: "description",
+      content: "Поделитесь своими мыслями касательно Chinese+",
+    },
+  ],
+};

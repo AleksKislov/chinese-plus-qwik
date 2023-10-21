@@ -1,5 +1,5 @@
 import { component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import { routeAction$, type RequestEvent, Link } from "@builder.io/qwik-city";
+import { routeAction$, type RequestEvent, Link, type DocumentHead } from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
 import { GoogleButton } from "~/components/auth/google-btn";
 import { Alerts } from "~/components/common/alerts/alerts";
@@ -132,3 +132,13 @@ export default component$(() => {
     </div>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Регистрация",
+  meta: [
+    {
+      name: "description",
+      content: "Зарегистрироваться на сайте Chinese+",
+    },
+  ],
+};

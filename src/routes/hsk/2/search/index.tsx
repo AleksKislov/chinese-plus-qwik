@@ -7,6 +7,7 @@ import { FlexRow } from "~/components/common/layout/flex-row";
 import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
+import { type DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const hskWords = useSignal<OldHskWordType[]>([]);
@@ -32,3 +33,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Поиск по словам HSK 2.0",
+};

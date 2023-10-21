@@ -1,4 +1,9 @@
-import { routeAction$, type RequestEvent, globalAction$ } from "@builder.io/qwik-city";
+import {
+  routeAction$,
+  type RequestEvent,
+  globalAction$,
+  type DocumentHead,
+} from "@builder.io/qwik-city";
 import { component$, useStore } from "@builder.io/qwik";
 import { PageTitle } from "~/components/common/layout/title";
 import { getTokenFromCookie } from "~/misc/actions/auth";
@@ -77,3 +82,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Поделиться контентом",
+  meta: [
+    {
+      name: "description",
+      content: "Поделитесь обучающим контентом с остальными посетителями Chinese+",
+    },
+  ],
+};

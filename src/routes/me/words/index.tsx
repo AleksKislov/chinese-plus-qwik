@@ -10,7 +10,7 @@ import { userContext } from "~/root";
 import { PrivateWordsCard } from "~/components/me/words/private-words-card";
 import { parseRussian } from "~/misc/helpers/translation";
 import { getTokenFromCookie } from "~/misc/actions/auth";
-import { type RequestEvent } from "@builder.io/qwik-city";
+import { type DocumentHead, type RequestEvent } from "@builder.io/qwik-city";
 
 export const onGet = async ({ cookie, redirect }: RequestEvent) => {
   const token = getTokenFromCookie(cookie);
@@ -55,3 +55,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Личный словарик",
+};

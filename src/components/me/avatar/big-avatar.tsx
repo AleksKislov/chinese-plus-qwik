@@ -1,6 +1,5 @@
 import { component$ } from "@builder.io/qwik";
 import { AvatarImg } from "~/components/common/media/avatar-img";
-import { type NewAvatar } from "~/root";
 
 type BigAvatarProps = {
   userName: string;

@@ -3,6 +3,7 @@ import {
   type RequestEvent,
   type JSONObject,
   type RequestEventAction,
+  type DocumentHead,
 } from "@builder.io/qwik-city";
 import {
   $,
@@ -169,3 +170,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Поделиться контентом",
+  meta: [
+    {
+      name: "description",
+      content: "Поделитесь обучающим контентом с остальными посетителями Chinese+",
+    },
+  ],
+};

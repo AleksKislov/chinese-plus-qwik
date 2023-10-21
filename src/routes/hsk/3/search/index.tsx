@@ -7,6 +7,7 @@ import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
 import { NewHskTable } from "~/components/hsk/new-hsk-table";
+import { type DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const hskWords = useSignal<NewHskWordType[]>([]);
@@ -42,3 +43,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Поиск по словам HSK 3.0",
+};

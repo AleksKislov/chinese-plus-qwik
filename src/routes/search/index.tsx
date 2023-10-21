@@ -7,7 +7,13 @@ import {
   useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { Link, routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
+import {
+  type DocumentHead,
+  Link,
+  routeLoader$,
+  useLocation,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { MainContent } from "~/components/common/layout/main-content";
@@ -24,6 +30,7 @@ import { ApiService } from "~/misc/actions/request";
 import { alertsContext } from "~/root";
 import { getWordsForTooltips } from "~/routes/read/texts/[id]";
 import HanziWriter from "hanzi-writer";
+import { markUpRuText } from "~/misc/helpers/translation";
 
 export const HanziWriterSettings = {
   width: 60,
@@ -170,3 +177,30 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = ({ resolveValue }) => {
+  const translation = resolveValue(useLoadTranslation);
+
+  if (translation.length === 1 && typeof translation[0] !== "string") {
+    const wordObj = translation[0];
+
+    return {
+      title: `Chinese+ ${wordObj.chinese} перевод c китайского на русский`,
+      meta: [
+        {
+          name: "description",
+          content: `Значение китайского слова ${markUpRuText(wordObj.russian, false)}`,
+        },
+      ],
+    };
+  }
+  return {
+    title: `Chinese+ Онлайн-словарь китайского языка`,
+    meta: [
+      {
+        name: "description",
+        content: `Перевод китайских слов и иероглифов на русский язык`,
+      },
+    ],
+  };
+};

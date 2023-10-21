@@ -1,5 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { FlexRow } from "~/components/common/layout/flex-row";
+import { type DocumentHead } from "@builder.io/qwik-city";
 import { MainContent } from "~/components/common/layout/main-content";
 import { Sidebar } from "~/components/common/layout/sidebar";
 import { PageTitle } from "~/components/common/layout/title";
@@ -2160,3 +2161,14 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Ключи китайских иероглифов",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Таблица ключей (radicals) иероглифов китайского языка. С указанием самых распространенных.",
+    },
+  ],
+};

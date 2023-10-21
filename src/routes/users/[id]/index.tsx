@@ -1,10 +1,9 @@
 import { component$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { ApiService } from "~/misc/actions/request";
 import { UserMainInfo } from "~/components/me/user-main-info";
-import { type NewAvatar } from "~/root";
 
 type UserInfo = {
   _id: string;
@@ -50,3 +49,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ страница пользователя",
+};

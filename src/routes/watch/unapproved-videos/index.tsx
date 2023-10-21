@@ -7,6 +7,7 @@ import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
 import { VideoCard } from "~/components/watch/video-card";
 import { type VideoCardInfo } from "../videos";
+import { type DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const videos = useSignal<VideoCardInfo[]>([]);
@@ -56,3 +57,14 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Китайские видео с субтитрами",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Видео на китайском языке с тройными субтитрами: иероглифы, перевод и пиньинь. Плюс всплывающий перевод каждого слова.",
+    },
+  ],
+};

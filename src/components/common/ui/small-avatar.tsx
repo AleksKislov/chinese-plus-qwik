@@ -1,5 +1,4 @@
 import { component$ } from "@builder.io/qwik";
-import { type NewAvatar } from "~/root";
 import { AvatarImg } from "../media/avatar-img";
 
 type SmallAvatarProps = {

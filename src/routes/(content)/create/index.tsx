@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { Link, type RequestEvent } from "@builder.io/qwik-city";
+import { type DocumentHead, Link, type RequestEvent } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { getTokenFromCookie } from "~/misc/actions/auth";
@@ -34,3 +34,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Поделиться контентом",
+  meta: [
+    {
+      name: "description",
+      content: "Поделитесь обучающим контентом с остальными посетителями Chinese+",
+    },
+  ],
+};

@@ -6,7 +6,7 @@ import {
   useVisibleTask$,
   type NoSerialize,
 } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 
 import { FlexRow } from "~/components/common/layout/flex-row";
@@ -231,3 +231,17 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = ({ resolveValue }) => {
+  const videoInfo = resolveValue(useGetVideo);
+
+  return {
+    title: `Chinese+ Китайское видео с переводом: ${videoInfo.title}`,
+    meta: [
+      {
+        name: "description",
+        content: `Видео на китайском языке с переводом и субтитрами: ${videoInfo.desc}`,
+      },
+    ],
+  };
+};

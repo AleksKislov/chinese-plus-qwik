@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PostCard } from "~/components/feedback/post-card";
 import { ApiService } from "~/misc/actions/request";
@@ -64,3 +64,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Фидбэк",
+  meta: [
+    {
+      name: "description",
+      content: "Поделитесь своими мыслями касательно Chinese+",
+    },
+  ],
+};

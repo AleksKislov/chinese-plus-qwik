@@ -1,5 +1,5 @@
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { type RequestEvent, routeLoader$ } from "@builder.io/qwik-city";
+import { type RequestEvent, routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { Alerts } from "~/components/common/alerts/alerts";
 import { OldHskTable } from "~/components/hsk/hsk-table";
 import { ApiService } from "~/misc/actions/request";
@@ -76,3 +76,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Личный словарик HSK",
+};

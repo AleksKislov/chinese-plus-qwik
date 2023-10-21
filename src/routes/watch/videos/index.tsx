@@ -1,5 +1,5 @@
 import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 
 import { FlexRow } from "~/components/common/layout/flex-row";
@@ -66,7 +66,6 @@ export default component$(() => {
 
   useTask$(async ({ track }) => {
     track(() => categorySignal.value);
-    // track(() => levelSignal.value);
     videos.value = await getVideos();
   });
 
@@ -87,13 +86,8 @@ export default component$(() => {
 
         <MainContent>
           <div class='grid sm:grid-cols-4 grid-cols-2 gap-1 mb-3'>
-            {/* <LevelFilter levelSignal={levelSignal} /> */}
             <CategoryFilter categorySignal={categorySignal} contentType={WHERE.video} />
-            <UnsetFiltersBtn
-              // levelSignal={levelSignal}
-              categorySignal={categorySignal}
-              skipSignal={skip}
-            />
+            <UnsetFiltersBtn categorySignal={categorySignal} skipSignal={skip} />
           </div>
 
           {videos.value.map((video, ind) => (
@@ -117,3 +111,14 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Китайские видео с субтитрами",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Видео на китайском языке с тройными субтитрами: иероглифы, перевод и пиньинь. Плюс всплывающий перевод каждого слова.",
+    },
+  ],
+};

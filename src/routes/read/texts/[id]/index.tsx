@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
 import { ApiService } from "~/misc/actions/request";
 
 import { FlexRow } from "~/components/common/layout/flex-row";
@@ -213,3 +213,17 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = ({ resolveValue }) => {
+  const textInfo = resolveValue(useGetText);
+
+  return {
+    title: `Chinese+ Китайский c переводом: ${textInfo.title}`,
+    meta: [
+      {
+        name: "description",
+        content: `Текст на китайском языке с переводом: ${textInfo.description}`,
+      },
+    ],
+  };
+};

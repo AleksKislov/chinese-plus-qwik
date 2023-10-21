@@ -4,7 +4,7 @@ import { Sidebar } from "~/components/common/layout/sidebar";
 import { MainContent } from "~/components/common/layout/main-content";
 import { PageTitle } from "~/components/common/layout/title";
 import { TableCard } from "~/components/hsk/table-card";
-import { routeLoader$, useLocation } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { type NewHskWordType } from "../table";
 import { ApiService } from "~/misc/actions/request";
 import { playSvg } from "~/components/common/media/svg";
@@ -165,4 +165,15 @@ export default component$(() => {
 
 export const playAudio = (id: number, lvl: string) => {
   new Audio(`${CONST_URLS.myAudioURL}newhsk/band${lvl}/${id}.mp3`).play();
+};
+
+export const head: DocumentHead = {
+  title: "Chinese+ Тесты HSK 3.0",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Короткие тесты на звание лексики нового HSK 3.0. Проверьте чтение, знание пиньиня, напечатайте иероглифы на скорость.",
+    },
+  ],
 };

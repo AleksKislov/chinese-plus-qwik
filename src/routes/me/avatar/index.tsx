@@ -6,12 +6,12 @@ import {
   useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { routeAction$, type RequestEvent } from "@builder.io/qwik-city";
+import { routeAction$, type RequestEvent, type DocumentHead } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
 import { UserMainInfo } from "~/components/me/user-main-info";
 import { getTokenFromCookie } from "~/misc/actions/auth";
-import { type NewAvatar, userContext } from "~/root";
+import { userContext } from "~/root";
 import {
   adventurer,
   avataaars,
@@ -181,3 +181,7 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Chinese+ Аватарка",
+};
