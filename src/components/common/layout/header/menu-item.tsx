@@ -8,14 +8,14 @@ export type MenuItemProps = {
   name: string;
 };
 
-export default component$(({ links, name }: MenuItemProps) => {
+export const MenuItem = component$(({ links, name }: MenuItemProps) => {
   return (
-    <li tabIndex={0} class='dropdown dropdown-hover'>
-      <label>
+    <li class='dropdown dropdown-hover'>
+      <label tabIndex={0} class='my-1'>
         {name}
         {dropdownArrowBottom}
       </label>
-      <ul class='dropdown-content menu shadow bg-neutral rounded-box p-2 w-52 z-40'>
+      <ul class='dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-64'>
         {links.map((link, ind) => (
           <MenuLink href={link.href} text={link.text} key={ind} />
         ))}

@@ -1,142 +1,96 @@
 import { component$, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
-import { isDarkThemeContext, userContext } from "~/root";
+import { userContext } from "~/root";
 import { logout } from "~/misc/actions/auth";
-import { Link, useNavigate } from "@builder.io/qwik-city";
-import MenuItem from "./menu-item";
-import type { MenuItemProps } from "./menu-item";
-import {
-  collapsedMenuSvg,
-  dropdownArrowBottom,
-  dropdownArrowRight,
-  enterSvg,
-  exitSvg,
-  logoSvg,
-  moonSvg,
-  sunSvg,
-} from "../../media/svg";
+import { Link } from "@builder.io/qwik-city";
+import { MenuItem, type MenuItemProps } from "./menu-item";
+import { dropdownArrowBottom, enterSvg, exitSvg, logoSvg } from "../../media/svg";
 import { getNewMentions } from "~/routes/layout";
 import { AvatarImg } from "../../media/avatar-img";
+import MenuLink from "./menu-link";
+import { MenuItemNew } from "./menu-item-new";
+import { ThemeChanger } from "./theme-changer";
+import { Brand } from "./brand";
 
 export default component$(() => {
   const newMentions = getNewMentions();
   const userState = useContext(userContext);
-  const isDarkTheme = useContext(isDarkThemeContext);
-  const themeChanged = useSignal(true);
-  const nav = useNavigate();
-  const showDoubleClickTip = useSignal(false);
+  const isMobile = useSignal(false);
 
   useTask$(() => {
     userState.newMentions = newMentions.value;
   });
 
-  useVisibleTask$(({ track }) => {
-    track(() => themeChanged.value);
-    isDarkTheme.bool = themeChanged.value;
+  useVisibleTask$(() => {
+    isMobile.value = window.innerWidth <= 768;
   });
 
   return (
     <header class='bg-neutral mb-4'>
       <div class='md:container md:mx-auto'>
         <div class='navbar h-12'>
-          <div class='flex-1'>
+          <div class='navbar-start lg:w-full'>
+            {/* mobile menu */}
             <div class='dropdown'>
               <label tabIndex={0} class='btn btn-ghost lg:hidden'>
-                {collapsedMenuSvg}
+                {logoSvg}
               </label>
-              <ul
-                tabIndex={0}
-                class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52 z-40'
-              >
-                <li tabIndex={0}>
-                  <a class='justify-between'>
-                    Читалка
-                    {dropdownArrowRight}
-                  </a>
-                  <ul class='p-2'>
-                    <li>
-                      <a>Тексты</a>
-                    </li>
-                    <li>
-                      <a>На проверке</a>
-                    </li>
-                  </ul>
-                </li>
+              <ul tabIndex={0} class='dropdown-content z-[1] menu bg-base-200 w-64 rounded-box'>
+                <MenuItemNew name={read.name} links={read.links} />
+                <MenuItemNew name={watch.name} links={watch.links} />
+                <MenuItemNew name={start.name} links={start.links} />
                 <li>
-                  <a>Item 3</a>
+                  <details class='z-40'>
+                    <summary>HSK</summary>
+                    <ul class='w-52 bg-base-200'>
+                      <MenuItemNew name={hsk2.name} links={hsk2.links} />
+                      <MenuItemNew name={hsk3.name} links={hsk3.links} />
+                    </ul>
+                  </details>
                 </li>
+                <MenuLink href='/search' text='Словарь' />
+                <MenuLink href='/feedback' text='Фидбэк' />
+                <ThemeChanger />
               </ul>
             </div>
 
-            <Link class='btn btn-ghost normal-case text-xl' href='/'>
-              <div class=''>{logoSvg}</div>
-              <span>
-                Chinese<span class='text-success font-extrabold text-2xl'>+</span>
-              </span>
-            </Link>
-
+            {/* desctop menu */}
             <div class='hidden lg:flex'>
-              <ul class='menu menu-horizontal px-1 mt-1'>
+              <Link class='btn btn-ghost normal-case text-xl mt-2' href='/'>
+                <div>{logoSvg}</div>
+                <Brand />
+              </Link>
+              <ul class='menu menu-horizontal mt-1'>
                 <MenuItem name={read.name} links={read.links} />
                 <MenuItem name={watch.name} links={watch.links} />
                 <MenuItem name={start.name} links={start.links} />
 
                 <li tabIndex={0} class='dropdown dropdown-hover'>
-                  <label>
+                  <label class='my-1'>
                     HSK
                     {dropdownArrowBottom}
                   </label>
-                  <ul class='dropdown-content menu shadow bg-neutral rounded-box w-52 p-2 z-40'>
-                    <li class='menu-title'>
-                      <small>HSK 2.0</small>
-                    </li>
-                    <li>
-                      <Link href='/hsk/2/table'>Таблица</Link>
-                    </li>
-                    <li>
-                      <Link href='/hsk/2/tests'>Тесты</Link>
-                    </li>
-                    <li>
-                      <Link href='/hsk/2/search'>Поиск</Link>
-                    </li>
-
-                    <li class='menu-title'>
-                      <small>HSK 3.0</small>
-                    </li>
-                    <li>
-                      <Link href='/hsk/3/table'>Таблица</Link>
-                    </li>
-                    <li>
-                      <Link href='/hsk/3/tests'>Тесты</Link>
-                    </li>
-                    <li>
-                      <Link href='/hsk/3/search'>Поиск</Link>
-                    </li>
+                  <ul class='dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-64'>
+                    <MenuItemNew name={hsk2.name} links={hsk2.links} />
+                    <MenuItemNew name={hsk3.name} links={hsk3.links} />
                   </ul>
                 </li>
 
-                <li tabIndex={0}>
-                  <Link href='/search'>Словарь</Link>
-                </li>
-                <li tabIndex={0}>
-                  <Link href='/feedback'>Фидбэк</Link>
-                </li>
-                <li tabIndex={0}>
-                  <label class='swap swap-rotate'>
-                    <input type='checkbox' bind:checked={themeChanged} />
-                    <div class='swap-on'>{moonSvg}</div>
-                    <div class='swap-off'>{sunSvg}</div>
-                  </label>
-                </li>
+                <MenuLink href='/search' text='Словарь' />
+                <MenuLink href='/feedback' text='Фидбэк' />
+                <ThemeChanger />
               </ul>
             </div>
           </div>
 
-          <div class='flex-none'>
-            {!showDoubleClickTip.value ? null : (
-              <div class='badge badge-xs'>double click ={">"} ЛК</div>
-            )}
+          {/* brand for mobile */}
+          <div class='navbar-center lg:hidden'>
+            <Link class='btn btn-ghost normal-case text-2xl' href='/'>
+              <Brand isMobile={true} />
+            </Link>
+          </div>
 
-            <div class='dropdown dropdown-end'>
+          <div class='navbar-end'>
+            <div class='dropdown dropdown-hover dropdown-end mr-2'>
               <label
                 tabIndex={0}
                 class={`btn btn-ghost btn-circle avatar ${
@@ -144,19 +98,7 @@ export default component$(() => {
                 } ${userState.name ? "mt-2" : ""}`}
               >
                 {userState.name ? (
-                  <div
-                    class='rounded-full '
-                    onMouseEnter$={() => {
-                      showDoubleClickTip.value = true;
-                    }}
-                    onMouseLeave$={() => {
-                      showDoubleClickTip.value = false;
-                    }}
-                    onClick$={(e) => {
-                      // @ts-ignore
-                      if (e.detail === 2) nav("/me");
-                    }}
-                  >
+                  <div class='rounded-full '>
                     <AvatarImg
                       userName={userState.name}
                       size={46}
@@ -169,7 +111,7 @@ export default component$(() => {
               </label>
               <ul
                 tabIndex={0}
-                class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52 z-40'
+                class='dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-64'
               >
                 {userState.name ? authMenu : unAuthMenu}
               </ul>
@@ -183,40 +125,21 @@ export default component$(() => {
 
 export const unAuthMenu = (
   <>
-    <li>
-      <Link href='/register'>Регистрация</Link>
-    </li>
-    <li>
-      <Link href='/login'>Войти</Link>
-    </li>
+    <MenuLink href='/register' text='Регистрация' />
+    <MenuLink href='/login' text='Войти' />
   </>
 );
 
 export const authMenu = (
   <>
-    <li>
-      <Link href='/me'>Личный кабинет</Link>
-    </li>
-    <li>
-      <Link href='/me/hsk/2'>Мой словарик HSK</Link>
-    </li>
-    <li>
-      <Link href='/me/words'>Мой словарик</Link>
-    </li>
-    <li>
-      <Link href='/create'>Поделиться контентом</Link>
-    </li>
+    <MenuLink href='/me' text='Личный кабинет' />
+    <MenuLink href='/me/hsk/2' text='Мой словарик HSK' />
+    <MenuLink href='/me/words' text='Мой словарик' />
+    <MenuLink href='/create' text='Поделиться контентом' />
     <hr class='h-px my-1 bg-primary border-0' />
 
     <li>
-      <a
-        onClick$={() => {
-          logout();
-          location.reload();
-        }}
-      >
-        Выйти {exitSvg}
-      </a>
+      <a onClick$={() => logout()}>Выйти {exitSvg}</a>
     </li>
   </>
 );
@@ -263,6 +186,42 @@ export const read: MenuItemProps = {
     {
       href: "/read/unapproved-texts",
       text: "На проверке",
+    },
+  ],
+};
+
+export const hsk3: MenuItemProps = {
+  name: "HSK 3.0",
+  links: [
+    {
+      href: "/hsk/3/table",
+      text: "Таблица",
+    },
+    {
+      href: "/hsk/3/tests",
+      text: "Тесты",
+    },
+    {
+      href: "/hsk/3/search",
+      text: "Поиск",
+    },
+  ],
+};
+
+export const hsk2: MenuItemProps = {
+  name: "HSK 2.0",
+  links: [
+    {
+      href: "/hsk/2/table",
+      text: "Таблица",
+    },
+    {
+      href: "/hsk/2/tests",
+      text: "Тесты",
+    },
+    {
+      href: "/hsk/2/search",
+      text: "Поиск",
     },
   ],
 };

@@ -29,6 +29,7 @@ export interface UserFromDB {
 
 export function logout() {
   Cookies.remove("token");
+  location.reload();
 }
 
 export async function getUser(token: string, controller?: AbortController): Promise<UserFromDB> {

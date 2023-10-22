@@ -296,6 +296,29 @@ export const faceSadBigSvg = (
   </svg>
 );
 
+export const clickSvg = (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    stroke-width='1.5'
+    stroke='currentColor'
+    class='w-4 h-4'
+  >
+    <path
+      stroke-linecap='round'
+      stroke-linejoin='round'
+      d='M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59'
+    />
+  </svg>
+);
+
+export const dropdownArrowSmRight = (
+  <svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 fill-current' viewBox='0 0 24 24'>
+    <path d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z' />
+  </svg>
+);
+
 export const faceSmileBigSvg = (
   <svg
     xmlns='http://www.w3.org/2000/svg'
@@ -598,8 +621,8 @@ export const logoSvg = (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     xmlns:xlink='http://www.w3.org/1999/xlink'
-    width='30px'
-    height='30px'
+    width='36px'
+    height='36px'
     viewBox='0 0 30 30'
     version='1.1'
   >

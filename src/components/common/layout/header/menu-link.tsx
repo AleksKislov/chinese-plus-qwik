@@ -9,7 +9,9 @@ export type MenuLinkProps = {
 export default component$(({ href, text }: MenuLinkProps) => {
   return (
     <li>
-      <Link href={href}>{text}</Link>
+      <Link href={href} class='my-1'>
+        {text}
+      </Link>
     </li>
   );
 });

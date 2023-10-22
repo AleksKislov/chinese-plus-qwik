@@ -1,4 +1,4 @@
-import { component$, type Signal, useContext } from "@builder.io/qwik";
+import { component$, type Signal, useContext, useTask$, useSignal } from "@builder.io/qwik";
 import { arrorUturnDown, editSvg, thumbUpSvg } from "../media/svg";
 import { UserDateDiv } from "./user-with-date";
 import { userContext } from "~/root";
@@ -34,9 +34,9 @@ type CommentCardProps = {
   notForReply?: boolean;
 };
 
-export const useCommentLike = globalAction$((params, ev) => {
+export const useCommentLike = globalAction$((params, ev): Promise<ContentLike[]> => {
   const token = ev.cookie.get("token")?.value;
-  return ApiService.put(`/api/comments/like/${params._id}`, null, token, {});
+  return ApiService.put(`/api/comments/like/${params._id}`, null, token, []);
 }, zod$({ _id: z.string() }));
 
 export const CommentCard = component$(
@@ -48,8 +48,8 @@ export const CommentCard = component$(
       _id,
       date,
       text,
-      user: { _id: userId, name: userName, newAvatar },
       likes,
+      user: { _id: userId, name: userName, newAvatar },
       destination: contentType,
       post_id: contentId,
     } = comment;
