@@ -119,10 +119,10 @@ export const CommentForm = component$(
 
     return (
       <>
-        <div class='card w-full bg-neutral mb-3'>
+        <div class='card w-full bg-neutral mb-3 text-base-content'>
           <div class='card-body'>
             <div class={"flex justify-between mb-2"}>
-              <h2 class='card-title pt-1'>Ваш комментарий</h2>
+              <h2 class='card-title pt-1 text-neutral-content'>Ваш комментарий</h2>
               <div class='card-actions'>
                 <button class='btn btn-info btn-sm' disabled={!loggedIn} onClick$={submitPost}>
                   Опубликовать

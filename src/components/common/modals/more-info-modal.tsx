@@ -9,7 +9,7 @@ export const MoreInfoModal = component$(
     const showExamples = useSignal(true);
 
     return (
-      <>
+      <div class='text-base-content'>
         <input type='checkbox' id={modalId} class='modal-toggle' />
         <label class='modal text-left' for={modalId}>
           <label class='modal-box relative' for=''>
@@ -26,7 +26,7 @@ export const MoreInfoModal = component$(
             <DictWordTranslation ru={ru} showExamples={showExamples.value} />
           </label>
         </label>
-      </>
+      </div>
     );
   }
 );

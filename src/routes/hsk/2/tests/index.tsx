@@ -131,7 +131,7 @@ export default component$(() => {
                 <h4>Выберите верный перевод для {title}</h4>
               </div>
 
-              <div class='form-control mb-2'>
+              <div class='form-control mb-2 text-base-content'>
                 {questionStore[type as QuestionType] &&
                   questionStore[type as QuestionType]!.map((word) => (
                     <div class='input-group mb-1 w-full' key={word.id}>
@@ -167,7 +167,7 @@ export default component$(() => {
 
               <button
                 type='button'
-                class='btn btn-accent btn-sm'
+                class='btn btn-info btn-sm'
                 onClick$={() =>
                   checkAnswers(answerStore[type as QuestionType], type as QuestionType)
                 }

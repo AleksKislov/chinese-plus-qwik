@@ -111,7 +111,7 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
                 </button>
               </div>
               <div class='prose mb-3'>
-                <h4 class='card-title'>
+                <h4 class='card-title text-neutral-content'>
                   Вопрос {questionNum}/{QUEST_NUM}
                 </h4>
               </div>
@@ -141,7 +141,7 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
           ) : (
             <div>
               <div class='prose mb-2'>
-                <h3 class='card-title'>
+                <h3 class='card-title text-neutral-content'>
                   {questionNum.value > QUEST_NUM ? (
                     "Результат"
                   ) : level ? (
@@ -162,16 +162,16 @@ export const TypingGame = component$(({ words, level }: TypingGameProps) => {
                       ? faceSadBigSvg
                       : faceSmileBigSvg}
                   </div>
-                  <div class='mx-4  text-center'>
-                    <div class='prose'>
+                  <div class='mx-4 text-center'>
+                    <div class='text-2xl text-neutral-content'>
                       <h4>Верно</h4>
                     </div>
                     <p class='text-success'>
                       <strong>{corrects.value}</strong>
                     </p>
                   </div>
-                  <div class=' text-center'>
-                    <div class='prose'>
+                  <div class='text-center'>
+                    <div class='text-2xl text-neutral-content'>
                       <h4>Ошибки</h4>
                     </div>
                     <p class='h2 text-error'>

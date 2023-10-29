@@ -88,7 +88,7 @@ export default component$(() => {
       getUserWords(token),
       getUserHsk2WordsTotal(token),
     ]);
-    // console.log(userResp);
+    // console.log(TailwindConf);
 
     if (userResp.status === "rejected") return cntrlr.abort;
     const resp = userResp.value;
@@ -126,7 +126,11 @@ export default component$(() => {
         <link rel='manifest' href='/manifest.json' />
         <RouterHead />
       </head>
-      <body lang='en' data-theme={isDarkThemeState.bool ? "night" : "wireframe"}>
+      <body
+        lang='en'
+        data-theme={isDarkThemeState.bool ? "night" : "emerald"}
+        class='text-neutral-content'
+      >
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>

@@ -21,7 +21,7 @@ export default component$(() => {
           <div class='relative container mx-auto px-4 lg:px-28'>
             <Slot />
           </div>
-          <footer class='footer footer-center p-10 text-base-content rounded bg-neutral mt-4'>
+          <footer class='footer footer-center p-10 text-neutral-content rounded bg-neutral mt-4'>
             <div>
               <Link class='link link-hover' href='/contacts'>
                 Контакты

@@ -59,7 +59,7 @@ export default component$(() => {
       </div>
 
       <div class='overflow-x-auto'>
-        <table class='table table-compact'>
+        <table class='table table-compact text-base-content'>
           <thead>
             <tr>
               <th>&nbsp;</th>
@@ -132,7 +132,7 @@ export default component$(() => {
                                 Object.keys(pinyinMap[pySound]).map((x, ind) => (
                                   <button
                                     class={`lowercase btn btn-sm ${
-                                      pinyinMap[pySound][x] ? "btn-accent" : "btn-error"
+                                      pinyinMap[pySound][x] ? "btn-info" : "btn-error"
                                     }`}
                                     key={ind}
                                     onClick$={() => {

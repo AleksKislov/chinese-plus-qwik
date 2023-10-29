@@ -130,7 +130,12 @@ export const featuresArr = [
 
 export const Features = component$(() => {
   return (
-    <div class='grid grid-cols-1 md:grid-cols-3 gap-4'>
+    <>
+      <div class='grid grid-cols-1 md:grid-cols-3 gap-4'>
+        {featuresArr.map((feat, ind) => (
+          <FeatureCard key={ind} title={feat.title} ind={ind} />
+        ))}
+      </div>
       <MoreInfoModal
         word={{
           cn: "我",
@@ -142,10 +147,6 @@ export const Features = component$(() => {
         }}
         modalId={moreInfoModalId}
       />
-
-      {featuresArr.map((feat, ind) => (
-        <FeatureCard key={ind} title={feat.title} ind={ind} />
-      ))}
-    </div>
+    </>
   );
 });

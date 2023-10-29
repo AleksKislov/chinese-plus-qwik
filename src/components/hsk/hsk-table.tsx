@@ -39,7 +39,7 @@ export const OldHskTable = component$(({ hskWords, userHskWords, isPrivate }: Ol
         <FlipCards words={hskWords as OldHskWordType[]} pinyinAbove={pinyinAbove} />
       ) : (
         <div class='overflow-x-auto'>
-          <table class='table table-compact w-full	overflow-hidden'>
+          <table class='table table-compact w-full overflow-hidden text-base-content'>
             <tbody>
               {hskWords.map((word) => (
                 <OldHskTableRow

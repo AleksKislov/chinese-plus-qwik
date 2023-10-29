@@ -11,12 +11,12 @@ module.exports = {
   ],
   daisyui: {
     styled: true,
-    themes: true,
+    // themes: true,
     base: true,
     utils: true,
     rtl: false,
     prefix: "",
     // darkTheme: "night",
-    themes: ["night", "wireframe"],
+    themes: ["night", "emerald"],
   },
 };

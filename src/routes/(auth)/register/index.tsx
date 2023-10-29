@@ -100,7 +100,7 @@ export default component$(() => {
 
             <div class='flex flex-col w-full border-opacity-50'>
               <button
-                class='btn btn-info mt-2'
+                class='btn btn-info btn-sm mt-2'
                 onClick$={() => {
                   if (!name.value || !email.value || !password.value) {
                     return alertsState.push({

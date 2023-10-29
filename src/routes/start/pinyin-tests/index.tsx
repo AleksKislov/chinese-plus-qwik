@@ -22,13 +22,13 @@ export default component$(() => {
           <div class='card bg-primary text-primary-content'>
             <div class='card-body'>
               <h2 class='card-title'>Пиньинь</h2>
-              <p>Пиньинь - первое, чем нужно овладеть изучающим китайский язык.</p>
+              <p>Это первое, чем нужно овладеть изучающим китайский язык.</p>
               <p>Проверьте насколько хорошо вы понимаете на слух звуки и тоны китайского языка.</p>
             </div>
           </div>
         </Sidebar>
         <MainContent>
-          <small>
+          <small class='text-base-content'>
             Введите соответствующий пиньинь для аудио в виде{" "}
             <code class='text-warning'>[латынь][цифра]</code>, например,{" "}
             <span class='text-success'>huang2</span> или <span class='text-success'>lv4</span>

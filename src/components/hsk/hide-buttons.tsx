@@ -14,7 +14,7 @@ export const HideButtons = component$(({ hideBtnsSig }: HideBtnsProps) => {
   const btns = [HideBtnsEnum.cn, HideBtnsEnum.py, HideBtnsEnum.ru];
 
   return (
-    <div class={"float-left mb-2"}>
+    <div class='float-left mb-2 text-base-content'>
       <span class={"font-bold mr-1"}>Скрыть: </span>
 
       <div class='btn-group'>

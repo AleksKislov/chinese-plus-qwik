@@ -130,7 +130,7 @@ export default component$(() => {
       </FlexRow>
 
       <FlexRow>
-        <div class='form-control w-full mr-2'>
+        <div class='form-control text-base-content w-full mr-2'>
           <label class='label'>
             <span class='label-text'>Впишите, что хотите</span>
           </label>
@@ -147,7 +147,7 @@ export default component$(() => {
           </label>
         </div>
 
-        <div class='form-control w-full mr-2'>
+        <div class='form-control text-base-content w-full mr-2'>
           <label class='label'>
             <span class='label-text'>Тип аватарки</span>
           </label>
@@ -162,7 +162,7 @@ export default component$(() => {
             <span class='label-text'>По умолчанию - adventurer</span>
           </label>
         </div>
-        <div class='form-control w-full mr-2'>
+        <div class='form-control text-base-content w-full mr-2'>
           <label class='label'>
             <span class='label-text'>Цвет фона</span>
           </label>

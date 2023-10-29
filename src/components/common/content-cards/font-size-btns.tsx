@@ -7,7 +7,7 @@ export const FontSizeBtnGroup = component$(({ fontSizeSig }: FontSizeBtnGroupPro
   const fontSizeBtns: FontSizeBtnsUnion[] = [FontSizeBtns.sm, FontSizeBtns.md, FontSizeBtns.lg];
 
   return (
-    <div class=''>
+    <div class='text-base-content'>
       <span class={"font-bold"}>Шрифт: </span>
       <div class='btn-group ml-1'>
         {fontSizeBtns.map((txt, ind) => (

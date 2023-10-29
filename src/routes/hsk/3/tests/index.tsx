@@ -147,7 +147,7 @@ export default component$(() => {
 
               <button
                 type='button'
-                class='btn btn-accent btn-sm'
+                class='btn btn-info btn-sm'
                 onClick$={() =>
                   checkAnswers(answerStore[type as QuestionType], type as QuestionType)
                 }

@@ -160,7 +160,7 @@ export const TextPreprocessForm = component$(({ store }: TextPreprocessFormProps
   const blockClass = "my-1 border border-info rounded-md p-2 relative";
 
   return (
-    <>
+    <div class='text-base-content'>
       <FlexRow>
         <div class='w-full basis-1/2 mt-3 ml-7 mr-3'>
           <div class='form-control w-full'>
@@ -252,6 +252,6 @@ export const TextPreprocessForm = component$(({ store }: TextPreprocessFormProps
           </button>
         </div>
       </FlexRow>
-    </>
+    </div>
   );
 });

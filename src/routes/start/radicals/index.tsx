@@ -74,7 +74,7 @@ export default component$(() => {
       </FlexRow>
 
       <div class='overflow-x-auto'>
-        <table class='table table-compact table-zebra w-full'>
+        <table class='table table-compact table-zebra w-full text-base-content'>
           <thead>
             <tr>
               <th>#</th>

@@ -21,7 +21,10 @@ export const OtherTextFields = component$(({ store }: OtherTextFieldsProps) => {
   const alreadyGotPics = useSignal(false);
 
   return (
-    <div tabIndex={0} class={`collapse collapse-arrow border border-base-300 bg-base-200`}>
+    <div
+      tabIndex={0}
+      class={`collapse collapse-arrow border border-base-300 bg-base-200 text-base-content`}
+    >
       <input type='checkbox' />
       <div class='collapse-title text-xl px-7'>
         Нужен только текст и перевод. Клик здесь, чтобы заполнить остальные необязательные поля

@@ -34,7 +34,10 @@ export default component$(() => {
               <label tabIndex={0} class='btn btn-ghost lg:hidden'>
                 {logoSvg}
               </label>
-              <ul tabIndex={0} class='dropdown-content z-[1] menu bg-base-200 w-64 rounded-box'>
+              <ul
+                tabIndex={0}
+                class='dropdown-content z-[1] menu bg-base-200 w-64 rounded-box text-base-content'
+              >
                 <MenuItemNew name={read.name} links={read.links} />
                 <MenuItemNew name={watch.name} links={watch.links} />
                 <MenuItemNew name={start.name} links={start.links} />
@@ -64,12 +67,12 @@ export default component$(() => {
                 <MenuItem name={watch.name} links={watch.links} />
                 <MenuItem name={start.name} links={start.links} />
 
-                <li tabIndex={0} class='dropdown dropdown-hover'>
-                  <label class='my-1'>
+                <li tabIndex={0} class='dropdown dropdown-hover hover:text-success'>
+                  <label class='my-1 hover:text-success'>
                     HSK
                     {dropdownArrowBottom}
                   </label>
-                  <ul class='dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-64'>
+                  <ul class='dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-64 text-base-content'>
                     <MenuItemNew name={hsk2.name} links={hsk2.links} />
                     <MenuItemNew name={hsk3.name} links={hsk3.links} />
                   </ul>
@@ -111,7 +114,7 @@ export default component$(() => {
               </label>
               <ul
                 tabIndex={0}
-                class='dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-64'
+                class='dropdown-content z-[3] menu p-2 shadow bg-base-200 rounded-box w-64 text-base-content'
               >
                 {userState.name ? authMenu : unAuthMenu}
               </ul>

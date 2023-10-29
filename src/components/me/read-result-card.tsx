@@ -33,12 +33,12 @@ export const ReadResultCard = component$(() => {
           </div>
         </div>
         <div>
-          <small class='label-text-alt'>
-            Сегодня прочитано <span class={"text-info"}>{readTodayNum}</span> из {readDailyGoal} 字{" "}
+          <small>
+            Сегодня прочитано <span class='text-info'>{readTodayNum}</span> из {readDailyGoal} 字{" "}
           </small>
           <div class='relative w-full h-3 overflow-hidden'>
             <progress
-              class={`progress border absolute w-full h-full z-20 ${
+              class={`progress border absolute w-full h-full z-[2] ${
                 progress.value < 100 ? "border-info" : "border-success"
               }`}
               value={0.0001}
@@ -54,12 +54,12 @@ export const ReadResultCard = component$(() => {
               max='100'
             ></progress>
           </div>
-          <div class={"w-full flex justify-between"}>
+          <div class='w-full flex justify-between'>
             <div>
-              <small class='label-text-alt'>Сброс в 0:00</small>
+              <small>Сброс в 0:00</small>
             </div>
             <div>
-              <small class='label-text-alt'>{Math.ceil(progress.value)}%</small>
+              <small>{Math.ceil(progress.value)}%</small>
             </div>
           </div>
         </div>

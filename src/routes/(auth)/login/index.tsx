@@ -6,7 +6,13 @@ import {
   useContext,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { routeAction$, type RequestEvent, Link, type DocumentHead } from "@builder.io/qwik-city";
+import {
+  routeAction$,
+  type RequestEvent,
+  Link,
+  type DocumentHead,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import Cookies from "js-cookie";
 import { GoogleButton } from "~/components/auth/google-btn";
 import { Alerts } from "~/components/common/alerts/alerts";
@@ -23,10 +29,18 @@ export const useLogin = routeAction$(async (params): Promise<{ token: string } |
   return ApiService.post("/api/auth", params, undefined, null);
 });
 
+export const useSendResetPasswordEmail = routeAction$(
+  async (params): Promise<{ token: string } | null> => {
+    return ApiService.post("/api/auth/send_reset_pass_email", params, undefined, null);
+  }
+);
+
 export default component$(() => {
+  const nav = useNavigate();
   const email = useSignal("");
   const password = useSignal("");
   const login = useLogin();
+  const sendEmail = useSendResetPasswordEmail();
   const alertsState = useContext(alertsContext);
 
   useVisibleTask$(({ track }) => {
@@ -42,7 +56,25 @@ export default component$(() => {
     }
 
     Cookies.set("token", res.token);
-    location.reload();
+    setTimeout(() => nav("/me"), 500);
+  });
+
+  useVisibleTask$(({ track }) => {
+    const res = track(() => sendEmail.value);
+    if (res === undefined) return;
+
+    if (!res) {
+      alertsState.push({
+        bg: AlertColorEnum.error,
+        text: `Ошибка при отправке письма, обратитесь к админу`,
+      });
+      return;
+    }
+
+    alertsState.push({
+      bg: AlertColorEnum.success,
+      text: `Отлично! Скоро вам на почту придет письмо.`,
+    });
   });
 
   useOnDocument(
@@ -53,6 +85,16 @@ export default component$(() => {
         login.submit({ email: email.value, password: password.value })
     )
   );
+
+  const ModalId = "reset-pass-modal";
+
+  const validateEmail = (email: string) => {
+    return email
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
 
   return (
     <div class='text-center'>
@@ -99,8 +141,42 @@ export default component$(() => {
               </button>
               <div class='divider'>или</div>
               <GoogleButton />
+              <div class='divider'>или</div>
+              <label
+                for={ModalId}
+                class={`btn btn-warning btn-sm ${validateEmail(email.value) ? "" : "btn-disabled"}`}
+              >
+                Забыли пароль?
+              </label>
             </div>
           </div>
+        </div>
+
+        <input type='checkbox' id={ModalId} class='modal-toggle' />
+        <div class='modal'>
+          <div class='modal-box'>
+            <h3 class='text-lg font-bold'>Забыли пароль?</h3>
+            <p class='py-4'>
+              Кнопка ниже отправит вам письмо на <kbd class='kbd kbd-xs'>{email.value}</kbd> со
+              ссылкой для смены пароля.
+            </p>
+            <div class='modal-action'>
+              <label
+                for={ModalId}
+                class='btn btn-info btn-sm'
+                onClick$={() => {
+                  if (email.value) {
+                    sendEmail.submit({ email: email.value });
+                  }
+                }}
+              >
+                Получить письмо
+              </label>
+            </div>
+          </div>
+          <label class='modal-backdrop' for={ModalId}>
+            Close
+          </label>
         </div>
       </article>
     </div>

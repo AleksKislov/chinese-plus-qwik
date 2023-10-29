@@ -15,10 +15,7 @@ export const markUpRuText = (text: string, showExamples: boolean = false): strin
     .replace(/\[m1\]/g, "<span class='block'>")
     .replace(/\[m\d\]/g, "<span class='tippyExample block'>")
     .replace(/\[\/m\]/g, "</span>")
-    .replace(
-      /\[\*\]\[ex\]/g,
-      `<div class='text-blue-200 indent-5 ${showExamples ? "" : "hidden"}'>`
-    )
+    .replace(/\[\*\]\[ex\]/g, `<div class='text-sky-300 indent-5 ${showExamples ? "" : "hidden"}'>`)
     .replace(/\[\/ex\]\[\/\*\]/g, "</div>")
     .replace(/\\\[(.+?)\\\]/g, "($1)");
 
