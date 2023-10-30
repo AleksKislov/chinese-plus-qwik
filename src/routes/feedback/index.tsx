@@ -2,10 +2,10 @@ import { $, component$, useSignal } from "@builder.io/qwik";
 import { type DocumentHead, routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import { FlexRow } from "~/components/common/layout/flex-row";
 import { PageTitle } from "~/components/common/layout/title";
-import { telegramSvg, vkSvg, youtubeSvg } from "~/components/common/media/svg";
 import { ApiService } from "~/misc/actions/request";
 import { PostForm } from "~/components/feedback/post-form";
 import { PostCard } from "~/components/feedback/post-card";
+import { OurSocialMedia } from "~/components/common/media/our-social-media";
 
 export type newPostData = {
   title: string;
@@ -53,12 +53,6 @@ export default component$(() => {
 
   const DisplayBtns: MsgsType[] = ["all", "wish", "bug", "news"];
 
-  const socMedia = [
-    { href: "https://www.youtube.com/c/Buyilehuorg", svg: youtubeSvg },
-    { href: "https://t.me/chineseplusnew", svg: telegramSvg },
-    { href: "https://vk.com/buyilehu", svg: vkSvg },
-  ];
-
   return (
     <>
       <PageTitle txt={"Гостевая и Новости Проекта"} />
@@ -67,12 +61,7 @@ export default component$(() => {
           <div class='card w-full bg-neutral h-full'>
             <div class='card-body'>
               <div class={"flex"}>
-                За проектом можно следить и в соцсетях:{" "}
-                {socMedia.map(({ href, svg }, ind) => (
-                  <a href={href} target={"_blank"} class={"pl-2 hover:text-info"} key={ind}>
-                    {svg}
-                  </a>
-                ))}
+                За проектом можно следить и в соцсетях: <OurSocialMedia />
               </div>
             </div>
           </div>
