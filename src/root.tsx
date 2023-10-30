@@ -15,6 +15,7 @@ import globalStyles from "./global.css?inline";
 import { getUserWords, type UserWord } from "./misc/actions/get-user-words";
 import { getUserHsk2WordsTotal } from "./misc/actions/get-user-hsk2-total";
 import { type CommentType } from "./components/common/comments/comment-card";
+import { QwikPartytown } from "./components/partytown/partytown";
 
 type ReadTodayMap = {
   [key: string]: number[];
@@ -124,6 +125,12 @@ export default component$(() => {
       <head>
         <meta charSet='utf-8' />
         <link rel='manifest' href='/manifest.json' />
+        <QwikPartytown forward={["dataLayer.push"]} />
+        <script
+          async
+          type='text/partytown'
+          src='https://www.googletagmanager.com/gtag/js?id=UA-73132243-4'
+        />
         <RouterHead />
       </head>
       <body
