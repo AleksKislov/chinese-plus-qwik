@@ -124,7 +124,7 @@ export default component$(() => {
     <QwikCityProvider>
       <head>
         <meta charSet='utf-8' />
-        <link rel='manifest' href='/manifest.json' />
+        {/* <link rel='manifest' href='/manifest.json' /> */}
         <QwikPartytown forward={["dataLayer.push"]} />
         <script
           async
